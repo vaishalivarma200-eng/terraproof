@@ -26,3 +26,4 @@ class SatelliteObservation(Base):
 
     # Relationships
     job = relationship("AnalysisJob", back_populates="observations")
+

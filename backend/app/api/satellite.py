@@ -47,3 +47,4 @@ async def search_satellite_scenes(req: SceneSearchRequest):
         "mode": provider.get_provider_metadata()["mode"],
         "scenes": scenes
     }
+

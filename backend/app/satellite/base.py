@@ -34,3 +34,4 @@ class BaseSatelliteProvider(ABC):
     def get_provider_metadata(self) -> Dict[str, Any]:
         """Returns provider name, license, operational status, and mode."""
         pass
+

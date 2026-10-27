@@ -17,3 +17,4 @@ def get_satellite_provider(override_mode: str | None = None) -> BaseSatellitePro
 def get_weather_provider() -> OpenMeteoWeatherProvider:
     """Returns the weather provider instance."""
     return OpenMeteoWeatherProvider()
+

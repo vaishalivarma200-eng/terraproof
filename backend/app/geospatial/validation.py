@@ -99,3 +99,4 @@ def validate_study_area(geojson_dict: Dict[str, Any]) -> StudyAreaValidationResu
         center_lat=c_lat,
         validation_message="Study area geometry successfully validated."
     )
+

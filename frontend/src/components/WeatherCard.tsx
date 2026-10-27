@@ -80,3 +80,4 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({ weather }) => {
     </div>
   );
 };
+

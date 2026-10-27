@@ -88,3 +88,4 @@ def compute_centroid(geojson_geometry: Dict[str, Any]) -> Tuple[float, float]:
     geom = shape(geojson_geometry)
     centroid = geom.centroid
     return (round(centroid.x, 6), round(centroid.y, 6))
+

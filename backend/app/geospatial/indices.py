@@ -114,3 +114,4 @@ def quantify_affected_area(
     affected_ha = round(ratio * total_study_area_ha, 3)
     percent = round(ratio * 100.0, 2)
     return (affected_ha, percent)
+

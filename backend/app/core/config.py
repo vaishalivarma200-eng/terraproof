@@ -61,3 +61,4 @@ settings = Settings()
 settings.DATA_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 settings.FIXTURES_DIR.mkdir(parents=True, exist_ok=True)
 settings.CACHE_DIR.mkdir(parents=True, exist_ok=True)
+

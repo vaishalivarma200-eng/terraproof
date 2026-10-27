@@ -19,3 +19,4 @@ class ProviderStatus(BaseModel):
     mode: str  # "real" or "demo"
     message: str
     supported_satellites: List[str]
+

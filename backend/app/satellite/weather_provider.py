@@ -92,3 +92,4 @@ class OpenMeteoWeatherProvider:
         except Exception as e:
             logger.error(f"Weather query failed: {str(e)}")
             return None
+

@@ -11,3 +11,4 @@ This directory stores satellite imagery assets, demonstration fixtures, and gene
 - Never commit actual full-scene Sentinel-1/2 products (several gigabytes) to Git.
 - Never commit raw claims containing personally identifiable farm owner data.
 - The `.gitignore` at the repository root prevents local satellite rasters, SQLite databases, and PDFs from being tracked.
+

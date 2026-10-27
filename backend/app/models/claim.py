@@ -44,3 +44,4 @@ class Claim(Base):
 
     # Relationships
     analysis_jobs = relationship("AnalysisJob", back_populates="claim", cascade="all, delete-orphan")
+

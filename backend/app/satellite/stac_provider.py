@@ -115,3 +115,4 @@ class PlanetaryComputerSTACProvider(BaseSatelliteProvider):
             "bands_requested": bands,
             "resolution_m": 10.0
         }
+

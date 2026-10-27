@@ -65,3 +65,4 @@
 
 ### 2.5 Report Generation Engine (`backend/app/reports/`)
 - **`pdf_generator.py`**: Builds certified multi-page PDF evidence dossiers using ReportLab Platypus. Features metadata audit tables, spectral divergence statistics, meteorological context, observation provenance, potential inconsistency alerts, and human reviewer signature blocks.
+

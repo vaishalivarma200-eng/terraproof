@@ -228,3 +228,4 @@ $$\text{Area} = \frac{R^2}{2} \left| \sum_{i=1}^{n} \Delta \lambda_i (2 + \sin \
 ## 10. Responsible Use & Disclaimers
 
 > **LEGAL & FORENSIC DISCLAIMER:** TerraProof is a technical decision-support and evidence-gathering system. Satellite spectral indices provide indirect radiometric indicators of vegetation vigor and surface moisture. This application does not constitute a legally binding determination of fraud or guarantee of indemnity. Final claim approval remains the exclusive responsibility of accredited human insurance adjusters.
+

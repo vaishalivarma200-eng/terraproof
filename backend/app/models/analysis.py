@@ -37,3 +37,4 @@ class AnalysisJob(Base):
     # Relationships
     claim = relationship("Claim", back_populates="analysis_jobs")
     observations = relationship("SatelliteObservation", back_populates="job", cascade="all, delete-orphan")
+

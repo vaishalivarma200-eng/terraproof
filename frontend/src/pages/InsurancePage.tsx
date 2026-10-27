@@ -695,3 +695,4 @@ export const InsurancePage: React.FC = () => {
     </div>
   );
 };
+

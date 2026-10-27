@@ -62,3 +62,4 @@ def test_validate_study_area_tiny_sliver():
     result = validate_study_area(polygon_geojson)
     assert result.is_valid is False
     assert "too small" in result.validation_message
+

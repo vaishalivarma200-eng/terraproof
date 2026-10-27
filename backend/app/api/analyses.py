@@ -180,3 +180,4 @@ def download_pdf_report(analysis_id: str, db: Session = Depends(get_db)):
         media_type="application/pdf",
         filename=pdf_file.name
     )
+

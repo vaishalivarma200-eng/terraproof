@@ -38,3 +38,4 @@ def init_db():
     """Initializes all database tables registered with Base."""
     import app.models  # noqa: F401 - ensure models are imported
     Base.metadata.create_all(bind=engine)
+

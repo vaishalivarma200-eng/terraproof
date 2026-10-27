@@ -45,3 +45,4 @@ export const DiscrepancyBadge: React.FC<DiscrepancyBadgeProps> = ({ verdict }) =
       );
   }
 };
+

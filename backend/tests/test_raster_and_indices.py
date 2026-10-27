@@ -34,3 +34,4 @@ def test_quantify_affected_area():
     area_ha, pct = quantify_affected_area(mask, total_study_area_ha=100.0)
     assert area_ha == 25.0
     assert pct == 25.0
+

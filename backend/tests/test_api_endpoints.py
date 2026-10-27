@@ -113,3 +113,4 @@ def test_insurance_verification_workflow():
 
     assert Path(pdf_path).exists()
     assert Path(pdf_path).stat().st_size > 1000
+

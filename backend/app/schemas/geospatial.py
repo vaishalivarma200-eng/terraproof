@@ -54,3 +54,4 @@ class StudyAreaValidationResult(BaseModel):
     center_lon: float
     center_lat: float
     validation_message: str
+
