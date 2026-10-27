@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 font-sans;
+  }
+}
+
+/* Custom Scrollbar for Geospatial Data Tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0b132b;
+}
+::-webkit-scrollbar-thumb {
+  background: #1c2541;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a506b;
+}
+
+/* Leaflet Container Styling */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background-color: #0b132b !important;
+  font-family: inherit;
+  z-index: 10;
+}
+
+.leaflet-bar a {
+  background-color: #1c2541 !important;
+  color: #e2e8f0 !important;
+  border-bottom: 1px solid #3a506b !important;
+}
+
+.leaflet-bar a:hover {
+  background-color: #3a506b !important;
+  color: #ffffff !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: #1c2541 !important;
+  color: #f8fafc !important;
+  border-radius: 8px !important;
+  border: 1px solid #3a506b !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.leaflet-popup-tip {
+  background-color: #1c2541 !important;
+}

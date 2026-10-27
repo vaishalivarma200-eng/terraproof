@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Node / Frontend
+node_modules/
+frontend/dist/
+frontend/dist-ssr/
+*.local
+
+# Environment variables & secrets (NEVER COMMIT)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Data & Large Satellite Rasters
+data/outputs/*
+!data/outputs/.gitkeep
+data/fixtures/*.tif
+data/fixtures/*.nc
+data/fixtures/*.zip
+data/cache/*
+!data/cache/.gitkeep
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
