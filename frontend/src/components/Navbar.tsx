@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  Satellite,
-  ShieldCheck,
-  Droplets,
-  SunMedium,
-  Trees,
-  LayoutDashboard,
-  Info,
-  Activity,
-} from 'lucide-react';
+import { Satellite, ShieldCheck, ArrowRight } from 'lucide-react';
 import { api } from '../services/api';
 import { ProviderStatus } from '../types';
 
@@ -24,70 +15,54 @@ export const Navbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { to: '/overview', label: 'Overview', icon: LayoutDashboard },
-    { to: '/claims', label: 'Insurance Claims', icon: ShieldCheck, primary: true },
-    { to: '/flood', label: 'Flood Detection', icon: Droplets },
-    { to: '/drought', label: 'Drought & Stress', icon: SunMedium },
-    { to: '/deforestation', label: 'Land-Cover Change', icon: Trees },
-    { to: '/about', label: 'Methodology', icon: Info },
+    { to: '/claims', label: 'Claims' },
+    { to: '/flood', label: 'Flood' },
+    { to: '/drought', label: 'Drought' },
+    { to: '/deforestation', label: 'Forest' },
+    { to: '/about', label: 'Methodology' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo & Brand */}
-          <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-              <Satellite className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <span className="text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
-                Terra<span className="text-emerald-400">Proof</span>
-              </span>
-              <span className="text-[10px] text-slate-400 tracking-wider uppercase block font-medium">
-                Earth Observation Intelligence
-              </span>
-            </div>
-          </Link>
-
-          {/* Nav Links */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = location.pathname.startsWith(link.to);
-              return (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`flex items-center space-x-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                    isActive
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-                  }`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{link.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Right Status Badge */}
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2 px-2.5 py-1 rounded-full bg-slate-800/80 border border-slate-700/80 text-[11px]">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <span className="text-slate-300 font-mono">
-                {providerStatus?.active_mode === 'real' ? 'LIVE STAC' : 'DEMO MODE'}
-              </span>
-            </div>
+    <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+      <header className="pointer-events-auto max-w-5xl w-full bg-[#122822]/85 backdrop-blur-md border border-teal-500/20 rounded-2xl sm:rounded-full px-4 sm:px-6 py-2.5 shadow-2xl shadow-teal-950/40 flex items-center justify-between transition-all">
+        {/* Brand Logo */}
+        <Link to="/" className="flex items-center space-x-2.5 group">
+          <div className="w-8 h-8 rounded-full bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 group-hover:bg-teal-500/30 transition-all">
+            <Satellite className="w-4 h-4" />
           </div>
+          <span className="text-lg font-serif font-bold tracking-tight text-white flex items-center">
+            Terra<span className="text-teal-400">Proof</span>
+          </span>
+        </Link>
+
+        {/* Navigation Links */}
+        <nav className="hidden md:flex items-center space-x-6 text-xs font-medium text-slate-300">
+          {navLinks.map((link) => {
+            const isActive = location.pathname.startsWith(link.to);
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`transition-colors hover:text-teal-300 ${
+                  isActive ? 'text-teal-300 font-semibold' : 'text-slate-300'
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Right CTA */}
+        <div className="flex items-center space-x-3">
+          <Link
+            to="/claims"
+            className="px-4 py-2 rounded-full bg-[#0d9488] hover:bg-[#14b8a6] text-white text-xs font-semibold shadow-md shadow-teal-900/40 transition-all flex items-center space-x-1.5"
+          >
+            <span>Verify a claim</span>
+          </Link>
         </div>
-      </div>
-    </header>
+      </header>
+    </div>
   );
 };
-
