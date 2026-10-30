@@ -24,11 +24,15 @@ class EvidenceMetrics(BaseModel):
     post_event_index_mean: float
     index_delta_mean: float
     estimated_affected_area_ha: float
+    estimated_inundated_area_ha: Optional[float] = None
+    estimated_vegetation_loss_area_ha: Optional[float] = None
+    total_field_area_ha: Optional[float] = None
     claimed_area_ha: Optional[float] = None
     area_discrepancy_percent: Optional[float] = None
     confidence_score: float = Field(..., ge=0.0, le=1.0)
     confidence_rationale: str
     weather_context: Optional[Dict[str, Any]] = None
+    compensation_scenario: Optional[Dict[str, Any]] = None
 
 class AnalysisResultSchema(BaseModel):
     summary: str
@@ -45,6 +49,8 @@ class AnalysisJobResponse(BaseModel):
     analysis_type: str
     status: str
     execution_mode: str
+    integrity_hash: Optional[str] = None
+    version: Optional[str] = "1.0.0"
     parameters: Dict[str, Any]
     results: Optional[AnalysisResultSchema]
     report_pdf_url: Optional[str]

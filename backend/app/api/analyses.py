@@ -52,12 +52,19 @@ async def trigger_analysis_job(req: AnalysisRequest, db: Session = Depends(get_d
     try:
         if req.analysis_type == "INSURANCE_VERIFICATION":
             damage = claim.damage_type if claim else req.parameters.get("damage_type", "Flood")
+            crop = claim.crop_type if claim else req.parameters.get("crop_type", "Wheat")
+            sum_insured = claim.sum_insured_per_ha if claim else req.parameters.get("sum_insured_per_ha", 35000.0)
+            cultivated_ha = claim.cultivated_area_ha if claim else None
+
             results = await run_insurance_verification(
                 boundary_geojson=boundary_dict,
                 damage_type=damage,
                 incident_start=req.pre_event_date_end,
                 incident_end=req.post_event_date_start,
                 claimed_area_ha=claimed_area_ha,
+                crop_type=crop,
+                sum_insured_per_ha=sum_insured,
+                cultivated_area_ha=cultivated_ha,
                 mode=settings.TERRAPROOF_MODE
             )
         elif req.analysis_type == "FLOOD_DETECTION":
@@ -104,7 +111,16 @@ async def trigger_analysis_job(req: AnalysisRequest, db: Session = Depends(get_d
             claim_info = {
                 "reference_no": claim.reference_no,
                 "farmer_name": claim.farmer_name,
-                "crop_type": claim.crop_type
+                "crop_type": claim.crop_type,
+                "state": claim.state or "Punjab",
+                "district": claim.district or "Ludhiana",
+                "crop_season": claim.crop_season or "Kharif",
+                "khasra_no": claim.khasra_no or "N/A",
+                "khatauni_no": claim.khatauni_no or "N/A",
+                "sum_insured_per_ha": claim.sum_insured_per_ha or 35000.0,
+                "claimed_loss_amount": claim.claimed_loss_amount,
+                "field_photos": claim.field_photos or [],
+                "field_inspections": claim.field_inspections or []
             }
 
         pdf_path = generate_evidence_pdf(
@@ -118,6 +134,8 @@ async def trigger_analysis_job(req: AnalysisRequest, db: Session = Depends(get_d
 
         job.results = results
         job.report_pdf_path = str(pdf_path)
+        job.integrity_hash = results.get("integrity_hash")
+        job.compensation_scenario = results.get("metrics", {}).get("compensation_scenario")
         job.status = "COMPLETED"
         job.completed_at = datetime.now(timezone.utc)
 

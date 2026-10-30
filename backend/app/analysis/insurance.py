@@ -1,3 +1,5 @@
+import json
+import hashlib
 from datetime import date
 from typing import Dict, Any, List, Optional
 import numpy as np
@@ -12,11 +14,15 @@ async def run_insurance_verification(
     incident_start: date,
     incident_end: date,
     claimed_area_ha: Optional[float] = None,
+    crop_type: Optional[str] = "Wheat",
+    sum_insured_per_ha: Optional[float] = 35000.0,
+    cultivated_area_ha: Optional[float] = None,
     mode: str = "demo"
 ) -> Dict[str, Any]:
     """
     Core Evidence Generation Engine for Agricultural Insurance Claims.
     Correlates pre- and post-incident satellite observations with reported loss.
+    Distinguishes observed inundation, estimated crop damage, and claimed loss.
     """
     # 1. Validate study area geometry
     validation = validate_study_area(boundary_geojson)
@@ -50,14 +56,20 @@ async def run_insurance_verification(
     post_stats = summarize_raster_statistics(post_ndvi)
     delta_stats = summarize_raster_statistics(delta_ndvi)
 
-    # 5. Determine affected mask based on damage type
+    # 5. Delineate observed inundation vs vegetation stress
+    post_ndwi = calculate_ndwi(post_bands["B03"], post_bands["B08"], mode="mcfeeters")
+    inundated_mask = post_ndwi > 0.0
+    veg_loss_mask = delta_ndvi > 0.20
+
+    inundated_ha, inundated_pct = quantify_affected_area(inundated_mask, total_study_area_ha)
+    veg_loss_ha, veg_loss_pct = quantify_affected_area(veg_loss_mask, total_study_area_ha)
+
     if damage_type.lower() == "flood":
-        post_ndwi = calculate_ndwi(post_bands["B03"], post_bands["B08"], mode="mcfeeters")
-        # Inundation where NDWI > 0.0 or severe NDVI drop
+        # Inundation where standing water detected or acute post-flood chlorophyll necrosis
         affected_mask = (post_ndwi > 0.0) | (delta_ndvi > 0.30)
     else:
         # Drought or crop stress: significant drop in NDVI (> 0.20)
-        affected_mask = delta_ndvi > 0.20
+        affected_mask = veg_loss_mask
 
     affected_ha, affected_percent = quantify_affected_area(affected_mask, total_study_area_ha)
 
@@ -75,13 +87,33 @@ async def run_insurance_verification(
     if claimed_area_ha and claimed_area_ha > 0:
         area_discrepancy_pct = round(abs(affected_ha - claimed_area_ha) / claimed_area_ha * 100.0, 1)
 
-    # 8. Evidence synthesis and Decision-Support Recommendation
+    # 8. PMFBY / Agricultural Insurance Compensation Scenario Calculation
+    rate_per_ha = sum_insured_per_ha or 35000.0
+    assumed_damage_ratio = 0.80 if damage_type.lower() == "flood" else 0.65
+    estimated_scenario_payout = round(rate_per_ha * affected_ha * assumed_damage_ratio, 2)
+
+    compensation_scenario = {
+        "sum_insured_per_ha": rate_per_ha,
+        "assumed_damage_severity_percent": round(assumed_damage_ratio * 100.0, 1),
+        "estimated_affected_area_ha": affected_ha,
+        "claimed_area_ha": claimed_area_ha,
+        "estimated_scenario_payout_inr": estimated_scenario_payout,
+        "formula": f"₹{rate_per_ha:,.0f}/ha × {affected_ha:.2f} ha × {assumed_damage_ratio:.2f} = ₹{estimated_scenario_payout:,.0f}",
+        "disclaimer": (
+            "Illustrative scenario estimate for decision support only. "
+            "Actual insurance settlement depends on applicable PMFBY scheme guidelines, "
+            "notified yield thresholds, and survey committee approval."
+        )
+    }
+
+    # 9. Evidence synthesis and Decision-Support Recommendation
     # Note: Never assert fraud or legal guilt. Provide objective consistency review.
     verdict = "EVIDENCE_CONSISTENT"
     limitations = [
         "Satellite pixel resolution is 10 meters; sub-pixel boundary mix may introduce +/- 8% area uncertainty.",
         "Optical observations can be occluded by cloud cover; review cloud metadata flags for each acquisition date.",
         "Surface greenness (NDVI) can decrease due to regular crop harvest or seasonal senescense rather than disaster.",
+        "Weather data from nearby grid cells may differ from localized cloudburst or field microclimate.",
     ]
     potential_inconsistencies = []
 
@@ -97,7 +129,7 @@ async def run_insurance_verification(
                 f"Local meteorological archive recorded only {weather_data['total_precipitation_mm']} mm precipitation during the reported window."
             )
 
-    # 9. Generate GeoJSON vector overlay of affected area for Leaflet
+    # 10. Generate GeoJSON vector overlay of affected area for Leaflet
     overlay_geojson = polygonize_raster_mask(
         affected_mask,
         bbox,
@@ -110,7 +142,7 @@ async def run_insurance_verification(
         "Corroborated by local meteorological precipitation trends."
     )
 
-    return {
+    result_payload = {
         "summary": (
             f"Satellite analysis observed approximately {affected_ha} ha ({affected_percent}% of field) "
             f"exhibiting spectral signatures consistent with {damage_type.lower()}."
@@ -120,15 +152,32 @@ async def run_insurance_verification(
             "baseline_index_mean": pre_stats["mean"],
             "post_event_index_mean": post_stats["mean"],
             "index_delta_mean": delta_stats["mean"],
+            "total_field_area_ha": total_study_area_ha,
             "estimated_affected_area_ha": affected_ha,
+            "estimated_inundated_area_ha": inundated_ha,
+            "estimated_vegetation_loss_area_ha": veg_loss_ha,
             "claimed_area_ha": claimed_area_ha,
             "area_discrepancy_percent": area_discrepancy_pct,
             "confidence_score": confidence_score,
             "confidence_rationale": confidence_rationale,
-            "weather_context": weather_data
+            "weather_context": weather_data,
+            "compensation_scenario": compensation_scenario
         },
         "observations_used": pre_scenes + post_scenes,
         "limitations": limitations,
         "potential_inconsistencies": potential_inconsistencies,
         "overlays_geojson": overlay_geojson
     }
+
+    # 11. Compute cryptographic SHA-256 integrity hash
+    hash_str = json.dumps({
+        "summary": result_payload["summary"],
+        "metrics": {k: v for k, v in result_payload["metrics"].items() if k != "weather_context"},
+        "verdict": verdict,
+        "incident_start": incident_start.isoformat(),
+        "incident_end": incident_end.isoformat(),
+    }, sort_keys=True)
+    integrity_hash = hashlib.sha256(hash_str.encode("utf-8")).hexdigest()
+    result_payload["integrity_hash"] = integrity_hash
+
+    return result_payload

@@ -88,22 +88,44 @@ def generate_evidence_pdf(
     # Header Banner
     story.append(Paragraph("TERRAPROOF | SATELLITE EVIDENCE DOSSIER", title_style))
     story.append(Paragraph(f"Autonomous Geospatial Audit & Decision-Support System • Generated {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}", subtitle_style))
-    story.append(Spacer(1, 8))
-    story.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor('#047857'), spaceAfter=12))
+    
+    # Cryptographic Integrity Hash
+    integrity_hash = results.get("integrity_hash", "UNHASHED_EVALUATION")
+    hash_style = ParagraphStyle(
+        'HashStyle',
+        parent=styles['Normal'],
+        fontName='Courier',
+        fontSize=7.5,
+        leading=10,
+        textColor=colors.HexColor('#065f46')
+    )
+    story.append(Spacer(1, 4))
+    story.append(Paragraph(f"<b>CRYPTOGRAPHIC INTEGRITY HASH (SHA-256):</b> {integrity_hash}", hash_style))
+    story.append(Spacer(1, 4))
+    story.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor('#047857'), spaceAfter=10))
 
     # Metadata Summary Table
     metrics = results.get("metrics", {})
     claim_ref = claim_info.get("reference_no", "Ad-hoc Analysis") if claim_info else "N/A"
     farmer = claim_info.get("farmer_name", "N/A") if claim_info else "N/A"
     crop = claim_info.get("crop_type", "N/A") if claim_info else "N/A"
+    state = claim_info.get("state", "Punjab") if claim_info else "N/A"
+    district = claim_info.get("district", "Ludhiana") if claim_info else "N/A"
+    season = claim_info.get("crop_season", "Kharif") if claim_info else "N/A"
+    khasra = claim_info.get("khasra_no", "N/A") if claim_info else "N/A"
+    sum_ins = claim_info.get("sum_insured_per_ha", 35000.0) if claim_info else 35000.0
 
     meta_data = [
         [Paragraph("<b>Audit Dossier ID:</b>", body_style), Paragraph(analysis_id, body_style),
          Paragraph("<b>Analysis Type:</b>", body_style), Paragraph(analysis_type.replace('_', ' '), body_style)],
         [Paragraph("<b>Claim Reference:</b>", body_style), Paragraph(str(claim_ref), body_style),
-         Paragraph("<b>Crop Context:</b>", body_style), Paragraph(str(crop), body_style)],
+         Paragraph("<b>State / District:</b>", body_style), Paragraph(f"{state} / {district}", body_style)],
         [Paragraph("<b>Farmer / Insured:</b>", body_style), Paragraph(str(farmer), body_style),
-         Paragraph("<b>Recommended Verdict:</b>", body_style), Paragraph(f"<b>{results.get('verdict_recommendation', 'N/A')}</b>", body_style)],
+         Paragraph("<b>Crop & Season:</b>", body_style), Paragraph(f"{crop} ({season})", body_style)],
+        [Paragraph("<b>Khasra / Land Record:</b>", body_style), Paragraph(str(khasra), body_style),
+         Paragraph("<b>Sum Insured / ha:</b>", body_style), Paragraph(f"₹{sum_ins:,.0f}/ha", body_style)],
+        [Paragraph("<b>Recommended Verdict:</b>", body_style), Paragraph(f"<b>{results.get('verdict_recommendation', 'N/A')}</b>", body_style),
+         Paragraph("<b>Evaluation Standard:</b>", body_style), Paragraph("PMFBY Geospatial Audit Standard", body_style)],
     ]
 
     t_meta = Table(meta_data, colWidths=[110, 155, 110, 155])
@@ -111,11 +133,11 @@ def generate_evidence_pdf(
         ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#f8fafc')),
         ('BOX', (0, 0), (-1, -1), 0.5, colors.HexColor('#cbd5e1')),
         ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#e2e8f0')),
-        ('TOPPADDING', (0, 0), (-1, -1), 4),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 3),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
     ]))
     story.append(t_meta)
-    story.append(Spacer(1, 10))
+    story.append(Spacer(1, 8))
 
     # Analytical Findings
     story.append(Paragraph("1. EXECUTIVE EVIDENCE FINDINGS", section_heading))
@@ -196,6 +218,48 @@ def generate_evidence_pdf(
     for lim in results.get("limitations", []):
         story.append(Paragraph(f"• {lim}", body_style))
     story.append(Spacer(1, 12))
+
+    # Compensation Scenario (PMFBY / Insurance Decision-Support)
+    comp = metrics.get("compensation_scenario")
+    if comp:
+        story.append(Paragraph("6. ESTIMATED COMPENSATION SCENARIO (PMFBY MODEL)", section_heading))
+        comp_data = [
+            [Paragraph("<b>Sum Insured / ha</b>", body_style), Paragraph(f"₹{comp.get('sum_insured_per_ha', 0):,.0f}", body_style),
+             Paragraph("<b>Assumed Severity %</b>", body_style), Paragraph(f"{comp.get('assumed_damage_severity_percent', 0)}%", body_style)],
+            [Paragraph("<b>Observed Affected Area</b>", body_style), Paragraph(f"{comp.get('estimated_affected_area_ha', 0):.2f} ha", body_style),
+             Paragraph("<b>Estimated Scenario Amount</b>", body_style), Paragraph(f"<b>₹{comp.get('estimated_scenario_payout_inr', 0):,.0f}</b>", body_style)],
+        ]
+        t_comp = Table(comp_data, colWidths=[140, 125, 140, 125])
+        t_comp.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#f0fdf4')),
+            ('BOX', (0, 0), (-1, -1), 0.5, colors.HexColor('#86efac')),
+            ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#bbf7d0')),
+            ('TOPPADDING', (0, 0), (-1, -1), 3),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+        ]))
+        story.append(t_comp)
+        story.append(Spacer(1, 4))
+        story.append(Paragraph(f"<i>Formula: {comp.get('formula', '')} • {comp.get('disclaimer', '')}</i>", alert_style))
+        story.append(Spacer(1, 8))
+
+    # Human Auditor Sign-off Block
+    story.append(Paragraph("7. HUMAN ADJUSTER AUDIT & DECISION SIGN-OFF", section_heading))
+    auditor_data = [
+        [Paragraph("<b>Adjuster Decision:</b>", body_style), Paragraph("PENDING ACCREDITED REVIEW", body_style),
+         Paragraph("<b>Date of Inspection:</b>", body_style), Paragraph("____________________", body_style)],
+        [Paragraph("<b>Adjuster Name & ID:</b>", body_style), Paragraph("___________________________", body_style),
+         Paragraph("<b>Physical Signature:</b>", body_style), Paragraph("____________________", body_style)],
+    ]
+    t_audit = Table(auditor_data, colWidths=[130, 140, 130, 130])
+    t_audit.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor('#fafaf9')),
+        ('BOX', (0, 0), (-1, -1), 0.5, colors.HexColor('#d6d3d1')),
+        ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#e7e5e4')),
+        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+    ]))
+    story.append(t_audit)
+    story.append(Spacer(1, 10))
 
     # Responsible Use Disclaimer
     story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor('#94a3b8'), spaceAfter=8))

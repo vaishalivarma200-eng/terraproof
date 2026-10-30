@@ -98,6 +98,51 @@ export const api = {
     return handleResponse<AnalysisJob>(res);
   },
 
+  // Photo EXIF GPS Verification
+  async verifyPhoto(photoBase64: string, boundaryGeoJSON: GeoJSONGeometry, filename = 'field_photo.jpg') {
+    const res = await fetch(`${API_BASE}/claims/verify-photo`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        photo_base64: photoBase64,
+        boundary_geojson: boundaryGeoJSON,
+        filename,
+      }),
+    });
+    return handleResponse<{
+      has_gps: boolean;
+      latitude?: number;
+      longitude?: number;
+      capture_time?: string;
+      camera_make?: string;
+      camera_model?: string;
+      is_inside_boundary: boolean;
+      distance_to_boundary_meters: number;
+      status_label: string;
+      explanation: string;
+    }>(res);
+  },
+
+  // On-ground Adjuster Field Inspections
+  async recordInspection(claimId: string, inspection: {
+    inspector_name: string;
+    inspection_date: string;
+    crop_growth_stage: string;
+    observed_damage_type: string;
+    estimated_ground_damage_percent: number;
+    ground_damage_area_ha?: number;
+    crop_lodging_observed: boolean;
+    submergence_depth_cm?: number;
+    inspection_notes: string;
+  }): Promise<Claim> {
+    const res = await fetch(`${API_BASE}/claims/${claimId}/inspections`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(inspection),
+    });
+    return handleResponse<Claim>(res);
+  },
+
   // Geospatial Geometry Validation
   async validateGeometry(geojson: GeoJSONGeometry) {
     const res = await fetch(`${API_BASE}/geospatial/validate-area`, {

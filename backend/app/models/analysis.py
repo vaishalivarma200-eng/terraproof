@@ -24,6 +24,15 @@ class AnalysisJob(Base):
     
     # Outputs: computed metrics, anomalies, change masks, geojson overlays
     results = Column(JSON, nullable=True)
+
+    # Cryptographic SHA-256 hash for forensic report integrity
+    integrity_hash = Column(String(64), nullable=True)
+
+    # Analysis Version for audit trails
+    version = Column(String(16), default="1.0.0", nullable=False)
+
+    # Calculated Compensation Scenario (PMFBY / Crop Policy)
+    compensation_scenario = Column(JSON, nullable=True)
     
     # Generated PDF report filepath
     report_pdf_path = Column(String(256), nullable=True)

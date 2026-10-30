@@ -89,3 +89,17 @@ def compute_centroid(geojson_geometry: Dict[str, Any]) -> Tuple[float, float]:
     centroid = geom.centroid
     return (round(centroid.x, 6), round(centroid.y, 6))
 
+def compute_geodesic_distance_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """
+    Calculates great-circle distance between two points on the WGS84 sphere in meters using Haversine formula.
+    """
+    r_earth = 6371007.2  # authalic mean Earth radius in meters
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+
+    a = math.sin(delta_phi / 2.0) ** 2 + math.cos(phi1) * math.cos(phi2) * (math.sin(delta_lambda / 2.0) ** 2)
+    c = 2.0 * math.atan2(math.sqrt(a), math.sqrt(1.0 - a))
+    return round(r_earth * c, 2)
+
+

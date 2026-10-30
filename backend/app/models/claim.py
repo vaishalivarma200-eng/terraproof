@@ -15,6 +15,16 @@ class Claim(Base):
     damage_type = Column(String(64), nullable=False)  # Flood, Drought, Hail, Storm, Pest, Fire
     incident_date_start = Column(Date, nullable=False)
     incident_date_end = Column(Date, nullable=False)
+
+    # Indian Agricultural & Policy Context
+    state = Column(String(64), nullable=True, default="Punjab")
+    district = Column(String(64), nullable=True)
+    crop_season = Column(String(32), nullable=True, default="Kharif")  # Kharif, Rabi, Zaid
+    cultivated_area_ha = Column(Float, nullable=True)  # Total farm size
+    claimed_loss_amount = Column(Float, nullable=True)  # In INR (₹)
+    sum_insured_per_ha = Column(Float, nullable=True, default=35000.0)  # In INR (₹)
+    khasra_no = Column(String(64), nullable=True)  # Land record plot identifier
+    khatauni_no = Column(String(64), nullable=True)  # Landholder account identifier
     
     # Representative centroid coordinate for quick mapping
     latitude = Column(Float, nullable=False)
@@ -24,6 +34,12 @@ class Claim(Base):
     boundary_geojson = Column(JSON, nullable=False)
     
     supporting_notes = Column(Text, nullable=True)
+
+    # Attached Photographs & EXIF Verification Data
+    field_photos = Column(JSON, nullable=True, default=list)
+
+    # Field Agent Ground Inspections
+    field_inspections = Column(JSON, nullable=True, default=list)
     
     # Review & Lifecycle Status
     # SUBMITTED -> ANALYZING -> EVIDENCE_GENERATED -> REVIEWED

@@ -35,7 +35,45 @@ def get_db() -> Generator[Session, None, None]:
         db.close()
 
 def init_db():
-    """Initializes all database tables registered with Base."""
+    """Initializes all database tables registered with Base and handles auto-migration of SQLite columns."""
     import app.models  # noqa: F401 - ensure models are imported
     Base.metadata.create_all(bind=engine)
+
+    if settings.DATABASE_URL.startswith("sqlite"):
+        with engine.connect() as conn:
+            cursor = conn.connection.cursor()
+            
+            # Auto-migrate claims table columns
+            cursor.execute("PRAGMA table_info(claims)")
+            existing_cols = {row[1] for row in cursor.fetchall()}
+            claims_cols = [
+                ("state", "VARCHAR(64) DEFAULT 'Punjab'"),
+                ("district", "VARCHAR(64)"),
+                ("crop_season", "VARCHAR(32) DEFAULT 'Kharif'"),
+                ("cultivated_area_ha", "FLOAT"),
+                ("claimed_loss_amount", "FLOAT"),
+                ("sum_insured_per_ha", "FLOAT DEFAULT 35000.0"),
+                ("khasra_no", "VARCHAR(64)"),
+                ("khatauni_no", "VARCHAR(64)"),
+                ("field_photos", "JSON"),
+                ("field_inspections", "JSON"),
+            ]
+            for col_name, col_type in claims_cols:
+                if col_name not in existing_cols:
+                    cursor.execute(f"ALTER TABLE claims ADD COLUMN {col_name} {col_type}")
+
+            # Auto-migrate analysis_jobs table columns
+            cursor.execute("PRAGMA table_info(analysis_jobs)")
+            job_cols = {row[1] for row in cursor.fetchall()}
+            job_cols_to_add = [
+                ("integrity_hash", "VARCHAR(64)"),
+                ("version", "VARCHAR(16) DEFAULT '1.0.0'"),
+                ("compensation_scenario", "JSON"),
+            ]
+            for col_name, col_type in job_cols_to_add:
+                if col_name not in job_cols:
+                    cursor.execute(f"ALTER TABLE analysis_jobs ADD COLUMN {col_name} {col_type}")
+
+            conn.connection.commit()
+            cursor.close()
 

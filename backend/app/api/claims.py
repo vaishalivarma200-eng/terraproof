@@ -4,7 +4,14 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.claim import Claim
-from app.schemas.claim import ClaimCreate, ClaimResponse, ClaimReviewRequest
+from app.schemas.claim import (
+    ClaimCreate,
+    ClaimResponse,
+    ClaimReviewRequest,
+    PhotoVerificationRequest,
+    PhotoVerificationResponse,
+    FieldInspectionCreate,
+)
 from app.geospatial.validation import validate_study_area
 from app.geospatial.geodesic import compute_centroid
 
@@ -50,10 +57,20 @@ def submit_agricultural_claim(claim_in: ClaimCreate, db: Session = Depends(get_d
         damage_type=claim_in.damage_type,
         incident_date_start=claim_in.incident_date_start,
         incident_date_end=claim_in.incident_date_end,
+        state=claim_in.state or "Punjab",
+        district=claim_in.district,
+        crop_season=claim_in.crop_season or "Kharif",
+        cultivated_area_ha=claim_in.cultivated_area_ha or claim_in.claimed_area_ha,
+        claimed_loss_amount=claim_in.claimed_loss_amount,
+        sum_insured_per_ha=claim_in.sum_insured_per_ha or 35000.0,
+        khasra_no=claim_in.khasra_no,
+        khatauni_no=claim_in.khatauni_no,
         latitude=center_lat,
         longitude=center_lon,
         boundary_geojson=geom_dict,
         supporting_notes=claim_in.supporting_notes,
+        field_photos=claim_in.field_photos or [],
+        field_inspections=[],
         status="SUBMITTED"
     )
 
@@ -61,6 +78,62 @@ def submit_agricultural_claim(claim_in: ClaimCreate, db: Session = Depends(get_d
     db.commit()
     db.refresh(claim)
     return claim
+
+@router.post("/verify-photo", response_model=PhotoVerificationResponse)
+def verify_photo(photo_in: PhotoVerificationRequest):
+    """
+    Extracts EXIF GPS coordinates and capture timestamp from a photograph
+    and compares its location against the declared field boundary polygon.
+    """
+    import base64
+    from app.geospatial.exif_verifier import verify_photo_against_boundary
+
+    image_bytes = None
+    if photo_in.photo_base64:
+        b64_str = photo_in.photo_base64
+        if "," in b64_str:
+            b64_str = b64_str.split(",", 1)[1]
+        try:
+            image_bytes = base64.b64decode(b64_str)
+        except Exception:
+            raise HTTPException(status_code=400, detail="Invalid base64 encoding for photo.")
+
+    result = verify_photo_against_boundary(
+        image_bytes=image_bytes,
+        boundary_geojson=photo_in.boundary_geojson,
+        filename=photo_in.filename or "field_photo.jpg"
+    )
+    return result
+
+@router.post("/{claim_id}/inspections", response_model=ClaimResponse)
+def add_field_inspection(
+    claim_id: str,
+    inspection_in: FieldInspectionCreate,
+    db: Session = Depends(get_db)
+):
+    """
+    Records an on-ground adjuster field visit report.
+    Logs ground crop conditions, photos, and flags discrepancies with satellite analysis.
+    """
+    claim = db.query(Claim).filter(Claim.id == claim_id).first()
+    if not claim:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Claim not found.")
+
+    inspection_data = inspection_in.model_dump()
+    inspection_data["recorded_at"] = datetime.now(timezone.utc).isoformat()
+
+    current_inspections = list(claim.field_inspections or [])
+    current_inspections.append(inspection_data)
+    claim.field_inspections = current_inspections
+
+    if claim.status != "REVIEWED":
+        claim.status = "FIELD_INSPECTION_RECORDED"
+
+    db.commit()
+    db.refresh(claim)
+    return claim
+
+
 
 @router.get("", response_model=List[ClaimResponse])
 def list_claims(
@@ -108,4 +181,6 @@ def review_claim(
     db.commit()
     db.refresh(claim)
     return claim
+
+
 

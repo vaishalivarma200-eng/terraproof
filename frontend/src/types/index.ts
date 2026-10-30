@@ -19,11 +19,42 @@ export interface Claim {
   damage_type: string;
   incident_date_start: string;
   incident_date_end: string;
+  state?: string;
+  district?: string;
+  crop_season?: string;
+  cultivated_area_ha?: number;
+  claimed_loss_amount?: number;
+  sum_insured_per_ha?: number;
+  khasra_no?: string;
+  khatauni_no?: string;
   latitude: number;
   longitude: number;
   boundary_geojson: GeoJSONGeometry;
   supporting_notes?: string;
-  status: 'SUBMITTED' | 'ANALYZING' | 'EVIDENCE_GENERATED' | 'REVIEWED';
+  field_photos?: Array<{
+    url?: string;
+    has_gps: boolean;
+    latitude?: number;
+    longitude?: number;
+    capture_time?: string;
+    camera_make?: string;
+    camera_model?: string;
+    status_label?: string;
+    distance_to_boundary_meters?: number;
+  }>;
+  field_inspections?: Array<{
+    inspector_name: string;
+    inspection_date: string;
+    crop_growth_stage: string;
+    observed_damage_type: string;
+    estimated_ground_damage_percent: number;
+    ground_damage_area_ha?: number;
+    crop_lodging_observed: boolean;
+    submergence_depth_cm?: number;
+    inspection_notes: string;
+    recorded_at: string;
+  }>;
+  status: 'SUBMITTED' | 'ANALYZING' | 'EVIDENCE_GENERATED' | 'FIELD_INSPECTION_RECORDED' | 'REVIEWED';
   reviewer_decision?: 'APPROVED' | 'PARTIAL' | 'REJECTED' | 'FIELD_INSPECTION';
   reviewer_notes?: string;
   reviewed_at?: string;
@@ -39,8 +70,52 @@ export interface ClaimCreateInput {
   damage_type: string;
   incident_date_start: string;
   incident_date_end: string;
+  state?: string;
+  district?: string;
+  crop_season?: string;
+  cultivated_area_ha?: number;
+  claimed_loss_amount?: number;
+  sum_insured_per_ha?: number;
+  khasra_no?: string;
+  khatauni_no?: string;
   boundary_geojson: GeoJSONGeometry;
   supporting_notes?: string;
+  field_photos?: any[];
+}
+
+export interface CompensationScenario {
+  sum_insured_per_ha: number;
+  assumed_damage_severity_percent: number;
+  estimated_affected_area_ha: number;
+  claimed_area_ha?: number;
+  estimated_scenario_payout_inr: number;
+  formula: string;
+  disclaimer: string;
+}
+
+export interface PhotoVerificationResult {
+  has_gps: boolean;
+  latitude?: number;
+  longitude?: number;
+  capture_time?: string;
+  camera_make?: string;
+  camera_model?: string;
+  is_inside_boundary: boolean;
+  distance_to_boundary_meters: number;
+  status_label: 'INSIDE_BOUNDARY' | 'NEAR_BOUNDARY' | 'OUTSIDE_BOUNDARY' | 'NO_GPS_METADATA' | string;
+  explanation: string;
+}
+
+export interface FieldInspectionInput {
+  inspector_name: string;
+  inspection_date: string;
+  crop_growth_stage: string;
+  observed_damage_type: string;
+  estimated_ground_damage_percent: number;
+  ground_damage_area_ha?: number;
+  crop_lodging_observed: boolean;
+  submergence_depth_cm?: number;
+  inspection_notes: string;
 }
 
 export interface WeatherContext {
@@ -64,17 +139,22 @@ export interface EvidenceMetrics {
   baseline_index_mean: number;
   post_event_index_mean: number;
   index_delta_mean: number;
+  total_field_area_ha?: number;
   estimated_affected_area_ha: number;
+  estimated_inundated_area_ha?: number;
+  estimated_vegetation_loss_area_ha?: number;
   claimed_area_ha?: number;
   area_discrepancy_percent?: number;
   confidence_score: number;
   confidence_rationale: string;
   weather_context?: WeatherContext;
+  compensation_scenario?: CompensationScenario;
 }
 
 export interface AnalysisResults {
   summary: string;
   verdict_recommendation: string;
+  integrity_hash?: string;
   metrics: EvidenceMetrics;
   observations_used: Array<{
     id: string;
@@ -95,6 +175,8 @@ export interface AnalysisJob {
   analysis_type: 'INSURANCE_VERIFICATION' | 'FLOOD_DETECTION' | 'DROUGHT_STRESS' | 'DEFORESTATION_CHANGE';
   status: 'QUEUED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
   execution_mode: 'demo' | 'real';
+  integrity_hash?: string;
+  version?: string;
   parameters: Record<string, any>;
   results?: AnalysisResults;
   report_pdf_url?: string;
