@@ -26,36 +26,36 @@ export const LandingPage: React.FC = () => {
           SECTION 1: HERO (Image 1)
           Atmospheric landscape, Three.js 3D depth, editorial typography & floating data pills
          ========================================================================= */}
-      <section className="relative min-h-[92vh] flex flex-col justify-between overflow-hidden bg-[#0c201a]">
-        {/* Landscape Photo with Dark Green / Teal Film Grading */}
+      <section className="relative min-h-[94vh] flex flex-col justify-between overflow-hidden bg-[#0c201a]">
+        {/* Coastal Terraced Landscape Photo with Deep Emerald / Sea Film Grading */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-45 mix-blend-luminosity scale-105 transition-transform duration-1000"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-luminosity scale-105 transition-transform duration-1000"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=2000&q=85')`,
+            backgroundImage: `url('https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=2000&q=85')`,
           }}
         />
 
-        {/* Ambient Gradient Overlays for Readability */}
+        {/* Ambient Gradient Overlays for Enhanced Editorial Legibility */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#0c201a] via-[#0c201a]/70 to-[#071713]/85" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0c201a]/90 via-[#0c201a]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0c201a]/95 via-[#0c201a]/55 to-transparent" />
 
         {/* Three.js 3D Orbital Canvas (Rotating Wireframe Earth & Satellite Constellation) */}
         <ThreeCanvas3D />
 
         {/* Hero Content Container */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 sm:pt-40 pb-20 w-full flex-1 flex flex-col justify-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 sm:pt-40 pb-16 w-full flex-1 flex flex-col justify-center">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Column: 3D Animated Headline & Actions */}
             <div className="lg:col-span-8 space-y-6">
               {/* Category Pill */}
               <MotionText3D delay={0.1} depth={-20}>
-                <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-[#16352c]/90 border border-teal-400/30 text-xs text-teal-300 font-medium tracking-wide shadow-lg">
+                <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#16352c]/90 border border-teal-400/30 text-xs text-teal-300 font-medium tracking-wide shadow-lg backdrop-blur-md">
                   <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
                   <span>Satellite environmental intelligence</span>
                 </div>
               </MotionText3D>
 
-              {/* Editorial Headline */}
+              {/* Editorial Headline matching Image 1 */}
               <MotionText3D delay={0.25} depth={-60}>
                 <h1 className="font-serif text-5xl sm:text-7xl lg:text-[5.25rem] text-white font-medium tracking-tight leading-[1.06]">
                   The land writes its <br />
@@ -73,23 +73,33 @@ export const LandingPage: React.FC = () => {
                 </p>
               </MotionText3D>
 
-              {/* CTA Buttons */}
+              {/* CTA Buttons & Subtle Scroll Indicator */}
               <MotionText3D delay={0.55} depth={-20}>
-                <div className="flex flex-wrap items-center gap-4 pt-3">
-                  <Link
-                    to="/claims"
-                    className="px-6 py-3.5 rounded-full bg-[#0d9488] hover:bg-[#14b8a6] text-white font-semibold text-sm shadow-xl shadow-teal-950/60 transition-all flex items-center space-x-2 group"
-                  >
-                    <span>Verify a claim</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                <div className="flex flex-wrap items-center justify-between gap-6 pt-3 max-w-xl">
+                  <div className="flex flex-wrap items-center gap-4">
+                    <Link
+                      to="/claims"
+                      className="px-6 py-3.5 rounded-full bg-[#0d9488] hover:bg-[#14b8a6] text-white font-semibold text-sm shadow-xl shadow-teal-950/60 transition-all flex items-center space-x-2 group"
+                    >
+                      <span>Verify a claim</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </Link>
 
-                  <a
-                    href="#workflow"
-                    className="px-6 py-3.5 rounded-full bg-[#16352c]/80 hover:bg-[#1a3e34] text-slate-300 hover:text-white border border-teal-500/20 font-medium text-sm backdrop-blur-md transition-all"
-                  >
-                    How it works
-                  </a>
+                    <a
+                      href="#workflow"
+                      className="px-6 py-3.5 rounded-full bg-[#16352c]/80 hover:bg-[#1a3e34] text-slate-300 hover:text-white border border-teal-500/20 font-medium text-sm backdrop-blur-md transition-all"
+                    >
+                      How it works
+                    </a>
+                  </div>
+
+                  {/* Scroll Indicator matching Image 1 */}
+                  <div className="hidden sm:flex items-center space-x-2 text-[10px] tracking-widest text-slate-400/80 font-mono uppercase">
+                    <span>SCROLL</span>
+                    <div className="w-3.5 h-5 rounded-full border border-slate-400/40 flex items-start justify-center p-0.5">
+                      <div className="w-1 h-1.5 rounded-full bg-teal-400 animate-bounce" />
+                    </div>
+                  </div>
                 </div>
               </MotionText3D>
             </div>
@@ -98,39 +108,45 @@ export const LandingPage: React.FC = () => {
             <div className="lg:col-span-4 relative h-64 lg:h-96 hidden sm:flex flex-col justify-center space-y-4">
               {/* Top Floating Badge: Flood Extent */}
               <FloatingCard3D delay={0.6} floatY={8} className="self-end">
-                <div className="p-3.5 rounded-2xl bg-[#122b24]/85 backdrop-blur-md border border-teal-500/25 text-left shadow-2xl text-xs space-y-1 w-60">
+                <div className="p-3.5 rounded-2xl bg-[#122b24]/90 backdrop-blur-md border border-teal-500/25 text-left shadow-2xl text-xs space-y-1 w-64 hover:border-teal-400/50 transition-colors">
                   <div className="flex items-center space-x-2 text-teal-300 font-semibold">
-                    <Radio className="w-4 h-4 text-teal-400" />
+                    <div className="w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center">
+                      <Radio className="w-3 h-3 text-teal-300" />
+                    </div>
                     <span>Flood extent · 412 ha (est.)</span>
                   </div>
-                  <div className="text-[11px] text-slate-400">
+                  <div className="text-[11px] text-slate-400 pl-7">
                     Sentinel-1 · IW · VV/VH polarisation
                   </div>
                 </div>
               </FloatingCard3D>
 
               {/* Middle Floating Badge: NDVI Crop Stress */}
-              <FloatingCard3D delay={0.8} floatY={6} className="self-start ml-4">
-                <div className="p-3.5 rounded-2xl bg-[#122b24]/85 backdrop-blur-md border border-teal-500/25 text-left shadow-2xl text-xs space-y-1 w-64">
+              <FloatingCard3D delay={0.8} floatY={6} className="self-start ml-2">
+                <div className="p-3.5 rounded-2xl bg-[#122b24]/90 backdrop-blur-md border border-teal-500/25 text-left shadow-2xl text-xs space-y-1 w-68 hover:border-teal-400/50 transition-colors">
                   <div className="flex items-center space-x-2 text-teal-300 font-semibold">
-                    <span className="text-teal-400 text-sm">🍃</span>
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                      <span className="text-emerald-300 text-xs">🍃</span>
+                    </div>
                     <span>NDVI −0.31 vs. baseline</span>
                   </div>
-                  <div className="text-[11px] text-slate-400">
+                  <div className="text-[11px] text-slate-400 pl-7">
                     crop-stress flag · pending review
                   </div>
                 </div>
               </FloatingCard3D>
 
               {/* Lower Floating Badge: Pass Matched */}
-              <FloatingCard3D delay={1.0} floatY={7} className="self-end mr-6">
-                <div className="p-3.5 rounded-2xl bg-[#122b24]/85 backdrop-blur-md border border-teal-500/25 text-left shadow-2xl text-xs space-y-1 w-64">
+              <FloatingCard3D delay={1.0} floatY={7} className="self-end mr-4">
+                <div className="p-3.5 rounded-2xl bg-[#122b24]/90 backdrop-blur-md border border-teal-500/25 text-left shadow-2xl text-xs space-y-1 w-64 hover:border-teal-400/50 transition-colors">
                   <div className="flex items-center space-x-2 text-teal-300 font-semibold">
-                    <Satellite className="w-4 h-4 text-teal-400" />
+                    <div className="w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center">
+                      <Satellite className="w-3 h-3 text-teal-300" />
+                    </div>
                     <span>Pass matched · 06:42 UTC</span>
                   </div>
-                  <div className="text-[11px] text-slate-400">
-                    cloud-free · 10 m spatial resolution
+                  <div className="text-[11px] text-slate-400 pl-7">
+                    cloud-free · 10 m resolution
                   </div>
                 </div>
               </FloatingCard3D>
@@ -138,16 +154,21 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Organic Curved Wave Divider Transitioning into Light Mint Content */}
-        <div className="relative w-full overflow-hidden leading-none z-10">
+        {/* Multi-layered Organic Curved Wave Divider matching Image 1 */}
+        <div className="relative w-full overflow-hidden leading-none z-10 pointer-events-none">
           <svg
-            className="relative block w-full h-16 sm:h-24 text-[#eef7f4]"
+            className="relative block w-full h-16 sm:h-24"
             viewBox="0 0 1200 120"
             preserveAspectRatio="none"
           >
             <path
-              d="M0,0 C150,90 350,-40 500,45 C650,130 900,10 1200,60 L1200,120 L0,120 Z"
-              fill="currentColor"
+              d="M0,25 C160,85 340,10 520,55 C700,100 900,25 1200,65 L1200,120 L0,120 Z"
+              fill="#133027"
+              fillOpacity="0.4"
+            />
+            <path
+              d="M0,50 C200,105 380,25 580,70 C780,115 980,45 1200,80 L1200,120 L0,120 Z"
+              fill="#eef7f4"
             />
           </svg>
         </div>
@@ -205,114 +226,86 @@ export const LandingPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Cards Grid */}
+          {/* Cards Grid matching Image 2 */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1: Insurance Claim Verification (Core) */}
             <Link
               to="/claims"
-              className="p-6 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-6 group"
+              className="p-7 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
             >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 rounded-xl bg-teal-50 border border-teal-200/60 flex items-center justify-center text-teal-800 group-hover:bg-teal-600 group-hover:text-white transition-colors">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-teal-100/80 text-teal-800 border border-teal-200">
-                    CORE
-                  </span>
+              <div className="flex items-center justify-between">
+                <div className="w-12 h-12 rounded-full bg-teal-50 border border-teal-200/60 flex items-center justify-center text-teal-800 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                  <ShieldCheck className="w-6 h-6" />
                 </div>
-
-                <div>
-                  <h3 className="font-serif text-lg font-semibold text-slate-900 group-hover:text-teal-800 transition-colors">
-                    Insurance claim verification
-                  </h3>
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                    Correlate reported crop damage against pre- and post-disaster spectral signatures. Quantifies claimed vs. observed area discrepancy.
-                  </p>
-                </div>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-teal-100/80 text-teal-800 border border-teal-200">
+                  CORE
+                </span>
               </div>
 
-              <div className="text-xs font-semibold text-teal-700 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
-                <span>Verify claims</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+              <div className="space-y-2">
+                <h3 className="font-serif text-xl font-semibold text-slate-900 group-hover:text-teal-800 transition-colors">
+                  Insurance claim verification
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-light">
+                  Correlate reported crop damage against pre- and post-disaster spectral signatures. Quantifies claimed vs. observed area discrepancy.
+                </p>
               </div>
             </Link>
 
             {/* Card 2: Flood Monitoring */}
             <Link
               to="/flood"
-              className="p-6 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-6 group"
+              className="p-7 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
             >
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-200/60 flex items-center justify-center text-sky-800 group-hover:bg-sky-600 group-hover:text-white transition-colors">
-                  <Droplets className="w-5 h-5" />
-                </div>
-
-                <div>
-                  <h3 className="font-serif text-lg font-semibold text-slate-900 group-hover:text-sky-800 transition-colors">
-                    Flood monitoring
-                  </h3>
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                    Radar-first inundation mapping with Sentinel-1 SAR and optical NDWI. Delineates standing water extent through cloud decks.
-                  </p>
-                </div>
+              <div className="w-12 h-12 rounded-full bg-sky-50 border border-sky-200/60 flex items-center justify-center text-sky-800 group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                <Droplets className="w-6 h-6" />
               </div>
 
-              <div className="text-xs font-semibold text-sky-700 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
-                <span>Explore flood extent</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+              <div className="space-y-2">
+                <h3 className="font-serif text-xl font-semibold text-slate-900 group-hover:text-sky-800 transition-colors">
+                  Flood monitoring
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-light">
+                  Radar-first inundation mapping with Sentinel-1 SAR and optical NDWI. Delineates standing water extent through cloud decks.
+                </p>
               </div>
             </Link>
 
             {/* Card 3: Drought & Crop Stress */}
             <Link
               to="/drought"
-              className="p-6 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-6 group"
+              className="p-7 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
             >
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-800 group-hover:bg-amber-600 group-hover:text-white transition-colors">
-                  <SunMedium className="w-5 h-5" />
-                </div>
-
-                <div>
-                  <h3 className="font-serif text-lg font-semibold text-slate-900 group-hover:text-amber-800 transition-colors">
-                    Drought & crop stress
-                  </h3>
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                    Vegetation-greenness trends, soil moisture deficits and meteorological precipitation integration across growing seasons.
-                  </p>
-                </div>
+              <div className="w-12 h-12 rounded-full bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-800 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                <SunMedium className="w-6 h-6" />
               </div>
 
-              <div className="text-xs font-semibold text-amber-700 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
-                <span>Evaluate stress trends</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+              <div className="space-y-2">
+                <h3 className="font-serif text-xl font-semibold text-slate-900 group-hover:text-amber-800 transition-colors">
+                  Drought & crop stress
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-light">
+                  Vegetation-greenness trends, soil moisture deficits and meteorological precipitation integration across growing seasons.
+                </p>
               </div>
             </Link>
 
             {/* Card 4: Forest & Land-Cover Change */}
             <Link
               to="/deforestation"
-              className="p-6 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-6 group"
+              className="p-7 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
             >
-              <div className="space-y-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/60 flex items-center justify-center text-emerald-800 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                  <Trees className="w-5 h-5" />
-                </div>
-
-                <div>
-                  <h3 className="font-serif text-lg font-semibold text-slate-900 group-hover:text-emerald-800 transition-colors">
-                    Forest & land-cover change
-                  </h3>
-                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                    Bi-temporal optical canopy loss detection distinguishing timber clearance, wildfires, and seasonal deciduous variation.
-                  </p>
-                </div>
+              <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center text-emerald-800 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <Trees className="w-6 h-6" />
               </div>
 
-              <div className="text-xs font-semibold text-emerald-700 flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
-                <span>Detect canopy loss</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+              <div className="space-y-2">
+                <h3 className="font-serif text-xl font-semibold text-slate-900 group-hover:text-emerald-800 transition-colors">
+                  Forest & land-cover change
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-light">
+                  Bi-temporal optical canopy loss detection distinguishing timber clearance, wildfires, and seasonal deciduous variation.
+                </p>
               </div>
             </Link>
           </div>
@@ -408,7 +401,7 @@ export const LandingPage: React.FC = () => {
               <div className="space-y-4">
                 <div className="relative inline-block">
                   <div className="w-14 h-14 rounded-2xl bg-white border border-teal-300/60 shadow-md flex items-center justify-center text-teal-700">
-                    <CheckCircle2 className="w-6 h-6" />
+                    <ShieldCheck className="w-6 h-6" />
                   </div>
                   <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center shadow">
                     4

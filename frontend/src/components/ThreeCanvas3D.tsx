@@ -171,3 +171,4 @@ export const ThreeCanvas3D: React.FC<ThreeCanvas3DProps> = ({ className = '' }) 
     />
   );
 };
+
