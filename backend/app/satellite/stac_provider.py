@@ -167,7 +167,7 @@ class PlanetaryComputerSTACProvider(BaseSatelliteProvider):
         # Rasterio GDAL HTTP environment for remote streaming
         gdal_env = rasterio.Env(
             GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR",
-            CPL_VSIL_CURL_ALLOWED_EXTENSIONS=".tif,.TIF",
+            CPL_VSIL_CURL_ALLOWED_EXTENSIONS=".tif,.tiff,.TIF,.TIFF",
             GDAL_HTTP_TIMEOUT=20
         )
 
@@ -186,17 +186,42 @@ class PlanetaryComputerSTACProvider(BaseSatelliteProvider):
 
                 try:
                     with rasterio.open(signed_href) as src:
-                        # Transform WGS84 bounding box to source CRS (UTM projection)
-                        utm_bounds = transform_bounds("EPSG:4326", src.crs, *bbox)
-                        window = from_bounds(*utm_bounds, transform=src.transform)
+                        if src.crs is not None:
+                            # Sentinel-2 Level-2A: Projected UTM coordinate system
+                            utm_bounds = transform_bounds("EPSG:4326", src.crs, *bbox)
+                            window = from_bounds(*utm_bounds, transform=src.transform)
+                            data = src.read(1, window=window)
 
-                        # Read the single band within the study window
-                        data = src.read(1, window=window)
+                            # Sentinel-2 Level-2A surface reflectance is scaled by 10,000
+                            # 0 to 10,000 -> 0.0 to 1.0 reflectance
+                            data_float = data.astype(np.float32) / 10000.0
+                            data_float = np.clip(data_float, 0.0, 1.0)
 
-                        # Sentinel-2 Level-2A surface reflectance is scaled by 10,000
-                        # 0 to 10,000 -> 0.0 to 1.0 reflectance
-                        data_float = data.astype(np.float32) / 10000.0
-                        data_float = np.clip(data_float, 0.0, 1.0)
+                        elif src.gcps and src.gcps[0]:
+                            # Sentinel-1 GRD: Ground Range Detected radar coordinates with Ground Control Points (GCPs)
+                            from rasterio.transform import from_gcps
+                            gcps, gcp_crs = src.gcps
+                            t = from_gcps(gcps)
+                            inv = ~t
+                            min_lon, min_lat, max_lon, max_lat = bbox
+                            c1, r1 = inv * (min_lon, max_lat)
+                            c2, r2 = inv * (max_lon, min_lat)
+                            col_start = max(0, int(min(c1, c2)))
+                            row_start = max(0, int(min(r1, r2)))
+                            w = max(10, min(src.width - col_start, int(abs(c2 - c1))))
+                            h = max(10, min(src.height - row_start, int(abs(r2 - r1))))
+                            window = rasterio.windows.Window(col_start, row_start, w, h)
+                            data = src.read(1, window=window)
+
+                            # Normalize raw radar amplitude
+                            data_float = data.astype(np.float32)
+                            max_val = data_float.max()
+                            if max_val > 0:
+                                data_float = np.clip(data_float / max_val, 0.0, 1.0)
+
+                        else:
+                            data = src.read(1)
+                            data_float = data.astype(np.float32)
 
                         band_arrays[b] = data_float
                 except Exception as e:

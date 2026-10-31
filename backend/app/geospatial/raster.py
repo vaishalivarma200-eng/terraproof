@@ -136,3 +136,62 @@ def polygonize_raster_mask(
         "type": "FeatureCollection",
         "features": features[:25]
     }
+
+def polygonize_zoned_raster(
+    severity_grid: np.ndarray,
+    bbox: Tuple[float, float, float, float],
+    total_area_ha: float
+) -> Dict[str, Any]:
+    """
+    Converts a multi-tier damage severity grid into categorized vector GeoJSON layers:
+    3 = Severe Loss / Inundation (>50%),
+    2 = Moderate Damage (25-50%),
+    1 = Mild Stress (10-25%),
+    0 = Healthy / Unaffected (<10%).
+    """
+    height, width = severity_grid.shape
+    min_lon, min_lat, max_lon, max_lat = bbox
+    transform = from_bounds(min_lon, min_lat, max_lon, max_lat, width, height)
+
+    total_pixels = height * width
+    zone_names = {
+        3: ("Severe Loss / Inundation", "#ef4444", 0.55, "severe_loss"),
+        2: ("Moderate Loss", "#f97316", 0.40, "moderate_loss"),
+        1: ("Mild Stress", "#eab308", 0.25, "mild_stress"),
+        0: ("Healthy Canopy", "#10b981", 0.15, "healthy")
+    }
+
+    features = []
+    grid_uint8 = severity_grid.astype(np.uint8)
+
+    for zone_val, (label, color, opacity, slug) in zone_names.items():
+        mask = (grid_uint8 == zone_val)
+        pixel_count = int(np.sum(mask))
+        if pixel_count == 0:
+            continue
+        zone_ha = round((pixel_count / total_pixels) * total_area_ha, 2)
+        zone_pct = round((pixel_count / total_pixels) * 100.0, 1)
+
+        for geom, val in shapes(grid_uint8, mask=mask, transform=transform):
+            s_geom = shape(geom)
+            if s_geom.area > 1e-7:
+                features.append({
+                    "type": "Feature",
+                    "geometry": mapping(s_geom),
+                    "properties": {
+                        "severity_code": int(zone_val),
+                        "severity_label": label,
+                        "color": color,
+                        "fill_opacity": opacity,
+                        "zone_slug": slug,
+                        "zone_area_ha": zone_ha,
+                        "zone_percentage": zone_pct
+                    }
+                })
+
+    # Sort largest first for clean rendering
+    features.sort(key=lambda f: shape(f["geometry"]).area, reverse=True)
+    return {
+        "type": "FeatureCollection",
+        "features": features[:60]
+    }

@@ -78,3 +78,4 @@ def test_insurance_verification_real_mode_truthful_non_fabrication():
     else:
         assert result["metrics"]["confidence_score"] > 0.0
         assert "Sentinel-2" in result["data_provenance"]
+

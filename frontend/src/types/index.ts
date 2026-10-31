@@ -89,6 +89,10 @@ export interface CompensationScenario {
   estimated_affected_area_ha: number;
   claimed_area_ha?: number;
   estimated_scenario_payout_inr: number;
+  min_payout_inr?: number;
+  max_payout_inr?: number;
+  payout_range_formatted?: string;
+  uncertainty_margin_percent?: number;
   formula: string;
   disclaimer: string;
 }
@@ -147,6 +151,43 @@ export interface EvidenceMetrics {
   area_discrepancy_percent?: number;
   confidence_score: number;
   confidence_rationale: string;
+  confidence_score_100?: number;
+  confidence_grade?: string;
+  confidence_breakdown?: {
+    total_score: number;
+    grade: string;
+    recommendation: string;
+    pillars: Record<string, { score: number; max: number; metric: string }>;
+    limitations_disclosed: string[];
+  };
+  peril_classification?: {
+    classified_peril: string;
+    confidence: number;
+    consistency_with_claim: string;
+    spectral_signature: string;
+    rationale: string;
+    recommended_action: string;
+  };
+  crop_season_context?: {
+    crop_type: string;
+    current_season: string;
+    phenology_stage: string;
+    is_harvest_window: boolean;
+    harvest_false_alarm_risk: string;
+    advisory_notes: string;
+  };
+  zoned_damage?: {
+    severe_damage_ha: number;
+    severe_damage_percent: number;
+    moderate_damage_ha: number;
+    moderate_damage_percent: number;
+    mild_stress_ha: number;
+    mild_stress_percent: number;
+    healthy_canopy_ha: number;
+    healthy_canopy_percent: number;
+    dominant_zone: string;
+  };
+  sensor_fusion_mode?: string;
   weather_context?: WeatherContext;
   compensation_scenario?: CompensationScenario;
 }

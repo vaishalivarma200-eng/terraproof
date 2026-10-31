@@ -58,6 +58,14 @@ async def trigger_analysis_job(req: AnalysisRequest, db: Session = Depends(get_d
             crop = claim.crop_type if claim else req.parameters.get("crop_type", "Wheat")
             sum_insured = claim.sum_insured_per_ha if claim else req.parameters.get("sum_insured_per_ha", 35000.0)
             cultivated_ha = claim.cultivated_area_ha if claim else None
+            season = claim.crop_season if claim else req.parameters.get("crop_season", "Kharif")
+            claim_state = claim.state if claim else req.parameters.get("state", "Rajasthan")
+
+            exif_match = None
+            if claim and claim.field_photos:
+                matches = [p.get("is_within_boundary") for p in claim.field_photos if "is_within_boundary" in p]
+                if matches:
+                    exif_match = any(matches)
 
             results = await run_insurance_verification(
                 boundary_geojson=boundary_dict,
@@ -68,6 +76,9 @@ async def trigger_analysis_job(req: AnalysisRequest, db: Session = Depends(get_d
                 crop_type=crop,
                 sum_insured_per_ha=sum_insured,
                 cultivated_area_ha=cultivated_ha,
+                crop_season=season,
+                state=claim_state,
+                has_exif_gps_match=exif_match,
                 mode=exec_mode
             )
         elif req.analysis_type == "FLOOD_DETECTION":

@@ -725,6 +725,158 @@ export const InsurancePage: React.FC = () => {
                     </div>
                   </div>
 
+                  {/* Phase 2: Peril Classification & Sensor Fusion Mode */}
+                  {activeAnalysis.results.metrics.peril_classification && (
+                    <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 space-y-2 text-xs">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-[10px] uppercase font-bold text-slate-400">Classified Peril:</span>
+                          <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-teal-500/15 text-teal-300 border border-teal-500/30">
+                            {activeAnalysis.results.metrics.peril_classification.classified_peril}
+                          </span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                            activeAnalysis.results.metrics.peril_classification.consistency_with_claim === 'CONSISTENT'
+                              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                              : 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+                          }`}>
+                            {activeAnalysis.results.metrics.peril_classification.consistency_with_claim === 'CONSISTENT' ? '✓ Consistent with Claim' : '⚠ Peril Discordance'}
+                          </span>
+                        </div>
+                        {activeAnalysis.results.metrics.sensor_fusion_mode && (
+                          <span className="text-[10px] font-mono text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded">
+                            Sensor: {activeAnalysis.results.metrics.sensor_fusion_mode}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-slate-300">
+                        {activeAnalysis.results.metrics.peril_classification.rationale}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Phase 2: Crop Phenology & Seasonal Harvest Assessment */}
+                  {activeAnalysis.results.metrics.crop_season_context && (
+                    <div className="p-3.5 rounded-lg bg-slate-950/70 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                      <div className="space-y-0.5">
+                        <div className="text-[10px] text-slate-400 uppercase font-bold">Agronomic Season & Phenology Stage</div>
+                        <div className="text-slate-200 font-semibold text-xs flex items-center gap-2">
+                          <span>{activeAnalysis.results.metrics.crop_season_context.crop_type} ({activeAnalysis.results.metrics.crop_season_context.current_season} Season)</span>
+                          <span className="text-emerald-400 text-[11px]">• {activeAnalysis.results.metrics.crop_season_context.phenology_stage}</span>
+                        </div>
+                      </div>
+                      {activeAnalysis.results.metrics.crop_season_context.is_harvest_window && (
+                        <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                          ⚠ Harvest Window Active (Verification Needed)
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Phase 2: Pixel-Level 4-Tier Damage Zoning */}
+                  {activeAnalysis.results.metrics.zoned_damage && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-slate-200">Pixel-Level Damage Severity Zoning (10m Resolution)</span>
+                        <span className="text-[10px] text-slate-400">Categorized Spatial Mask</span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div className="p-2.5 rounded-lg bg-red-950/30 border border-red-500/40">
+                          <div className="flex items-center space-x-1.5 text-[10px] text-red-300">
+                            <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                            <span>Severe Loss (&gt;50%)</span>
+                          </div>
+                          <div className="text-sm font-bold text-red-200 mt-1">
+                            {activeAnalysis.results.metrics.zoned_damage.severe_damage_ha} ha
+                          </div>
+                          <div className="text-[10px] text-red-300/70">{activeAnalysis.results.metrics.zoned_damage.severe_damage_percent}% of plot</div>
+                        </div>
+
+                        <div className="p-2.5 rounded-lg bg-orange-950/30 border border-orange-500/40">
+                          <div className="flex items-center space-x-1.5 text-[10px] text-orange-300">
+                            <span className="w-2 h-2 rounded-full bg-orange-500"></span>
+                            <span>Moderate (25-50%)</span>
+                          </div>
+                          <div className="text-sm font-bold text-orange-200 mt-1">
+                            {activeAnalysis.results.metrics.zoned_damage.moderate_damage_ha} ha
+                          </div>
+                          <div className="text-[10px] text-orange-300/70">{activeAnalysis.results.metrics.zoned_damage.moderate_damage_percent}% of plot</div>
+                        </div>
+
+                        <div className="p-2.5 rounded-lg bg-amber-950/30 border border-amber-500/40">
+                          <div className="flex items-center space-x-1.5 text-[10px] text-amber-300">
+                            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                            <span>Mild Stress (10-25%)</span>
+                          </div>
+                          <div className="text-sm font-bold text-amber-200 mt-1">
+                            {activeAnalysis.results.metrics.zoned_damage.mild_stress_ha} ha
+                          </div>
+                          <div className="text-[10px] text-amber-300/70">{activeAnalysis.results.metrics.zoned_damage.mild_stress_percent}% of plot</div>
+                        </div>
+
+                        <div className="p-2.5 rounded-lg bg-emerald-950/30 border border-emerald-500/40">
+                          <div className="flex items-center space-x-1.5 text-[10px] text-emerald-300">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>Healthy Canopy</span>
+                          </div>
+                          <div className="text-sm font-bold text-emerald-200 mt-1">
+                            {activeAnalysis.results.metrics.zoned_damage.healthy_canopy_ha} ha
+                          </div>
+                          <div className="text-[10px] text-emerald-300/70">{activeAnalysis.results.metrics.zoned_damage.healthy_canopy_percent}% of plot</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Phase 2: 5-Pillar Explainable Confidence Breakdown (0-100) */}
+                  {activeAnalysis.results.metrics.confidence_breakdown && (
+                    <div className="p-4 rounded-xl bg-slate-950/90 border border-teal-500/30 space-y-3 text-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                        <div className="flex items-center space-x-2">
+                          <ShieldCheck className="w-4 h-4 text-teal-400" />
+                          <h4 className="font-bold text-white text-xs uppercase tracking-wider">
+                            5-Pillar Confidence Score &amp; Limitations Breakdown
+                          </h4>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-base font-extrabold text-teal-400">
+                            {activeAnalysis.results.metrics.confidence_score_100 ?? Math.round(activeAnalysis.results.metrics.confidence_score * 100)} / 100
+                          </span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                            (activeAnalysis.results.metrics.confidence_score_100 || 80) >= 80
+                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                              : (activeAnalysis.results.metrics.confidence_score_100 || 80) >= 60
+                              ? 'bg-teal-500/20 text-teal-300 border border-teal-500/40'
+                              : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                          }`}>
+                            {activeAnalysis.results.metrics.confidence_grade || 'MODERATE'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-5 gap-2 pt-1 text-[11px]">
+                        {Object.entries(activeAnalysis.results.metrics.confidence_breakdown.pillars).map(([key, p]) => (
+                          <div key={key} className="p-2 rounded bg-slate-900 border border-slate-800 space-y-1">
+                            <div className="flex justify-between text-slate-400 text-[10px] capitalize">
+                              <span>{key.replace('_', ' ')}</span>
+                              <span className="font-bold text-slate-200">{p.score}/{p.max}</span>
+                            </div>
+                            <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+                              <div
+                                className="h-full rounded-full bg-teal-400"
+                                style={{ width: `${(p.score / p.max) * 100}%` }}
+                              ></div>
+                            </div>
+                            <div className="text-[9px] text-slate-400 truncate">{p.metric}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <p className="text-[11px] text-slate-300 italic pt-1">
+                        "{activeAnalysis.results.metrics.confidence_breakdown.recommendation}"
+                      </p>
+                    </div>
+                  )}
+
                   {/* Interactive PMFBY Compensation Calculator */}
                   <div className="p-4 rounded-xl bg-slate-950/80 border border-emerald-500/25 space-y-4">
                     <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
@@ -782,6 +934,11 @@ export const InsurancePage: React.FC = () => {
                         <div className="text-xl font-extrabold text-emerald-400 mt-0.5">
                           ₹{interactivePayout.toLocaleString()}
                         </div>
+                        {activeAnalysis.results.metrics.compensation_scenario?.payout_range_formatted && (
+                          <div className="text-[11px] font-semibold text-emerald-300 mt-0.5">
+                            Range: {activeAnalysis.results.metrics.compensation_scenario.payout_range_formatted}
+                          </div>
+                        )}
                         <div className="text-[10px] text-slate-400 mt-1">
                           ₹{simSumInsured.toLocaleString()} × {observedHa.toFixed(2)} ha × {simSeverity}%
                         </div>

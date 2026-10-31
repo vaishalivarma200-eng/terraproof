@@ -31,6 +31,13 @@ class EvidenceMetrics(BaseModel):
     area_discrepancy_percent: Optional[float] = None
     confidence_score: float = Field(..., ge=0.0, le=1.0)
     confidence_rationale: str
+    confidence_score_100: Optional[int] = Field(default=None, description="Explainable composite score 0 to 100")
+    confidence_grade: Optional[str] = Field(default=None, description="Score tier: HIGH/MODERATE/LOW/INSUFFICIENT")
+    confidence_breakdown: Optional[Dict[str, Any]] = Field(default=None, description="5-pillar explainability breakdown")
+    peril_classification: Optional[Dict[str, Any]] = Field(default=None, description="Agro-meteorological peril identification")
+    crop_season_context: Optional[Dict[str, Any]] = Field(default=None, description="Phenological calendar & harvest risk assessment")
+    zoned_damage: Optional[Dict[str, Any]] = Field(default=None, description="Pixel-level damage severity zone hectares")
+    sensor_fusion_mode: Optional[str] = Field(default=None, description="Optical Sentinel-2 or Sentinel-1 SAR monsoon fallback")
     weather_context: Optional[Dict[str, Any]] = None
     compensation_scenario: Optional[Dict[str, Any]] = None
 
