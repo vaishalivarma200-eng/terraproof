@@ -78,3 +78,4 @@ def test_exif_boundary_verification_no_gps():
 
     assert res["has_gps"] is False
     assert res["status_label"] == "NO_GPS_METADATA"
+

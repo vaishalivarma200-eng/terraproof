@@ -51,6 +51,8 @@ frontend/dist-ssr/
 # Data & Large Satellite Rasters
 data/outputs/*
 !data/outputs/.gitkeep
+backend/data/outputs/*
+!backend/data/outputs/.gitkeep
 data/fixtures/*.tif
 data/fixtures/*.nc
 data/fixtures/*.zip

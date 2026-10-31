@@ -15,7 +15,7 @@ class OpenMeteoWeatherProvider:
 
     def __init__(self):
         self.endpoint = settings.OPEN_METEO_API_URL
-        self.timeout = 5.0
+        self.timeout = 10.0
 
     async def get_historical_weather(
         self,
@@ -23,10 +23,12 @@ class OpenMeteoWeatherProvider:
         longitude: float,
         start_date: date,
         end_date: date,
-        mode: str = "demo"
+        mode: Optional[str] = None
     ) -> Optional[Dict[str, Any]]:
+        effective_mode = mode if mode is not None else settings.TERRAPROOF_MODE
+
         # In demonstration mode, return deterministic offline fixture
-        if mode == "demo" or settings.TERRAPROOF_MODE == "demo":
+        if effective_mode == "demo":
             return {
                 "provider": "Open-Meteo Historical Archive (Demonstration Fixture)",
                 "latitude": round(latitude, 4),
@@ -59,7 +61,12 @@ class OpenMeteoWeatherProvider:
                 resp = await client.get(self.endpoint, params=params)
                 if resp.status_code != 200:
                     logger.warning(f"Open-Meteo returned HTTP {resp.status_code}: {resp.text}")
-                    return None
+                    return {
+                        "provider": "Open-Meteo Historical Archive",
+                        "status": "error",
+                        "error_message": f"HTTP {resp.status_code} from Open-Meteo Archive API",
+                        "provenance": "REAL DATA: Failed query to Open-Meteo"
+                    }
                 data = resp.json()
                 daily = data.get("daily", {})
                 
@@ -87,9 +94,14 @@ class OpenMeteoWeatherProvider:
                         "precipitation_mm": precip_list,
                         "temperature_max_c": daily.get("temperature_2m_max", []),
                         "temperature_min_c": daily.get("temperature_2m_min", [])
-                    }
+                    },
+                    "provenance": "REAL DATA: Live query to Open-Meteo Historical Archive API"
                 }
         except Exception as e:
             logger.error(f"Weather query failed: {str(e)}")
-            return None
-
+            return {
+                "provider": "Open-Meteo Historical Archive",
+                "status": "error",
+                "error_message": str(e),
+                "provenance": "REAL DATA: Network or API failure connecting to Open-Meteo"
+            }

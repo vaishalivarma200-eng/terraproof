@@ -195,3 +195,4 @@ def verify_photo_against_boundary(
             "status_label": "COMPARISON_ERROR",
             "explanation": f"Failed to compute spatial boundary intersection: {str(e)}"
         }
+

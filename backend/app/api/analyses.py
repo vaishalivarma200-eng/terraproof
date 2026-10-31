@@ -35,12 +35,15 @@ async def trigger_analysis_job(req: AnalysisRequest, db: Session = Depends(get_d
         if claim:
             claimed_area_ha = claim.claimed_area_ha
 
+    # Determine execution mode (demo vs real)
+    exec_mode = (req.parameters.get("mode") or settings.TERRAPROOF_MODE).lower()
+
     # Create job record
     job = AnalysisJob(
         claim_id=req.claim_id,
         analysis_type=req.analysis_type,
         status="PROCESSING",
-        execution_mode=settings.TERRAPROOF_MODE,
+        execution_mode=exec_mode,
         parameters=req.model_dump(mode="json")
     )
     db.add(job)
@@ -65,28 +68,28 @@ async def trigger_analysis_job(req: AnalysisRequest, db: Session = Depends(get_d
                 crop_type=crop,
                 sum_insured_per_ha=sum_insured,
                 cultivated_area_ha=cultivated_ha,
-                mode=settings.TERRAPROOF_MODE
+                mode=exec_mode
             )
         elif req.analysis_type == "FLOOD_DETECTION":
             results = await run_flood_analysis(
                 boundary_geojson=boundary_dict,
                 pre_event_date=req.pre_event_date_end,
                 post_event_date=req.post_event_date_start,
-                mode=settings.TERRAPROOF_MODE
+                mode=exec_mode
             )
         elif req.analysis_type == "DROUGHT_STRESS":
             results = await run_drought_analysis(
                 boundary_geojson=boundary_dict,
                 baseline_date=req.pre_event_date_end,
                 current_date=req.post_event_date_start,
-                mode=settings.TERRAPROOF_MODE
+                mode=exec_mode
             )
         elif req.analysis_type == "DEFORESTATION_CHANGE":
             results = await run_deforestation_analysis(
                 boundary_geojson=boundary_dict,
                 t1_date=req.pre_event_date_end,
                 t2_date=req.post_event_date_start,
-                mode=settings.TERRAPROOF_MODE
+                mode=exec_mode
             )
         else:
             raise ValueError(f"Unknown analysis type: {req.analysis_type}")
