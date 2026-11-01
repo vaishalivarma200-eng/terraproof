@@ -19,6 +19,7 @@ export const Navbar: React.FC = () => {
     { to: '/flood', label: 'Flood' },
     { to: '/drought', label: 'Drought' },
     { to: '/deforestation', label: 'Forest' },
+    { to: '/verify', label: 'Public Verify' },
     { to: '/about', label: 'Methodology' },
   ];
 

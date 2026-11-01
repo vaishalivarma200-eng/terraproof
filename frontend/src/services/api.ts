@@ -417,5 +417,162 @@ export const api = {
     const res = await fetch(`${API_BASE}/official/override-analytics`);
     return handleResponse<any>(res);
   },
+
+  // --- Phase 10: Public Verification, Cryptographic Audit Ledger & Appeals ---
+  async verifyDocumentPublic(identifier: string) {
+    const res = await fetch(`${API_BASE}/public/verify/${encodeURIComponent(identifier)}`);
+    return handleResponse<{
+      is_authentic: boolean;
+      verification_status: string;
+      document_type?: string;
+      reference_no?: string;
+      inspection_id?: string;
+      issuing_authority?: string;
+      officer_designation?: string;
+      decision_action?: string;
+      confirmed_damage_percent?: number;
+      incident_peril?: string;
+      crop_type?: string;
+      crop_season?: string;
+      khasra_no?: string;
+      district?: string;
+      state?: string;
+      digital_signature_hash?: string;
+      signed_at?: string;
+      pdf_download_available?: boolean;
+      pii_redacted?: boolean;
+      privacy_notice?: string;
+      message?: string;
+    }>(res);
+  },
+
+  getPublicVerificationPdfUrl(identifier: string): string {
+    return `${API_BASE}/public/verify/${encodeURIComponent(identifier)}/pdf`;
+  },
+
+  async verifyAuditLedgerChain() {
+    const res = await fetch(`${API_BASE}/audit/verify-chain`);
+    return handleResponse<{
+      is_valid: boolean;
+      status: string;
+      total_blocks: number;
+      genesis_hash?: string;
+      tip_hash?: string;
+      tampered_at_index?: number;
+      message?: string;
+      audit_timestamp?: string;
+    }>(res);
+  },
+
+  async getRecentAuditBlocks(limit: number = 25) {
+    const res = await fetch(`${API_BASE}/audit/blocks?limit=${limit}`);
+    return handleResponse<Array<{
+      block_index: number;
+      timestamp: string;
+      event_type: string;
+      record_id: string;
+      actor: string;
+      payload_summary: any;
+      data_hash: string;
+      previous_hash: string;
+      block_hash: string;
+    }>>(res);
+  },
+
+  async submitFarmerAppeal(data: {
+    claim_id: string;
+    grounds_type: string;
+    farmer_statement: string;
+    supporting_photo_urls?: string[];
+    original_damage_percent?: number;
+  }) {
+    const res = await fetch(`${API_BASE}/appeals/submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return handleResponse<{
+      status: string;
+      message: string;
+      appeal: {
+        id: string;
+        reference_no: string;
+        claim_id: string;
+        grounds_type: string;
+        status: string;
+        assigned_reviewer_role: string;
+        created_at: string;
+      };
+    }>(res);
+  },
+
+  async getAppealsByClaim(claimId: string) {
+    const res = await fetch(`${API_BASE}/appeals/claim/${claimId}`);
+    return handleResponse<Array<{
+      id: string;
+      reference_no: string;
+      grounds_type: string;
+      farmer_statement: string;
+      supporting_photo_urls: string[];
+      status: string;
+      assigned_reviewer_role: string;
+      assigned_reviewer_name?: string;
+      original_damage_percent: number;
+      revised_damage_percent?: number;
+      resolution_remarks?: string;
+      resolution_signature_hash?: string;
+      resolved_at?: string;
+      created_at: string;
+    }>>(res);
+  },
+
+  async getPendingAppeals() {
+    const res = await fetch(`${API_BASE}/appeals/pending`);
+    return handleResponse<any[]>(res);
+  },
+
+  async resolveFarmerAppeal(appealId: string, data: {
+    reviewer_name: string;
+    reviewer_role: string;
+    status: string;
+    revised_damage_percent?: number;
+    resolution_remarks: string;
+  }) {
+    const res = await fetch(`${API_BASE}/appeals/${appealId}/resolve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return handleResponse<any>(res);
+  },
+
+  async getFairnessMetrics() {
+    const res = await fetch(`${API_BASE}/analytics/fairness`);
+    return handleResponse<{
+      parity_status: string;
+      disparity_ratio: number;
+      parity_note: string;
+      size_tiers: Record<string, {
+        label: string;
+        total_claims: number;
+        flagged_claims: number;
+        flag_rate_pct: number;
+        official_overrides: number;
+        override_rate_pct: number;
+        avg_claimed_area_ha: number;
+        avg_damage_pct: number;
+      }>;
+      crop_tiers: Record<string, any>;
+      total_claims_analyzed: number;
+      total_inspections_analyzed: number;
+    }>(res);
+  },
+
+  async resetDemoScenarios() {
+    const res = await fetch(`${API_BASE}/demo/reset-scenarios`, {
+      method: 'POST',
+    });
+    return handleResponse<any>(res);
+  },
 };
 

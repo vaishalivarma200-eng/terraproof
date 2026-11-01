@@ -9,6 +9,7 @@ import { FloodPage } from './pages/FloodPage';
 import { DroughtPage } from './pages/DroughtPage';
 import { DeforestationPage } from './pages/DeforestationPage';
 import { AnalysisDetailPage } from './pages/AnalysisDetailPage';
+import { PublicVerificationPage } from './pages/PublicVerificationPage';
 import { AboutPage } from './pages/AboutPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
@@ -35,6 +36,9 @@ export const App: React.FC = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/overview" element={<OverviewPage />} />
           <Route path="/claims" element={<InsurancePage />} />
+          <Route path="/insurance" element={<InsurancePage />} />
+          <Route path="/verify" element={<PublicVerificationPage />} />
+          <Route path="/verify/:identifier" element={<PublicVerificationPage />} />
           <Route path="/flood" element={<FloodPage />} />
           <Route path="/drought" element={<DroughtPage />} />
           <Route path="/deforestation" element={<DeforestationPage />} />

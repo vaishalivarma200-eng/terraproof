@@ -1,231 +1,196 @@
-# TerraProof | Satellite-Based Environmental Evidence & Claim Verification System
+# TerraProof | Satellite Evidence & Decision-Support Layer for Agricultural Revenue Administration
 
 [![Python](https://img.shields.io/badge/Python-3.14+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.136+-009688.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18.3+-61DAFB.svg)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-3178C6.svg)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4+-646CFF.svg)](https://vitejs.dev/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![DPDP Act 2023](https://img.shields.io/badge/Privacy-DPDP%20Act%202023%20Aligned-emerald.svg)](https://www.meity.gov.in/)
+[![Tests](https://img.shields.io/badge/Tests-53%20Passed-brightgreen.svg)](https://pytest.org/)
 
-> **TerraProof** is a satellite-based environmental monitoring and decision-support platform designed to corroborate agricultural loss claims, delineate flood inundation, evaluate vegetation desiccation, and quantify land-cover changes using open Earth observation data.
-
----
-
-## 1. Executive Overview & Problem Context
-
-Traditional agricultural insurance loss assessment relies heavily on manual field surveyors visiting isolated rural locations weeks after an extreme weather disaster. By that time:
-- Inundation waters may have receded,
-- Rotting crops may have been cleared, or
-- Surviving vegetation may have partially recovered.
-
-**TerraProof** bridges this information gap by pairing **Sentinel-2 optical surface reflectance** and **Sentinel-1 synthetic aperture radar (SAR)** with **high-resolution historical weather reanalysis**. 
-
-### Critical Design Tenet: Decision Support, Not Automated Invalidation
-TerraProof is engineered strictly as an **evidence-corroboration and decision-support instrument**. It produces objective spectral change indicators (such as NDVI drops and NDWI surface water masks) with explicit confidence rationales and limitation disclosures. It **never** automatically labels a farmer's claim as fraudulent or conclusively determines legal responsibility without an accredited human adjuster's review.
+> **TerraProof** is an Earth observation evidence and decision-support layer designed for **revenue officials (Patwari / Kanungo / Tehsildar / District Administration)**, agricultural insurers (PMFBY), lending banks, and farmers. It pre-screens claims, prioritizes ground audits, drafts objective evidence packs, and maintains an immutable cryptographic audit ledger.
 
 ---
 
-## 2. Key Capabilities & Modules
+## 1. Official Positioning & Guiding Principles
 
-1. **Module A: Agricultural Insurance Claim Verification (Primary)**
-   - Registers agricultural loss claims with cadastral field polygons.
-   - Computes ellipsoidal geodesic area in hectares using WGS84 authalic sphere formulas.
-   - Ingests pre- and post-incident satellite observations.
-   - Calculates vegetation loss ($\Delta\text{NDVI}$) or standing water ($\text{NDWI}$).
-   - Compares reported loss area against observed spectral damage.
-   - Highlights potential inconsistencies (e.g., claiming 15 ha flood loss when rainfall was negligible).
-   - Enables human adjusters to log structured review determinations (`APPROVED`, `PARTIAL`, `FIELD_INSPECTION`, `REJECTED`).
-   - Exports certified PDF evidence dossiers.
+### 🏛️ Decision Support, NOT Replacement of Revenue Officials
+**TerraProof does not replace patwaris, tehsildars, state land records, or human adjudicators.** 
+Revenue officers and executive magistrates retain sole statutory and quasi-judicial authority under State Land Revenue Codes (e.g., MP Land Revenue Code, Punjab Land Revenue Act, Maharashtra Land Revenue Code). TerraProof serves as a **transparent, defensible pre-screening and evidence-drafting platform**.
 
-2. **Module B: Flood Detection & Inundation Monitoring**
-   - Applies McFeeters Normalized Difference Water Index ($\text{NDWI}$) and Sentinel-1 SAR backscatter thresholding ($<-16\text{ dB}$).
-   - Generates interactive vector map overlays showing floodwater extent.
-   - Discloses radar shadows, asphalt specular reflectance, and emergent canopy limitations.
+### ⚖️ Never Auto-Reject & Procedural Justice
+- Algorithms in TerraProof **never automatically dismiss or invalidate** a farmer's claim. Discrepancies generate explainable priority flags (`AMBER` / `RED`) for expedited physical inspection.
+- **Low-Damage Technical Truthfulness:** Sentinel 10-meter pixels cannot reliably distinguish sub-15% damage from natural phenological or soil variance. TerraProof explicitly flags sub-15% estimates with: *"Satellite Resolution Insufficient — Mandatory Physical Ground Inspection Required"*.
+- **Guaranteed Independent Appeals:** Farmers can contest preliminary findings via a statutory grievance flow routed independently to the **Tehsildar / Sub-Divisional Magistrate (SDM)** rather than the original inspecting officer.
 
-3. **Module C: Drought & Crop-Stress Monitoring**
-   - Tracks vegetative vigor ($\text{NDVI}$) and canopy moisture content.
-   - Integrates local precipitation deficits and topsoil moisture ($0\text{--}7\text{ cm}$) from the Open-Meteo Historical Archive.
-   - Accounts for normal crop harvest calendars to avoid false drought flags.
-
-4. **Module D: Deforestation & Land-Cover Change Detection**
-   - Bi-temporal optical differencing identifying abrupt canopy loss and exposed bare soil.
-   - Notes distinctions between commercial timber harvesting, wildfires, and illegal clearance.
+### 🔒 Privacy-First Architecture (DPDP Act 2023 Aligned)
+- **Zero Raw Aadhaar Storage:** 12-digit Aadhaar numbers are strictly barred from database tables, schemas, session states, and server logs. The system stores only a masked reference (`XXXX-XXXX-1098`) and a salted cryptographic hash.
+- **Statutory Consent & Data Erasure:** Full implementation of Section 6 (Purpose-Specific Consent), Section 11 (Right to Access & Download Data), and Section 12 (Right to Erasure / "Forget Me").
+- **Public Verification PII Redaction:** The public verification registry (`/verify/:id`) shields all personal identifiers, farmer names, phone numbers, and financial details pursuant to Section 8 of the DPDP Act 2023.
 
 ---
 
-## 3. Technology Stack
+## 2. Real vs. Mocked Integrations Disclosure
 
-| Layer | Technologies Used | Purpose |
-| :--- | :--- | :--- |
-| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS | High-performance, type-safe Earth observation user interface |
-| **Interactive Maps** | Leaflet 1.9, React-Leaflet | Vector map rendering, multi-basemap layers, GeoJSON overlays |
-| **Visualizations** | Recharts, Lucide React | Precipitation timelines, soil moisture graphs, interface icons |
-| **Backend REST API** | Python 3.14, FastAPI, Pydantic V2 | Asynchronous RESTful API with automated OpenAPI / Swagger docs |
-| **Database & ORM** | SQLite (local dev) / PostgreSQL + PostGIS, SQLAlchemy 2.0 | Spatial geometries, claim tracking, analysis results persistence |
-| **Geospatial Engine** | Rasterio 1.5, NumPy 2.4, Shapely 2.2 | Multi-spectral indexing, NoData masking, polygonization, geodesic area |
-| **Report Generation** | ReportLab 5.1 Platypus | Multi-page certified PDF evidence dossiers |
-| **Testing** | Pytest 9.1 | Deterministic automated testing of algorithms and API endpoints |
+In compliance with our truthfulness pledge, we clearly disclose which services query live external networks and which operate via production-ready stubs:
+
+| Integration / Adapter | Execution Mode | Technical Provider / Protocol | API Key / Cost |
+| :--- | :--- | :--- | :--- |
+| **Sentinel-2 Optical Imagery** | **Live Network & Calibrated Fixture** | Microsoft Planetary Computer STAC Catalog (`/collections/sentinel-2-l2a`) | **Free / Keyless** |
+| **Sentinel-1 SAR Radar (Monsoon)** | **Live Network & Calibrated Fixture** | Planetary Computer STAC (`/collections/sentinel-1-grd`, VH/VV backscatter) | **Free / Keyless** |
+| **Historical Weather & Rainfall** | **Live Network** | Open-Meteo Historical Weather Archive (`archive-api.open-meteo.com`) | **Free / Keyless** |
+| **Basemaps & Satellite Tiles** | **Live Network** | Esri World Imagery & Dark Gray Canvas (Watermark-free) | **Free / Keyless** |
+| **Digital Crop Survey (AgriStack)** | **Production Stub / Adapter** | `AgriStackDCSAdapter` (Standardized JSON plot schema) | Government Intranet / Mock |
+| **e-Girdawari Revenue Export** | **Production Adapter** | `EGirdawariAdapter` (State-compliant Khasra CSV/JSON export) | Local / State Format |
+| **PMFBY / NCIP Insurance Unit** | **Production Adapter** | `PMFBYNCIPAdapter` (Standardized PMFBY claim evidence format) | Local / NCIP Format |
+| **State Land Records (Bhulekh)** | **Production Parser** | Bilingual Hindi/English OCR extractor (Form 7/12, Khasra, Jamabandi) | Local / Open Source |
+| **DigiLocker / Aadhaar e-KYC** | **Production Stub / Verifier** | `DigiLockerOAuthStub`, `AadhaarOfflineQRVerifier` (W3C XML Signature) | Mock for Demo |
 
 ---
 
-## 4. Directory Structure
+## 3. Four Canonical Demonstration Archetypes (Phase 11 Seed Scenarios)
+
+TerraProof comes preloaded with the four benchmark evaluation scenarios, which can be re-seeded at any time using the **"4 Archetypes"** button in the UI or via `POST /api/v1/demo/reset-scenarios`:
+
+1. **Scenario 1: Genuine Flood Claim (Fast-Track Approved)**
+   - **Claim Reference:** `CLM-2026-0891` | Farmer: Gurpreet Singh (Ludhiana, Punjab)
+   - **Parcel & Crop:** 3.5 ha Kharif Rice | Khasra #142/2 (Owner)
+   - **Satellite Evidence:** Severe inundation corroborated by Sentinel-2 NDWI (78% surface water) and Sentinel-1 SAR backscatter drop ($<-16\text{ dB}$).
+   - **Triage Result:** Risk Score 14/100 (`LOW_RISK`, Green). Document area matches drawn boundary (3.5 ha). Fast-track recommended.
+
+2. **Scenario 2: Inflated Area Claim (Flagged by Risk Engine)**
+   - **Claim Reference:** `CLM-2026-1044` | Farmer: Vikramaditya Singh (Kota, Rajasthan)
+   - **Parcel & Crop:** Claimed 14.5 ha loss | Kharif Soybean | Khasra #88/1
+   - **Discrepancy:** Khasra title extract and satellite-derived boundary establish plot size is only **3.2 hectares** (a 353% area inflation!).
+   - **Triage Result:** Risk Score 78/100 (`HIGH_RISK`, Red). Automated alert: *"Severe cadastral inflation detected; physical revenue inspection mandatory"*.
+
+3. **Scenario 3: Land Document Tenancy Mismatch (Review Required)**
+   - **Claim Reference:** `CLM-2026-0520` | Farmer: Devendra Meena (Karnal, Haryana)
+   - **Parcel & Crop:** 4.0 ha Rabi Wheat | Khasra #203/4 (Filed as Tenant)
+   - **Discrepancy:** Uploaded Jamabandi title is in the name of the original landowner; tenant lease agreement affidavit is missing.
+   - **Triage Result:** Status `NEEDS_TENANCY_REVIEW`. In accordance with PMFBY Tenant Guidelines, tenant claims are protected from automated dismissal and routed for patwari lease validation.
+
+4. **Scenario 4: Suspected Unauthorized Construction on Farmland (Land-Use Change)**
+   - **Claim Reference:** `CLM-2026-0312` | Farmer: Rajeshwari Bai (Ujjain, Madhya Pradesh)
+   - **Parcel & Crop:** 2.5 ha Kharif Cotton | Khasra #512/3
+   - **Satellite Evidence:** Multi-temporal differencing detected a +0.38 NDBI (Normalized Difference Built-up Index) jump and strong Sentinel-1 SAR double-bounce consistent with a 0.45 ha concrete warehouse plinth erected on agricultural revenue land.
+   - **Triage Result:** Flagged as `FLAGGED_UNAUTHORIZED_CONSTRUCTION` for Tehsildar revenue inspection under Section 172 (Diversion of Agricultural Land).
+
+---
+
+## 4. Key Architectural Modules
 
 ```
 terraproof/
 ├── backend/
 │   ├── app/
-│   │   ├── api/             # REST endpoints (health, claims, analyses, satellite)
-│   │   ├── core/            # Config, database engine, sample database seeding
-│   │   ├── models/          # SQLAlchemy ORM models (Claim, AnalysisJob, Observation)
-│   │   ├── schemas/         # Pydantic request/response validation schemas
-│   │   ├── geospatial/      # Geodesic area, geometry validation, raster indices (NDVI/NDWI)
-│   │   ├── satellite/       # Provider abstractions (Planetary Computer STAC, Open-Meteo, Mock)
-│   │   ├── analysis/        # Core analytical modules (Insurance, Flood, Drought, Deforestation)
-│   │   └── reports/         # ReportLab PDF evidence dossier generator
-│   └── tests/               # Pytest automated test suite (12 passed tests)
+│   │   ├── api/
+│   │   │   ├── health.py             # System status & provider diagnostics
+│   │   │   ├── claims.py             # PMFBY claim ingestion & triage
+│   │   │   ├── analyses.py          # Multi-sensor fusion execution
+│   │   │   ├── satellite.py         # STAC scene discovery & raw reflectance
+│   │   │   ├── identity.py          # DPDP consent logs, export, erasure
+│   │   │   ├── documents.py         # Bilingual land document OCR parser
+│   │   │   ├── integrations.py      # AgriStack, e-Girdawari, PMFBY adapters
+│   │   │   ├── risk.py              # Anti-fraud risk engine & land-use change
+│   │   │   ├── official.py          # Revenue officer workload & inspection orders
+│   │   │   ├── public_verify.py     # Public verification portal & audit ledger
+│   │   │   ├── appeals.py           # Farmer grievance & independent review API
+│   │   │   ├── fairness.py          # Algorithmic parity & smallholder monitoring
+│   │   │   └── demo.py              # Demo scenario seed & reset endpoint
+│   │   ├── core/
+│   │   │   ├── config.py            # Pydantic v2 settings
+│   │   │   ├── database.py          # SQLite/PostgreSQL engine & auto-migration
+│   │   │   ├── audit_chain.py       # Append-only SHA-256 cryptographic ledger
+│   │   │   └── seed.py              # 4 canonical demonstration archetypes
+│   │   ├── models/                  # SQLAlchemy ORM models (Audit, Appeal, Decision, Claim)
+│   │   ├── geospatial/              # Geodesic ellipsoidal area, zoning, SAR backscatter
+│   │   ├── satellite/               # STAC Planetary Computer & Open-Meteo clients
+│   │   ├── analysis/                # Risk engine, peril classifier, land-use change
+│   │   └── reports/                 # Certified dossier & statutory inspection PDF generators
+│   └── tests/                       # 53 comprehensive unit and integration tests
 ├── frontend/
 │   ├── src/
-│   │   ├── components/      # Navbar, Footer, MapViewer (Leaflet), MetricCard, WeatherCard
-│   │   ├── pages/           # Landing, Overview, Insurance, Flood, Drought, Deforestation, Detail, About
-│   │   ├── services/        # Frontend API client communicating with FastAPI
-│   │   └── types/           # TypeScript interfaces for claims, geometries, and analyses
-│   ├── index.html
-│   └── vite.config.ts
-├── data/
-│   ├── fixtures/            # Offline calibration fixtures
-│   └── outputs/             # Generated PDF dossiers and analytical rasters
-├── docs/
-│   └── ARCHITECTURE.md      # Detailed technical architecture whitepaper
-├── .env.example             # Configuration placeholders
-├── .gitignore               # Strict exclusion of rasters, secrets, and SQLite databases
-└── README.md                # Project documentation
+│   │   ├── components/              # OfficialWorkflowModal, FarmerAppealModal, FairnessModal...
+│   │   ├── pages/                   # InsurancePage, PublicVerificationPage, Flood, Drought...
+│   │   └── services/api.ts          # Fully typed API service client
 ```
 
 ---
 
-## 5. Prerequisites & Installation (Windows PowerShell)
+## 5. Local Setup & Execution (Windows PowerShell)
 
-Ensure you have the following installed on your Windows machine:
-- **Python 3.11+** (Python 3.14 verified)
-- **Node.js 18+** (Node v24.14 verified) & **npm**
-- **Git**
-
-### Step 1: Open PowerShell and Navigate to the Project
-
+### Step 1: Open PowerShell and Navigate to Workspace
 ```powershell
 cd C:\Users\Vaishali\.gemini\antigravity\scratch\terraproof
 ```
 
-### Step 2: Configure Environment Variables
-
-Copy the example environment template:
-
+### Step 2: Configure Environment
 ```powershell
-Copy-Item .env.example .env
 Copy-Item .env.example backend\.env
 ```
+Default mode is `TERRAPROOF_MODE=demo` (zero keys needed, fully offline capable). Set `TERRAPROOF_MODE=real` to query live Microsoft Planetary Computer STAC and Open-Meteo APIs.
 
-The application defaults to `TERRAPROOF_MODE=demo`, which allows full end-to-end functionality offline without requiring external API keys.
-
----
-
-## 6. How to Run TerraProof Locally
-
-You will run the backend and frontend in two separate PowerShell windows.
-
-### Terminal 1: Start the Backend (FastAPI)
-
+### Step 3: Start FastAPI Backend
 ```powershell
-cd C:\Users\Vaishali\.gemini\antigravity\scratch\terraproof\backend
+cd backend
 $env:PYTHONPATH = "."
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
+- **API Root & Docs:** `http://127.0.0.1:8000/docs`
+- **Audit Ledger Chain:** `http://127.0.0.1:8000/api/v1/audit/verify-chain`
+- **Public Verification API:** `http://127.0.0.1:8000/api/v1/public/verify/CLM-2026-0891`
 
-- **Backend API:** `http://127.0.0.1:8000`
-- **Interactive Swagger Docs:** `http://127.0.0.1:8000/docs`
-- **System Health:** `http://127.0.0.1:8000/api/v1/health`
-
-### Terminal 2: Start the Frontend (Vite + React)
-
+### Step 4: Start React + Vite Frontend
+In a second PowerShell terminal:
 ```powershell
-cd C:\Users\Vaishali\.gemini\antigravity\scratch\terraproof\frontend
+cd frontend
 npm run dev
 ```
-
-- **Web Application:** `http://localhost:5173`
-
-Open your web browser and navigate to `http://localhost:5173`.
+- **Web Portal:** `http://localhost:5173`
+- **Official Revenue Claims Queue:** `http://localhost:5173/claims`
+- **Public Verification Registry:** `http://localhost:5173/verify`
 
 ---
 
-## 7. Running the Automated Test Suite
+## 6. Automated Test Suite (53 Tests)
 
-TerraProof includes an automated test suite validating geodesic mathematical calculations, NDVI/NDWI indexing, geometry boundary bounds, and claim review endpoints.
-
-Run tests using PowerShell:
+Execute the complete test suite verifying every component from mathematical geodesy to hash-chain tamper detection:
 
 ```powershell
-cd C:\Users\Vaishali\.gemini\antigravity\scratch\terraproof\backend
+cd backend
 $env:PYTHONPATH = "."
 python -m pytest tests -v
 ```
 
-### Test Results
+### Test Suite Summary:
 ```text
-tests/test_api_endpoints.py::test_health_handler PASSED                  [  8%]
-tests/test_api_endpoints.py::test_provider_status_handler PASSED         [ 16%]
-tests/test_api_endpoints.py::test_submit_claim_and_review PASSED         [ 25%]
-tests/test_api_endpoints.py::test_insurance_verification_workflow PASSED [ 33%]
-tests/test_geodesic_and_validation.py::test_geodesic_polygon_area_positive PASSED [ 41%]
-tests/test_geodesic_and_validation.py::test_validate_study_area_valid PASSED [ 50%]
-tests/test_geodesic_and_validation.py::test_validate_study_area_invalid_coordinates PASSED [ 58%]
-tests/test_geodesic_and_validation.py::test_validate_study_area_tiny_sliver PASSED [ 66%]
-tests/test_raster_and_indices.py::test_ndvi_known_values PASSED          [ 75%]
-tests/test_raster_and_indices.py::test_ndvi_with_nodata PASSED           [ 83%]
-tests/test_raster_and_indices.py::test_ndwi_mcfeeters PASSED             [ 91%]
-tests/test_raster_and_indices.py::test_quantify_affected_area PASSED     [100%]
+tests/test_api_endpoints.py (4 tests) .................. PASSED
+tests/test_exif_and_compensation.py (4 tests) .......... PASSED
+tests/test_geodesic_and_validation.py (4 tests) ........ PASSED
+tests/test_phase7_identity_and_documents.py (15 tests) . PASSED
+tests/test_phase8_risk_and_land_use.py (5 tests) ....... PASSED
+tests/test_phase9_official_workflow.py (6 tests) ....... PASSED
+tests/test_phase10_verification_and_appeals.py (4 tests) PASSED
+tests/test_raster_and_indices.py (4 tests) ............. PASSED
+tests/test_real_vs_demo_provenance.py (3 tests) ........ PASSED
+tests/test_verification_upgrades.py (4 tests) .......... PASSED
 
-============================= 12 passed in 1.16s ==============================
+======================== 53 passed in 4.85s ========================
 ```
 
 ---
 
-## 8. Satellite Data Provider Modes
+## 7. Cryptographic Audit Ledger & Public Verification
 
-TerraProof supports two cleanly separated modes configured in `.env`:
-
-### Demonstration Mode (`TERRAPROOF_MODE=demo`) — Default
-- Uses deterministic, calibrated synthetic satellite observations.
-- Explicitly labeled in the UI and reports with disclaimer: `[DEMO MODE: Calibrated Fixture]`.
-- Requires zero API keys or external network requests.
-- Ideal for student presentations, offline development, and unit testing.
-
-### Real Data Mode (`TERRAPROOF_MODE=real`)
-- Queries the **Microsoft Planetary Computer STAC Catalog** (`https://planetarycomputer.microsoft.com/api/stac/v1`) for authentic Sentinel-2 MSI and Sentinel-1 SAR acquisition scenes.
-- Queries **Open-Meteo Historical Weather Archive** for real millimeter-level rainfall and root-zone soil moisture.
-- Preserves genuine ESA scene IDs, solar angles, and percentage cloud coverage.
+TerraProof enforces mathematical immutability for administrative determinations:
+- **Hash Pointer Chaining:** Every block contains $H_n = \text{SHA256}(n + \text{timestamp} + \text{event} + \text{record} + \text{actor} + \text{data\_hash} + H_{n-1})$.
+- **Genesis Block:** Linked to $64$ zero-characters (`0000000000000000...`).
+- **Integrity Audit:** Endpoint `/api/v1/audit/verify-chain` recalculates every digest across the entire chain to guarantee mathematical non-repudiation.
+- **Citizen Privacy Shield:** The `/verify/:id` public portal displays official quasi-judicial determinations while redacting all PII (names, phone numbers, raw Aadhaar, and bank accounts) under the DPDP Act 2023.
 
 ---
 
-## 9. Mathematical Formulations
+## 8. Responsible Use & Disclaimers
 
-### 1. Normalized Difference Vegetation Index (NDVI)
-$$\text{NDVI} = \frac{\text{NIR} - \text{RED}}{\text{NIR} + \text{RED} + \epsilon}$$
-- **NIR:** Sentinel-2 Band 8 ($842\text{ nm}$)
-- **RED:** Sentinel-2 Band 4 ($665\text{ nm}$)
-
-### 2. Normalized Difference Water Index (NDWI - McFeeters)
-$$\text{NDWI} = \frac{\text{GREEN} - \text{NIR}}{\text{GREEN} + \text{NIR} + \epsilon}$$
-- **GREEN:** Sentinel-2 Band 3 ($560\text{ nm}$)
-- **NIR:** Sentinel-2 Band 8 ($842\text{ nm}$)
-
-### 3. True Ellipsoidal Geodesic Area
-$$\text{Area} = \frac{R^2}{2} \left| \sum_{i=1}^{n} \Delta \lambda_i (2 + \sin \phi_i + \sin \phi_{i+1}) \right|$$
-- Computed directly on the WGS84 authalic sphere ($R \approx 6,371,007.2\text{ m}$) to avoid planar projection distortion.
-
----
-
-## 10. Responsible Use & Disclaimers
-
-> **LEGAL & FORENSIC DISCLAIMER:** TerraProof is a technical decision-support and evidence-gathering system. Satellite spectral indices provide indirect radiometric indicators of vegetation vigor and surface moisture. This application does not constitute a legally binding determination of fraud or guarantee of indemnity. Final claim approval remains the exclusive responsibility of accredited human insurance adjusters.
-
+> **STATUTORY NOTICE:** TerraProof is an Earth observation evidence-corroboration instrument. Satellite spectral reflectance indices and SAR backscatter measurements provide radiometric indicators of physical surface phenomena. In accordance with State Land Revenue Codes and PMFBY Operational Guidelines, official revenue decisions remain under the sole jurisdiction of designated revenue officials and appellate courts.

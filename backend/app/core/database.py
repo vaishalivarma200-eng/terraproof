@@ -81,6 +81,46 @@ def init_db():
                 if col_name not in job_cols:
                     cursor.execute(f"ALTER TABLE analysis_jobs ADD COLUMN {col_name} {col_type}")
 
+            # Auto-migrate audit_blocks table columns
+            cursor.execute("PRAGMA table_info(audit_blocks)")
+            audit_cols = {row[1] for row in cursor.fetchall()}
+            if audit_cols and "timestamp_iso" not in audit_cols:
+                cursor.execute("ALTER TABLE audit_blocks ADD COLUMN timestamp_iso VARCHAR(64)")
+
+            # Auto-migrate official_inspections table columns
+            cursor.execute("PRAGMA table_info(official_inspections)")
+            insp_cols = {row[1] for row in cursor.fetchall()}
+            insp_cols_to_add = [
+                ("jurisdiction_village", "VARCHAR(64)"),
+                ("jurisdiction_tehsil", "VARCHAR(64)"),
+                ("jurisdiction_district", "VARCHAR(64)"),
+                ("device_latitude", "FLOAT"),
+                ("device_longitude", "FLOAT"),
+                ("is_geotag_matched_boundary", "BOOLEAN DEFAULT 1"),
+                ("checklist_crop_present", "BOOLEAN DEFAULT 1"),
+                ("checklist_water_marks_observed", "BOOLEAN DEFAULT 0"),
+                ("checklist_structure_present", "BOOLEAN DEFAULT 0"),
+                ("checklist_boundary_matches", "BOOLEAN DEFAULT 1"),
+                ("prefilled_satellite_damage_percent", "FLOAT DEFAULT 0.0"),
+                ("confirmed_damage_percent", "FLOAT DEFAULT 0.0"),
+                ("override_occurred", "BOOLEAN DEFAULT 0"),
+                ("override_reason", "TEXT"),
+                ("low_damage_insufficient_flag", "BOOLEAN DEFAULT 0"),
+                ("decision_action", "VARCHAR(64) DEFAULT 'CONFIRM_EVIDENCE'"),
+                ("decision_remarks", "TEXT"),
+                ("signature_hash", "VARCHAR(64)"),
+                ("signed_at", "DATETIME"),
+                ("sla_deadline", "DATETIME"),
+                ("sla_status", "VARCHAR(32) DEFAULT 'ON_TIME'"),
+                ("inspection_photos", "JSON"),
+                ("report_pdf_path", "VARCHAR(512)"),
+                ("created_at", "DATETIME"),
+                ("updated_at", "DATETIME")
+            ]
+            for col_name, col_type in insp_cols_to_add:
+                if col_name not in insp_cols:
+                    cursor.execute(f"ALTER TABLE official_inspections ADD COLUMN {col_name} {col_type}")
+
             conn.connection.commit()
             cursor.close()
 

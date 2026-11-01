@@ -21,6 +21,9 @@ import {
   Copy,
   Check,
   Building2,
+  Scale,
+  RotateCcw,
+  ExternalLink,
 } from 'lucide-react';
 import { api } from '../services/api';
 import { Claim, AnalysisJob, GeoJSONGeometry, PhotoVerificationResult } from '../types';
@@ -33,6 +36,8 @@ import { OfficialIntegrationsBar } from '../components/OfficialIntegrationsBar';
 import { RiskScoreCard } from '../components/RiskScoreCard';
 import { LandUseChangeViewer } from '../components/LandUseChangeViewer';
 import { OfficialWorkflowModal } from '../components/OfficialWorkflowModal';
+import { FarmerAppealModal } from '../components/FarmerAppealModal';
+import { FairnessMonitoringModal } from '../components/FairnessMonitoringModal';
 import {
   INDIAN_STATES_DISTRICTS,
   CROP_SEASONS,
@@ -137,6 +142,9 @@ export const InsurancePage: React.FC = () => {
   const [showInspectionModal, setShowInspectionModal] = useState(false);
   const [showIdentityModal, setShowIdentityModal] = useState(false);
   const [showOfficialModal, setShowOfficialModal] = useState(false);
+  const [showAppealModal, setShowAppealModal] = useState(false);
+  const [showFairnessModal, setShowFairnessModal] = useState(false);
+  const [resettingDemo, setResettingDemo] = useState(false);
 
   // Form State
   const [refNo, setRefNo] = useState(`CLM-2026-${Math.floor(1000 + Math.random() * 9000)}`);
@@ -351,6 +359,22 @@ export const InsurancePage: React.FC = () => {
     }
   };
 
+  const handleResetDemoScenarios = async () => {
+    if (!window.confirm('Reset database with the 4 benchmark evaluation archetypes? (Genuine Flood, Inflated Area, Tenancy Dispute, Unauthorized Construction)')) {
+      return;
+    }
+    try {
+      setResettingDemo(true);
+      await api.resetDemoScenarios();
+      await loadClaims();
+      alert('Demonstration scenarios successfully reloaded.');
+    } catch (err: any) {
+      alert(`Failed to reset demo scenarios: ${err.message}`);
+    } finally {
+      setResettingDemo(false);
+    }
+  };
+
   const handleRunVerification = async () => {
     if (!selectedClaim) return;
     try {
@@ -437,7 +461,30 @@ export const InsurancePage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center space-x-3 self-start sm:self-auto">
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          {/* Fairness Monitoring */}
+          <button
+            type="button"
+            onClick={() => setShowFairnessModal(true)}
+            className="px-3 py-1.5 rounded-lg bg-indigo-950/50 hover:bg-indigo-900/50 border border-indigo-700/50 text-indigo-300 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-sm"
+            title="Smallholder parity & model fairness monitoring"
+          >
+            <Scale className="w-3.5 h-3.5" />
+            <span>Fairness & Parity</span>
+          </button>
+
+          {/* Reset Demo Archetypes */}
+          <button
+            type="button"
+            disabled={resettingDemo}
+            onClick={handleResetDemoScenarios}
+            className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-sm disabled:opacity-50"
+            title="Reload 4 evaluation archetypes"
+          >
+            <RotateCcw className={`w-3.5 h-3.5 text-amber-400 ${resettingDemo ? 'animate-spin' : ''}`} />
+            <span>{resettingDemo ? 'Resetting...' : '4 Archetypes'}</span>
+          </button>
+
           {/* Language Toggle */}
           <button
             type="button"
@@ -586,6 +633,27 @@ export const InsurancePage: React.FC = () => {
                       <Building2 className="w-3.5 h-3.5 text-blue-400" />
                       <span>Official Decision Order</span>
                     </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowAppealModal(true)}
+                      className="px-3 py-2 rounded-lg bg-amber-950/40 hover:bg-amber-900/40 text-amber-300 text-xs font-semibold border border-amber-700/50 flex items-center space-x-1.5 transition-all shadow-sm"
+                      title="File statutory grievance or appeal for independent administrative review"
+                    >
+                      <Scale className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Statutory Appeal</span>
+                    </button>
+
+                    <a
+                      href={`/verify/${selectedClaim.reference_no}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 flex items-center space-x-1.5 transition-all shadow-sm"
+                      title="View public tamper-evident certificate (Zero-PII)"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Public Verify</span>
+                    </a>
 
                     <button
                       type="button"
@@ -1623,6 +1691,26 @@ export const InsurancePage: React.FC = () => {
           }}
         />
       )}
+
+      {/* Phase 10: Farmer Grievance & Statutory Appeal Modal */}
+      {selectedClaim && (
+        <FarmerAppealModal
+          isOpen={showAppealModal}
+          onClose={() => setShowAppealModal(false)}
+          claimId={selectedClaim.id}
+          claimReference={selectedClaim.reference_no}
+          originalDamagePercent={activeAnalysis?.results?.metrics?.damage_percentage || 65.0}
+          onAppealSubmitted={() => {
+            loadClaims();
+          }}
+        />
+      )}
+
+      {/* Phase 10: Algorithmic Fairness & Model Parity Modal */}
+      <FairnessMonitoringModal
+        isOpen={showFairnessModal}
+        onClose={() => setShowFairnessModal(false)}
+      />
     </div>
   );
 };

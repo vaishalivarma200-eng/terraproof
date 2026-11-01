@@ -188,6 +188,7 @@ def sign_official_inspection(
     )
 
     if db:
+        from app.core.audit_chain import append_audit_block
         db.add(inspection)
         # Update claim status based on decision action
         claim = db.query(Claim).filter(Claim.id == claim_id).first()
@@ -203,5 +204,22 @@ def sign_official_inspection(
             claim.reviewer_notes = f"Official {officer_role} {officer_name}: {remarks}"
         db.commit()
         db.refresh(inspection)
+
+        # Cryptographically append official inspection order to the tamper-evident ledger
+        append_audit_block(
+            db=db,
+            event_type="OFFICIAL_INSPECTED",
+            record_id=inspection.id,
+            actor=f"OFFICIAL:{officer_role}:{officer_name.replace(' ', '_').upper()}",
+            payload={
+                "claim_reference": claim.reference_no if claim else "N/A",
+                "officer_role": officer_role,
+                "confirmed_damage_pct": confirmed_damage_pct,
+                "prefilled_damage_pct": prefilled_damage_pct,
+                "override_occurred": override_occurred,
+                "decision_action": decision_action,
+                "signature_hash": sig_hash
+            }
+        )
 
     return inspection
