@@ -55,6 +55,9 @@ def init_db():
                 ("sum_insured_per_ha", "FLOAT DEFAULT 35000.0"),
                 ("khasra_no", "VARCHAR(64)"),
                 ("khatauni_no", "VARCHAR(64)"),
+                ("tenancy_type", "VARCHAR(32) DEFAULT 'OWNER'"),
+                ("masked_aadhaar_ref", "VARCHAR(32)"),
+                ("kyc_status", "VARCHAR(32) DEFAULT 'UNVERIFIED'"),
                 ("field_photos", "JSON"),
                 ("field_inspections", "JSON"),
             ]

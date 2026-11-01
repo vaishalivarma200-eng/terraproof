@@ -23,6 +23,9 @@ class ClaimCreate(BaseModel):
     sum_insured_per_ha: Optional[float] = Field(35000.0, description="Sum insured per hectare under PMFBY in INR (₹)")
     khasra_no: Optional[str] = Field(None, description="Khasra land record parcel number")
     khatauni_no: Optional[str] = Field(None, description="Khatauni ledger account number")
+    tenancy_type: Optional[str] = Field("OWNER", description="Tenancy status: OWNER, TENANT, SHARECROPPER")
+    masked_aadhaar_ref: Optional[str] = Field(None, description="Masked Aadhaar reference e.g. XXXX-XXXX-4921 (Never raw)")
+    kyc_status: Optional[str] = Field("UNVERIFIED", description="KYC status: VERIFIED or UNVERIFIED")
     field_photos: Optional[List[Dict[str, Any]]] = Field(default_factory=list)
 
 class FieldInspectionCreate(BaseModel):
@@ -78,6 +81,9 @@ class ClaimResponse(BaseModel):
     sum_insured_per_ha: Optional[float]
     khasra_no: Optional[str]
     khatauni_no: Optional[str]
+    tenancy_type: Optional[str] = "OWNER"
+    masked_aadhaar_ref: Optional[str] = None
+    kyc_status: Optional[str] = "UNVERIFIED"
     latitude: float
     longitude: float
     boundary_geojson: Dict[str, Any]

@@ -27,6 +27,9 @@ import { Claim, AnalysisJob, GeoJSONGeometry, PhotoVerificationResult } from '..
 import { MapViewer } from '../components/MapViewer';
 import { DiscrepancyBadge } from '../components/DiscrepancyBadge';
 import { WeatherCard } from '../components/WeatherCard';
+import { IdentityConsentModal } from '../components/IdentityConsentModal';
+import { LandDocumentVerifier } from '../components/LandDocumentVerifier';
+import { OfficialIntegrationsBar } from '../components/OfficialIntegrationsBar';
 import {
   INDIAN_STATES_DISTRICTS,
   CROP_SEASONS,
@@ -129,6 +132,7 @@ export const InsurancePage: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showInspectionModal, setShowInspectionModal] = useState(false);
+  const [showIdentityModal, setShowIdentityModal] = useState(false);
 
   // Form State
   const [refNo, setRefNo] = useState(`CLM-2026-${Math.floor(1000 + Math.random() * 9000)}`);
@@ -534,6 +538,16 @@ export const InsurancePage: React.FC = () => {
 
                   {/* Action Buttons */}
                   <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+                    <button
+                      type="button"
+                      onClick={() => setShowIdentityModal(true)}
+                      className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 flex items-center space-x-1.5 transition-all shadow-sm"
+                      title="Privacy-First Identity & DPDP Act Consent"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>{selectedClaim.masked_aadhaar_ref || 'Verify KYC'}</span>
+                    </button>
+
                     {activeAnalysis?.report_pdf_url && (
                       <a
                         href={activeAnalysis.report_pdf_url}
@@ -654,6 +668,12 @@ export const InsurancePage: React.FC = () => {
                   overlayLayerName="Observed Crop Damage"
                   overlayColor="#ef4444"
                   height="380px"
+                />
+
+                {/* Phase 7: Official Revenue & Insurance Export Layer */}
+                <OfficialIntegrationsBar
+                  claimId={selectedClaim.id}
+                  claimReference={selectedClaim.reference_no}
                 />
               </div>
 
@@ -965,6 +985,15 @@ export const InsurancePage: React.FC = () => {
 
                   {/* Weather Context Component */}
                   <WeatherCard weather={activeAnalysis.results.metrics.weather_context} />
+
+                  {/* Phase 7: Land Document OCR & Consistency Verification */}
+                  <LandDocumentVerifier
+                    claimId={selectedClaim.id}
+                    claimantName={selectedClaim.farmer_name}
+                    claimedAreaHa={selectedClaim.claimed_area_ha}
+                    drawnBoundaryHa={selectedClaim.claimed_area_ha}
+                    district={selectedClaim.district}
+                  />
 
                   {/* Ground Inspection Findings if recorded */}
                   {selectedClaim.field_inspections && selectedClaim.field_inspections.length > 0 && (
@@ -1509,6 +1538,23 @@ export const InsurancePage: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Phase 7: DPDP Consent & Identity Verification Modal */}
+      {selectedClaim && (
+        <IdentityConsentModal
+          isOpen={showIdentityModal}
+          onClose={() => setShowIdentityModal(false)}
+          farmerName={selectedClaim.farmer_name}
+          onVerified={(maskedId) => {
+            setSelectedClaim({
+              ...selectedClaim,
+              masked_aadhaar_ref: maskedId,
+              kyc_status: 'VERIFIED',
+            });
+            setShowIdentityModal(false);
+          }}
+        />
       )}
     </div>
   );

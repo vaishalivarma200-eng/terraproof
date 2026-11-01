@@ -27,6 +27,9 @@ export interface Claim {
   sum_insured_per_ha?: number;
   khasra_no?: string;
   khatauni_no?: string;
+  tenancy_type?: string;
+  masked_aadhaar_ref?: string;
+  kyc_status?: string;
   latitude: number;
   longitude: number;
   boundary_geojson: GeoJSONGeometry;
@@ -78,6 +81,9 @@ export interface ClaimCreateInput {
   sum_insured_per_ha?: number;
   khasra_no?: string;
   khatauni_no?: string;
+  tenancy_type?: string;
+  masked_aadhaar_ref?: string;
+  kyc_status?: string;
   boundary_geojson: GeoJSONGeometry;
   supporting_notes?: string;
   field_photos?: any[];

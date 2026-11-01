@@ -58,6 +58,12 @@ class Claim(Base):
         nullable=False
     )
 
+    # Identity & Tenancy Context (Privacy-First)
+    tenancy_type = Column(String(32), default="OWNER", nullable=True)  # OWNER, TENANT, SHARECROPPER
+    masked_aadhaar_ref = Column(String(32), nullable=True)  # e.g. "XXXX-XXXX-4921" (Never raw 12 digits)
+    kyc_status = Column(String(32), default="UNVERIFIED", nullable=True)  # VERIFIED, UNVERIFIED
+
     # Relationships
     analysis_jobs = relationship("AnalysisJob", back_populates="claim", cascade="all, delete-orphan")
+    land_documents = relationship("LandDocument", back_populates="claim", cascade="all, delete-orphan")
 

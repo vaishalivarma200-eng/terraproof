@@ -159,5 +159,112 @@ export const api = {
       validation_message: string;
     }>(res);
   },
+
+  // --- Phase 7: Identity & DPDP Act API Methods ---
+  async verifyKYC(provider: string, payload: Record<string, any>) {
+    const res = await fetch(`${API_BASE}/identity/verify-kyc`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ provider, payload }),
+    });
+    return handleResponse<{
+      is_verified: boolean;
+      masked_identifier: string;
+      salted_hash: string;
+      verification_source: string;
+      full_name?: string;
+      state?: string;
+      district?: string;
+      audit_metadata?: Record<string, any>;
+    }>(res);
+  },
+
+  async recordConsent(data: {
+    farmer_name: string;
+    masked_identifier: string;
+    purpose?: string;
+    retention_period_days?: number;
+    agreed_terms: boolean;
+  }) {
+    const res = await fetch(`${API_BASE}/identity/consent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return handleResponse<any>(res);
+  },
+
+  async downloadMyData(farmerName: string) {
+    const res = await fetch(`${API_BASE}/identity/my-data/${encodeURIComponent(farmerName)}`);
+    return handleResponse<any>(res);
+  },
+
+  async deleteMyData(farmerName: string) {
+    const res = await fetch(`${API_BASE}/identity/my-data/${encodeURIComponent(farmerName)}`, {
+      method: 'DELETE',
+    });
+    return handleResponse<any>(res);
+  },
+
+  // --- Phase 7: Land Document OCR & Verification ---
+  async verifySampleLandDocument(params: {
+    document_text: string;
+    document_type?: string;
+    claimant_name: string;
+    drawn_boundary_ha: number;
+    claimed_area_ha: number;
+    claim_district?: string;
+    tenancy_type?: string;
+  }) {
+    const res = await fetch(`${API_BASE}/documents/verify-sample`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return handleResponse<{
+      extracted_data: Record<string, any>;
+      verification_report: Record<string, any>;
+      verification_status: string;
+    }>(res);
+  },
+
+  async uploadLandDocumentText(params: {
+    claim_id: string;
+    document_text: string;
+    document_type: string;
+    filename?: string;
+    tenancy_type?: string;
+  }) {
+    const res = await fetch(`${API_BASE}/documents/upload-text`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return handleResponse<any>(res);
+  },
+
+  async getClaimLandDocuments(claimId: string) {
+    const res = await fetch(`${API_BASE}/documents/claim/${claimId}`);
+    return handleResponse<any[]>(res);
+  },
+
+  // --- Phase 7: Government Interoperability Adapters ---
+  async compareWithOfficialData(claimId: string) {
+    const res = await fetch(`${API_BASE}/integrations/compare/${claimId}`);
+    return handleResponse<any>(res);
+  },
+
+  async getDraftGirdawari(claimId: string) {
+    const res = await fetch(`${API_BASE}/integrations/girdawari/draft/${claimId}`);
+    return handleResponse<any>(res);
+  },
+
+  exportGirdawariCsvUrl(claimId: string): string {
+    return `${API_BASE}/integrations/girdawari/export-csv/${claimId}`;
+  },
+
+  exportPmfbyCsvUrl(claimId: string): string {
+    return `${API_BASE}/integrations/pmfby/export-csv/${claimId}`;
+  },
 };
 

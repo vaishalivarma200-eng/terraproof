@@ -160,3 +160,4 @@ def assess_crop_season_context(
         "harvest_false_alarm_risk": risk,
         "advisory_notes": notes
     }
+

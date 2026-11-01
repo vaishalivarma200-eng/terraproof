@@ -94,3 +94,4 @@ def classify_damage_peril(
         "rationale": rationale,
         "recommended_action": action
     }
+

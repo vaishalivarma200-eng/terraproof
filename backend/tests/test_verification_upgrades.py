@@ -153,3 +153,4 @@ def test_insurance_verification_phase2_upgrades():
     first_feat = result["overlays_geojson"]["features"][0]
     assert "severity_label" in first_feat["properties"]
     assert "color" in first_feat["properties"]
+
