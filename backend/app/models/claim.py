@@ -72,4 +72,5 @@ class Claim(Base):
     # Relationships
     analysis_jobs = relationship("AnalysisJob", back_populates="claim", cascade="all, delete-orphan")
     land_documents = relationship("LandDocument", back_populates="claim", cascade="all, delete-orphan")
+    official_inspections_list = relationship("OfficialInspection", back_populates="claim", cascade="all, delete-orphan")
 

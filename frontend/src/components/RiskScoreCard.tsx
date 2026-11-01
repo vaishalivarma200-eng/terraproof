@@ -208,3 +208,4 @@ export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({
     </div>
   );
 };
+

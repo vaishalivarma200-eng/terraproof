@@ -340,5 +340,82 @@ export const api = {
       triage_queue: any[];
     }>(res);
   },
+
+  // --- Phase 9: Official Decision Support & Inspection App ---
+  async getOfficialWorkload(officerRole: string, district?: string) {
+    const params = new URLSearchParams();
+    if (district) params.append('district', district);
+    const res = await fetch(`${API_BASE}/official/workload/${encodeURIComponent(officerRole)}?${params.toString()}`);
+    return handleResponse<{
+      officer_role: string;
+      total_assigned_claims: number;
+      overdue_count: number;
+      nearing_sla_count: number;
+      queue: any[];
+    }>(res);
+  },
+
+  async getDraftEvidencePack(claimId: string) {
+    const res = await fetch(`${API_BASE}/official/draft-evidence-pack/${claimId}`);
+    return handleResponse<{
+      claim_reference: string;
+      farmer_name: string;
+      khasra_no: string;
+      prefilled_crop: string;
+      prefilled_season: string;
+      claimed_area_ha: number;
+      satellite_observed_damaged_ha: number;
+      suggested_damage_percent: number;
+      suggested_damage_range: string;
+      confidence_score: number;
+      peril_identified: string;
+      is_low_damage_insufficient: boolean;
+      low_damage_notice?: string;
+      satellite_evidence_sources: string;
+      official_disclaimer: string;
+    }>(res);
+  },
+
+  async submitOfficialInspection(data: {
+    claim_id: string;
+    officer_name: string;
+    officer_role: string;
+    prefilled_damage_percent: number;
+    confirmed_damage_percent: number;
+    override_reason?: string;
+    decision_action: string;
+    decision_remarks: string;
+    checklist: Record<string, boolean>;
+    photos?: any[];
+    device_latitude?: number;
+    device_longitude?: number;
+  }) {
+    const res = await fetch(`${API_BASE}/official/inspections/submit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return handleResponse<{
+      inspection_id: string;
+      claim_id: string;
+      officer_name: string;
+      officer_role: string;
+      decision_action: string;
+      confirmed_damage_percent: number;
+      override_occurred: boolean;
+      signature_hash: string;
+      signed_at: string;
+      pdf_download_url: string;
+    }>(res);
+  },
+
+  getOfficialInspectionPdfUrl(claimId: string): string {
+    return `${API_BASE}/official/inspection-report-pdf/${claimId}`;
+  },
+
+  async getOverrideAnalytics() {
+    const res = await fetch(`${API_BASE}/official/override-analytics`);
+    return handleResponse<any>(res);
+  },
 };
 

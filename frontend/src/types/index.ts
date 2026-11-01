@@ -155,6 +155,8 @@ export interface EvidenceMetrics {
   index_delta_mean: number;
   total_field_area_ha?: number;
   estimated_affected_area_ha: number;
+  damaged_area_ha?: number;
+  damage_percentage?: number;
   estimated_inundated_area_ha?: number;
   estimated_vegetation_loss_area_ha?: number;
   claimed_area_ha?: number;

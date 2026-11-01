@@ -217,3 +217,4 @@ def get_village_triage_queue(district: str, village: str, db: Session = Depends(
         "urgent_audits_count": len([q for q in queue if q["inspection_priority"] == "URGENT_AUDIT"]),
         "triage_queue": queue
     }
+

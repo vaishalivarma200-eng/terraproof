@@ -32,6 +32,7 @@ import { LandDocumentVerifier } from '../components/LandDocumentVerifier';
 import { OfficialIntegrationsBar } from '../components/OfficialIntegrationsBar';
 import { RiskScoreCard } from '../components/RiskScoreCard';
 import { LandUseChangeViewer } from '../components/LandUseChangeViewer';
+import { OfficialWorkflowModal } from '../components/OfficialWorkflowModal';
 import {
   INDIAN_STATES_DISTRICTS,
   CROP_SEASONS,
@@ -135,6 +136,7 @@ export const InsurancePage: React.FC = () => {
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [showInspectionModal, setShowInspectionModal] = useState(false);
   const [showIdentityModal, setShowIdentityModal] = useState(false);
+  const [showOfficialModal, setShowOfficialModal] = useState(false);
 
   // Form State
   const [refNo, setRefNo] = useState(`CLM-2026-${Math.floor(1000 + Math.random() * 9000)}`);
@@ -574,6 +576,16 @@ export const InsurancePage: React.FC = () => {
                         <span>Dossier PDF</span>
                       </a>
                     )}
+
+                    <button
+                      type="button"
+                      onClick={() => setShowOfficialModal(true)}
+                      className="px-3 py-2 rounded-lg bg-blue-950/40 hover:bg-blue-900/40 text-blue-300 text-xs font-semibold border border-blue-700/50 flex items-center space-x-1.5 transition-all shadow-sm"
+                      title="Quasi-Judicial Revenue Decision Order (Patwari / Tehsildar)"
+                    >
+                      <Building2 className="w-3.5 h-3.5 text-blue-400" />
+                      <span>Official Decision Order</span>
+                    </button>
 
                     <button
                       type="button"
@@ -1587,6 +1599,27 @@ export const InsurancePage: React.FC = () => {
               kyc_status: 'VERIFIED',
             });
             setShowIdentityModal(false);
+          }}
+        />
+      )}
+
+      {/* Phase 9: Official Revenue Decision & Inspection Order Modal */}
+      {selectedClaim && (
+        <OfficialWorkflowModal
+          isOpen={showOfficialModal}
+          onClose={() => setShowOfficialModal(false)}
+          claimId={selectedClaim.id}
+          claimReference={selectedClaim.reference_no}
+          farmerName={selectedClaim.farmer_name}
+          khasraNo={selectedClaim.khasra_no}
+          claimedAreaHa={selectedClaim.claimed_area_ha}
+          initialSatelliteDamage={activeAnalysis?.results?.metrics?.damage_percentage || 65.0}
+          onInspectionCommitted={(res) => {
+            setSelectedClaim({
+              ...selectedClaim,
+              status: res.decision_action === 'CONFIRM_EVIDENCE' ? 'REVIEWED' : 'FIELD_INSPECTION_RECORDED',
+              reviewer_decision: res.decision_action === 'CONFIRM_EVIDENCE' ? 'APPROVED' : undefined,
+            });
           }}
         />
       )}

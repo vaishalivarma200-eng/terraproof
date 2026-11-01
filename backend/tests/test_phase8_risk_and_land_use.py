@@ -133,3 +133,4 @@ def test_land_use_change_detection_structure():
     assert len(res["overlays_geojson"]["features"]) > 0
     assert "Section 172 Land Revenue Code" in res["inspector_task_directive"]
     assert "Suspected change based on multi-temporal spectral and radar anomalies" in res["disclaimer"]
+

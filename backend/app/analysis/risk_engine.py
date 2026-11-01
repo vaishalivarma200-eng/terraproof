@@ -252,3 +252,4 @@ def compute_claim_risk_score(
         "risk_factors_count": len([f for f in risk_factors if f.get("score_impact", 0) > 0]),
         "risk_factors": risk_factors
     }
+
