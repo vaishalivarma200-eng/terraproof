@@ -184,3 +184,4 @@ def resolve_farmer_appeal(appeal_id: str, request: AppealResolveRequest, db: Ses
         "resolution_signature_hash": resolution_hash,
         "resolved_at": now_utc.isoformat()
     }
+

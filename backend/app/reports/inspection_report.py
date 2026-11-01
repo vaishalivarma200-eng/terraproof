@@ -238,3 +238,4 @@ def generate_official_inspection_pdf(
 
     doc.build(story)
     return str(filepath)
+

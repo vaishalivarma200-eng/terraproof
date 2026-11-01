@@ -73,10 +73,10 @@ export const PublicVerificationPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       {/* Official Gov-Tech Style Topbar */}
-      <header className="border-b border-emerald-900/40 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+      <header className="border-b border-slate-800/80 bg-gradient-to-r from-slate-950 via-slate-900/95 to-slate-950 backdrop-blur sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400">
+            <div className="p-2 bg-slate-800/80 border border-slate-700/80 rounded-lg text-emerald-400">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
@@ -107,7 +107,7 @@ export const PublicVerificationPage: React.FC = () => {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 space-y-8">
         
         {/* Search Bar */}
-        <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+        <section className="bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800/80 rounded-2xl p-6 shadow-xl relative overflow-hidden">
           <div className="absolute -top-12 -right-12 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
           
           <div className="max-w-2xl">
@@ -130,7 +130,7 @@ export const PublicVerificationPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-sm rounded-xl transition flex items-center gap-2 shadow-lg shadow-emerald-950/40 disabled:opacity-50"
+                className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-medium text-sm rounded-xl transition flex items-center gap-2 shadow-lg shadow-emerald-950/40 border border-emerald-500/30 disabled:opacity-50"
               >
                 {loading ? 'Verifying...' : 'Verify Record'}
               </button>
@@ -168,8 +168,8 @@ export const PublicVerificationPage: React.FC = () => {
 
         {/* Verification Result Card */}
         {record && record.is_authentic ? (
-          <section className="bg-slate-900 border border-emerald-900/60 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden space-y-6">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+          <section className="bg-gradient-to-b from-slate-900/95 to-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden space-y-6">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
             
             {/* Authenticity Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
@@ -365,3 +365,4 @@ export const PublicVerificationPage: React.FC = () => {
     </div>
   );
 };
+

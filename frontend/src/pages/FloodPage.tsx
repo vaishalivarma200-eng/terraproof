@@ -54,7 +54,7 @@ export const FloodPage: React.FC = () => {
             <Droplets className="w-4 h-4" />
             <span>Module B • Multi-Spectral & SAR Delineation</span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Flood Inundation & Surface Water Monitoring</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent tracking-tight">Flood Inundation & Surface Water Monitoring</h1>
           <p className="text-slate-400 text-xs mt-0.5">
             Delineates active flood extent using Sentinel-2 McFeeters NDWI and Sentinel-1 synthetic aperture radar backscatter contrast.
           </p>
@@ -101,7 +101,7 @@ export const FloodPage: React.FC = () => {
             <button
               onClick={handleRunFloodDetection}
               disabled={analyzing}
-              className="w-full py-2.5 rounded-lg bg-sky-500 hover:bg-sky-400 disabled:opacity-50 text-slate-950 text-xs font-bold flex items-center justify-center space-x-1.5 shadow-md transition-all"
+              className="w-full py-2.5 rounded-lg bg-gradient-to-r from-sky-600 to-blue-700 hover:from-sky-500 hover:to-blue-600 disabled:opacity-50 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-md shadow-sky-950/40 border border-sky-500/30 transition-all"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>{analyzing ? 'Processing Radar & NDWI...' : 'Run Flood Analysis'}</span>

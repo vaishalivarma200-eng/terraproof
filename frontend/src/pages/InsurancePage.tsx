@@ -455,7 +455,7 @@ export const InsurancePage: React.FC = () => {
             <ShieldCheck className="w-4 h-4" />
             <span>PMFBY Geospatial Decision-Support Engine</span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">{t.claimsTitle}</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent tracking-tight">{t.claimsTitle}</h1>
           <p className="text-slate-400 text-xs mt-0.5">
             Cross-examine reported crop loss with Sentinel-1/2 spectral signatures, Open-Meteo rainfall, and EXIF field photographs.
           </p>
@@ -498,7 +498,7 @@ export const InsurancePage: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowModal(true)}
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs shadow-md transition-all"
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-xs shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all"
           >
             <Plus className="w-4 h-4" />
             <span>{t.newClaim}</span>
@@ -677,7 +677,7 @@ export const InsurancePage: React.FC = () => {
                       type="button"
                       disabled={analyzing}
                       onClick={handleRunVerification}
-                      className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-slate-950 text-xs font-bold flex items-center space-x-1.5 shadow-md transition-all"
+                      className="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 disabled:opacity-50 text-white text-xs font-semibold shadow-md shadow-emerald-950/40 border border-emerald-500/30 flex items-center space-x-1.5 transition-all"
                     >
                       <Play className="w-3.5 h-3.5 fill-current" />
                       <span>{analyzing ? 'Analyzing Pixels...' : t.runVerification}</span>

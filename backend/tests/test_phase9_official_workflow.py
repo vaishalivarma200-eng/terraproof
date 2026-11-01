@@ -193,3 +193,4 @@ def test_generate_official_inspection_pdf(tmp_path):
     pdf_file = generate_official_inspection_pdf(insp_data, claim_data, output_dir=tmp_path)
     assert Path(pdf_file).exists()
     assert Path(pdf_file).stat().st_size > 1000  # More than 1 KB
+

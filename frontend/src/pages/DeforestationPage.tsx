@@ -53,7 +53,7 @@ export const DeforestationPage: React.FC = () => {
             <Trees className="w-4 h-4" />
             <span>Module D • Bi-Temporal Optical Differencing</span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Deforestation & Land-Cover Change</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent tracking-tight">Deforestation & Land-Cover Change</h1>
           <p className="text-slate-400 text-xs mt-0.5">
             Quantifies severe canopy removal and conversion to bare soil over time. Notes harvest vs deforestation distinctions.
           </p>
@@ -100,7 +100,7 @@ export const DeforestationPage: React.FC = () => {
             <button
               onClick={handleRunChangeDetection}
               disabled={analyzing}
-              className="w-full py-2.5 rounded-lg bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-slate-950 text-xs font-bold flex items-center justify-center space-x-1.5 shadow-md transition-all"
+              className="w-full py-2.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 disabled:opacity-50 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>{analyzing ? 'Detecting Canopy Clearance...' : 'Run Change Analysis'}</span>

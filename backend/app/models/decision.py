@@ -69,3 +69,4 @@ class OfficialInspection(Base):
 
     # Relationship to claim
     claim = relationship("Claim", back_populates="official_inspections_list")
+

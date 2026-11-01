@@ -54,7 +54,7 @@ export const DroughtPage: React.FC = () => {
             <SunMedium className="w-4 h-4" />
             <span>Module C • Canopy Greenness & Soil Moisture</span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Drought & Crop-Stress Monitoring</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent tracking-tight">Drought & Crop-Stress Monitoring</h1>
           <p className="text-slate-400 text-xs mt-0.5">
             Evaluates NDVI vegetation stress anomalies correlated with precipitation deficits and root-zone soil moisture.
           </p>
@@ -101,7 +101,7 @@ export const DroughtPage: React.FC = () => {
             <button
               onClick={handleRunDroughtAnalysis}
               disabled={analyzing}
-              className="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 text-xs font-bold flex items-center justify-center space-x-1.5 shadow-md transition-all"
+              className="w-full py-2.5 rounded-lg bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 disabled:opacity-50 text-white text-xs font-semibold flex items-center justify-center space-x-1.5 shadow-md shadow-amber-950/40 border border-amber-500/30 transition-all"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               <span>{analyzing ? 'Computing NDVI Anomalies...' : 'Run Stress Analysis'}</span>

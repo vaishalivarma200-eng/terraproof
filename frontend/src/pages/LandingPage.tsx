@@ -15,29 +15,32 @@ import {
   MapPin,
   Sparkles,
   CheckCircle2,
+  Building2,
+  Scale
 } from 'lucide-react';
 import { ThreeCanvas3D } from '../components/ThreeCanvas3D';
 import { MotionText3D, FloatingCard3D } from '../components/MotionText3D';
 
 export const LandingPage: React.FC = () => {
   return (
-    <div className="bg-[#eef7f4] text-slate-800 font-sans min-h-screen selection:bg-teal-300 selection:text-slate-950">
+    <div className="bg-slate-950 text-slate-100 font-sans min-h-screen selection:bg-emerald-500/30 selection:text-white">
       {/* =========================================================================
-          SECTION 1: HERO (Image 1)
-          Atmospheric landscape, Three.js 3D depth, editorial typography & floating data pills
+          SECTION 1: HERO
+          Formal dark atmospheric landscape, Three.js 3D depth, editorial typography
          ========================================================================= */}
-      <section className="relative min-h-[94vh] flex flex-col justify-between overflow-hidden bg-[#0c201a]">
-        {/* Coastal Terraced Landscape Photo with Deep Emerald / Sea Film Grading */}
+      <section className="relative min-h-[94vh] flex flex-col justify-between overflow-hidden bg-gradient-to-b from-[#080d19] via-[#050811] to-slate-950">
+        {/* Landscape photo with formal deep monochrome / slate grading */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-luminosity scale-105 transition-transform duration-1000"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 mix-blend-luminosity scale-105 transition-transform duration-1000"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=2000&q=85')`,
           }}
         />
 
-        {/* Ambient Gradient Overlays for Enhanced Editorial Legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0c201a] via-[#0c201a]/70 to-[#071713]/85" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0c201a]/95 via-[#0c201a]/55 to-transparent" />
+        {/* Formal Ambient Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-[#080d19]/80" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/50 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(16,185,129,0.06),transparent_70%)] pointer-events-none" />
 
         {/* Three.js 3D Orbital Canvas (Rotating Wireframe Earth & Satellite Constellation) */}
         <ThreeCanvas3D />
@@ -49,18 +52,18 @@ export const LandingPage: React.FC = () => {
             <div className="lg:col-span-8 space-y-6">
               {/* Category Pill */}
               <MotionText3D delay={0.1} depth={-20}>
-                <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#16352c]/90 border border-teal-400/30 text-xs text-teal-300 font-medium tracking-wide shadow-lg backdrop-blur-md">
-                  <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-                  <span>Satellite environmental intelligence</span>
+                <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-xs text-emerald-400 font-medium tracking-wide shadow-lg backdrop-blur-md">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>National Agricultural Decision-Support Layer</span>
                 </div>
               </MotionText3D>
 
-              {/* Editorial Headline matching Image 1 */}
+              {/* Editorial Headline with Formal Gradient Accent */}
               <MotionText3D delay={0.25} depth={-60}>
                 <h1 className="font-serif text-5xl sm:text-7xl lg:text-[5.25rem] text-white font-medium tracking-tight leading-[1.06]">
                   The land writes its <br />
                   history. <br />
-                  <span className="text-[#2dd4bf] italic font-normal tracking-normal drop-shadow-sm">
+                  <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent italic font-normal drop-shadow-sm">
                     We help you read it.
                   </span>
                 </h1>
@@ -69,7 +72,7 @@ export const LandingPage: React.FC = () => {
               {/* Subtitle */}
               <MotionText3D delay={0.4} depth={-30}>
                 <p className="max-w-xl text-base sm:text-lg text-slate-300/90 font-light leading-relaxed">
-                  TerraProof reads satellite observations of floods, droughts and forest change — and turns them into calm, credible evidence for the people verifying crop-insurance claims.
+                  TerraProof fuses Sentinel-1 SAR and Sentinel-2 optical imagery with meteorological archives into defensible, explainable evidence for revenue officers, PMFBY insurers, and farmers.
                 </p>
               </MotionText3D>
 
@@ -79,74 +82,75 @@ export const LandingPage: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-4">
                     <Link
                       to="/claims"
-                      className="px-6 py-3.5 rounded-full bg-[#0d9488] hover:bg-[#14b8a6] text-white font-semibold text-sm shadow-xl shadow-teal-950/60 transition-all flex items-center space-x-2 group"
+                      className="px-6 py-3.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-sm shadow-xl shadow-emerald-950/60 border border-emerald-500/30 transition-all flex items-center space-x-2 group"
                     >
                       <span>Verify a claim</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
 
-                    <a
-                      href="#workflow"
-                      className="px-6 py-3.5 rounded-full bg-[#16352c]/80 hover:bg-[#1a3e34] text-slate-300 hover:text-white border border-teal-500/20 font-medium text-sm backdrop-blur-md transition-all"
+                    <Link
+                      to="/verify"
+                      className="px-6 py-3.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 font-medium text-sm backdrop-blur-md transition-all flex items-center space-x-2"
                     >
-                      How it works
-                    </a>
+                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                      <span>Public Registry</span>
+                    </Link>
                   </div>
 
-                  {/* Scroll Indicator matching Image 1 */}
-                  <div className="hidden sm:flex items-center space-x-2 text-[10px] tracking-widest text-slate-400/80 font-mono uppercase">
-                    <span>SCROLL</span>
-                    <div className="w-3.5 h-5 rounded-full border border-slate-400/40 flex items-start justify-center p-0.5">
-                      <div className="w-1 h-1.5 rounded-full bg-teal-400 animate-bounce" />
+                  {/* Formal Scroll Indicator */}
+                  <div className="hidden sm:flex items-center space-x-2 text-[10px] tracking-widest text-slate-400 font-mono uppercase">
+                    <span>EXPLORE</span>
+                    <div className="w-3.5 h-5 rounded-full border border-slate-600 flex items-start justify-center p-0.5">
+                      <div className="w-1 h-1.5 rounded-full bg-emerald-400 animate-bounce" />
                     </div>
                   </div>
                 </div>
               </MotionText3D>
             </div>
 
-            {/* Right Column: Floating Live-Data Badges (Exactly as in Image 1) */}
+            {/* Right Column: Floating Live-Data Badges */}
             <div className="lg:col-span-4 relative h-64 lg:h-96 hidden sm:flex flex-col justify-center space-y-4">
               {/* Top Floating Badge: Flood Extent */}
               <FloatingCard3D delay={0.6} floatY={8} className="self-end">
-                <div className="p-3.5 rounded-2xl bg-[#122b24]/90 backdrop-blur-md border border-teal-500/25 text-left shadow-2xl text-xs space-y-1 w-64 hover:border-teal-400/50 transition-colors">
-                  <div className="flex items-center space-x-2 text-teal-300 font-semibold">
-                    <div className="w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center">
-                      <Radio className="w-3 h-3 text-teal-300" />
+                <div className="p-3.5 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-slate-800 text-left shadow-2xl text-xs space-y-1 w-68 hover:border-slate-700 transition-colors">
+                  <div className="flex items-center space-x-2 text-emerald-400 font-semibold">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                      <Radio className="w-3 h-3 text-emerald-400" />
                     </div>
                     <span>Flood extent · 412 ha (est.)</span>
                   </div>
-                  <div className="text-[11px] text-slate-400 pl-7">
-                    Sentinel-1 · IW · VV/VH polarisation
+                  <div className="text-[11px] text-slate-400 pl-7 font-mono">
+                    Sentinel-1 SAR · VV/VH Dual-Pol
                   </div>
                 </div>
               </FloatingCard3D>
 
               {/* Middle Floating Badge: NDVI Crop Stress */}
               <FloatingCard3D delay={0.8} floatY={6} className="self-start ml-2">
-                <div className="p-3.5 rounded-2xl bg-[#122b24]/90 backdrop-blur-md border border-teal-500/25 text-left shadow-2xl text-xs space-y-1 w-68 hover:border-teal-400/50 transition-colors">
+                <div className="p-3.5 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-slate-800 text-left shadow-2xl text-xs space-y-1 w-68 hover:border-slate-700 transition-colors">
                   <div className="flex items-center space-x-2 text-teal-300 font-semibold">
-                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                      <span className="text-emerald-300 text-xs">🍃</span>
+                    <div className="w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center">
+                      <span className="text-teal-300 text-xs">🍃</span>
                     </div>
                     <span>NDVI −0.31 vs. baseline</span>
                   </div>
-                  <div className="text-[11px] text-slate-400 pl-7">
-                    crop-stress flag · pending review
+                  <div className="text-[11px] text-slate-400 pl-7 font-mono">
+                    Phenological drop · Patwari audit
                   </div>
                 </div>
               </FloatingCard3D>
 
               {/* Lower Floating Badge: Pass Matched */}
               <FloatingCard3D delay={1.0} floatY={7} className="self-end mr-4">
-                <div className="p-3.5 rounded-2xl bg-[#122b24]/90 backdrop-blur-md border border-teal-500/25 text-left shadow-2xl text-xs space-y-1 w-64 hover:border-teal-400/50 transition-colors">
-                  <div className="flex items-center space-x-2 text-teal-300 font-semibold">
-                    <div className="w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center">
-                      <Satellite className="w-3 h-3 text-teal-300" />
+                <div className="p-3.5 rounded-2xl bg-slate-900/90 backdrop-blur-md border border-slate-800 text-left shadow-2xl text-xs space-y-1 w-68 hover:border-slate-700 transition-colors">
+                  <div className="flex items-center space-x-2 text-sky-400 font-semibold">
+                    <div className="w-5 h-5 rounded-full bg-sky-500/20 flex items-center justify-center">
+                      <Satellite className="w-3 h-3 text-sky-400" />
                     </div>
-                    <span>Pass matched · 06:42 UTC</span>
+                    <span>STAC Pass · 06:42 UTC</span>
                   </div>
-                  <div className="text-[11px] text-slate-400 pl-7">
-                    cloud-free · 10 m resolution
+                  <div className="text-[11px] text-slate-400 pl-7 font-mono">
+                    Planetary Computer · 10m L2A
                   </div>
                 </div>
               </FloatingCard3D>
@@ -154,99 +158,83 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Multi-layered Organic Curved Wave Divider matching Image 1 */}
-        <div className="relative w-full overflow-hidden leading-none z-10 pointer-events-none">
-          <svg
-            className="relative block w-full h-16 sm:h-24"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0,25 C160,85 340,10 520,55 C700,100 900,25 1200,65 L1200,120 L0,120 Z"
-              fill="#133027"
-              fillOpacity="0.4"
-            />
-            <path
-              d="M0,50 C200,105 380,25 580,70 C780,115 980,45 1200,80 L1200,120 L0,120 Z"
-              fill="#eef7f4"
-            />
-          </svg>
-        </div>
+        {/* Formal Architectural Gradient Rule */}
+        <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-slate-800 to-transparent z-10" />
       </section>
 
       {/* =========================================================================
-          SECTION 2: FEATURE TICKER BAR (Image 2)
+          SECTION 2: FEATURE TICKER BAR
          ========================================================================= */}
-      <section className="bg-[#eef7f4] border-b border-teal-900/10 py-5">
+      <section className="bg-gradient-to-r from-slate-950 via-slate-900/90 to-slate-950 border-b border-slate-800/80 py-5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-6 text-xs text-slate-600 font-medium">
-            <div className="flex items-center space-x-2 hover:text-teal-800 transition-colors">
-              <Radio className="w-4 h-4 text-teal-700" />
-              <span>Sentinel-1 radar</span>
+          <div className="flex flex-wrap items-center justify-between gap-6 text-xs text-slate-400 font-medium">
+            <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
+              <Radio className="w-4 h-4 text-emerald-400" />
+              <span>Sentinel-1 SAR Radar</span>
             </div>
 
-            <div className="flex items-center space-x-2 hover:text-teal-800 transition-colors">
-              <Eye className="w-4 h-4 text-teal-700" />
-              <span>Sentinel-2 optical</span>
+            <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
+              <Eye className="w-4 h-4 text-emerald-400" />
+              <span>Sentinel-2 Optical (10m)</span>
             </div>
 
-            <div className="flex items-center space-x-2 hover:text-teal-800 transition-colors">
-              <LineChart className="w-4 h-4 text-teal-700" />
-              <span>NDVI time series</span>
+            <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
+              <LineChart className="w-4 h-4 text-emerald-400" />
+              <span>NDVI / NDWI Differencing</span>
             </div>
 
-            <div className="flex items-center space-x-2 hover:text-teal-800 transition-colors">
-              <CloudRain className="w-4 h-4 text-teal-700" />
-              <span>Rainfall context</span>
+            <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
+              <CloudRain className="w-4 h-4 text-emerald-400" />
+              <span>Open-Meteo Rainfall Archive</span>
             </div>
 
-            <div className="flex items-center space-x-2 hover:text-teal-800 transition-colors">
-              <Activity className="w-4 h-4 text-teal-700" />
-              <span>Change detection</span>
+            <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
+              <Scale className="w-4 h-4 text-emerald-400" />
+              <span>Immutable Cryptographic Ledger</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 3: FOUR MODULES — "FOUR LENSES ON THE SAME LAND" (Image 2)
+          SECTION 3: FOUR MODULES — "FOUR LENSES ON THE SAME LAND"
          ========================================================================= */}
-      <section className="py-20 bg-[#eef7f4]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <section className="py-24 bg-gradient-to-b from-slate-950 via-slate-900/40 to-slate-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
           {/* Header */}
           <div className="space-y-3 max-w-2xl">
-            <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-teal-800">
-              FOUR MODULES
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-emerald-400">
+              FOUR CORE DOMAINS
             </span>
-            <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-slate-900 leading-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-white leading-tight">
               Four lenses on the same land
             </h2>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Every analysis is decision support. The satellites observe; TerraProof organises the evidence; a human decides what it means.
+            <p className="text-sm text-slate-400 leading-relaxed font-light">
+              Every analysis is decision support. The satellites observe; TerraProof drafts the evidence; designated human revenue officials make the quasi-judicial determination.
             </p>
           </div>
 
-          {/* Cards Grid matching Image 2 */}
+          {/* Formal Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1: Insurance Claim Verification (Core) */}
             <Link
               to="/claims"
-              className="p-7 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
+              className="p-7 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800/80 hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-950/20 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
             >
               <div className="flex items-center justify-between">
-                <div className="w-12 h-12 rounded-full bg-teal-50 border border-teal-200/60 flex items-center justify-center text-teal-800 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                   <ShieldCheck className="w-6 h-6" />
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-teal-100/80 text-teal-800 border border-teal-200">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-300 border border-emerald-800">
                   CORE
                 </span>
               </div>
 
               <div className="space-y-2">
-                <h3 className="font-serif text-xl font-semibold text-slate-900 group-hover:text-teal-800 transition-colors">
-                  Insurance claim verification
+                <h3 className="font-serif text-xl font-semibold text-white group-hover:text-emerald-400 transition-colors">
+                  Claim verification
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-light">
+                <p className="text-xs text-slate-400 leading-relaxed font-light">
                   Correlate reported crop damage against pre- and post-disaster spectral signatures. Quantifies claimed vs. observed area discrepancy.
                 </p>
               </div>
@@ -255,18 +243,18 @@ export const LandingPage: React.FC = () => {
             {/* Card 2: Flood Monitoring */}
             <Link
               to="/flood"
-              className="p-7 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
+              className="p-7 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800/80 hover:border-sky-500/50 hover:shadow-2xl hover:shadow-sky-950/20 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
             >
-              <div className="w-12 h-12 rounded-full bg-sky-50 border border-sky-200/60 flex items-center justify-center text-sky-800 group-hover:bg-sky-600 group-hover:text-white transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center text-sky-400 group-hover:bg-sky-600 group-hover:text-white transition-colors">
                 <Droplets className="w-6 h-6" />
               </div>
 
               <div className="space-y-2">
-                <h3 className="font-serif text-xl font-semibold text-slate-900 group-hover:text-sky-800 transition-colors">
+                <h3 className="font-serif text-xl font-semibold text-white group-hover:text-sky-400 transition-colors">
                   Flood monitoring
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-light">
-                  Radar-first inundation mapping with Sentinel-1 SAR and optical NDWI. Delineates standing water extent through cloud decks.
+                <p className="text-xs text-slate-400 leading-relaxed font-light">
+                  Radar-first inundation mapping with Sentinel-1 SAR and optical NDWI. Delineates standing water extent through dense monsoon clouds.
                 </p>
               </div>
             </Link>
@@ -274,18 +262,18 @@ export const LandingPage: React.FC = () => {
             {/* Card 3: Drought & Crop Stress */}
             <Link
               to="/drought"
-              className="p-7 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
+              className="p-7 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800/80 hover:border-amber-500/50 hover:shadow-2xl hover:shadow-amber-950/20 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
             >
-              <div className="w-12 h-12 rounded-full bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-800 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center text-amber-400 group-hover:bg-amber-600 group-hover:text-white transition-colors">
                 <SunMedium className="w-6 h-6" />
               </div>
 
               <div className="space-y-2">
-                <h3 className="font-serif text-xl font-semibold text-slate-900 group-hover:text-amber-800 transition-colors">
+                <h3 className="font-serif text-xl font-semibold text-white group-hover:text-amber-400 transition-colors">
                   Drought & crop stress
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-light">
-                  Vegetation-greenness trends, soil moisture deficits and meteorological precipitation integration across growing seasons.
+                <p className="text-xs text-slate-400 leading-relaxed font-light">
+                  Vegetation-greenness trends, soil moisture deficits, and meteorological precipitation integration across growing seasons.
                 </p>
               </div>
             </Link>
@@ -293,18 +281,18 @@ export const LandingPage: React.FC = () => {
             {/* Card 4: Forest & Land-Cover Change */}
             <Link
               to="/deforestation"
-              className="p-7 rounded-2xl bg-white border border-teal-900/10 hover:border-teal-600/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
+              className="p-7 rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-slate-800/80 hover:border-teal-500/50 hover:shadow-2xl hover:shadow-teal-950/20 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-start space-y-5 group"
             >
-              <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200/60 flex items-center justify-center text-emerald-800 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+              <div className="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center text-teal-400 group-hover:bg-teal-600 group-hover:text-white transition-colors">
                 <Trees className="w-6 h-6" />
               </div>
 
               <div className="space-y-2">
-                <h3 className="font-serif text-xl font-semibold text-slate-900 group-hover:text-emerald-800 transition-colors">
-                  Forest & land-cover change
+                <h3 className="font-serif text-xl font-semibold text-white group-hover:text-teal-400 transition-colors">
+                  Land-cover change
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-light">
-                  Bi-temporal optical canopy loss detection distinguishing timber clearance, wildfires, and seasonal deciduous variation.
+                <p className="text-xs text-slate-400 leading-relaxed font-light">
+                  Multi-temporal differencing detecting unauthorized construction, plinths, and forest clearing on agricultural parcels.
                 </p>
               </div>
             </Link>
@@ -313,17 +301,17 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          SECTION 4: THE WORKFLOW (Image 3)
+          SECTION 4: THE WORKFLOW
           "From orbit to evidence, in four calm steps"
          ========================================================================= */}
-      <section id="workflow" className="py-20 bg-[#e4f1ed] border-t border-teal-900/10">
+      <section id="workflow" className="py-24 bg-gradient-to-b from-slate-950 via-[#070c18] to-slate-950 border-t border-slate-800/80 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
           {/* Header */}
           <div className="space-y-3 max-w-2xl">
-            <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-teal-800">
-              THE WORKFLOW
+            <span className="text-xs font-bold tracking-[0.2em] uppercase text-emerald-400">
+              AUDIT WORKFLOW
             </span>
-            <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-slate-900 leading-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-white leading-tight">
               From orbit to evidence, in four calm steps
             </h2>
           </div>
@@ -331,26 +319,26 @@ export const LandingPage: React.FC = () => {
           {/* 4 Connected Circular Step Cards on a horizontal timeline */}
           <div className="relative">
             {/* Horizontal Line connecting nodes (desktop) */}
-            <div className="hidden lg:block absolute top-7 left-12 right-12 h-[2px] bg-teal-600/20 z-0" />
+            <div className="hidden lg:block absolute top-7 left-12 right-12 h-[1px] bg-slate-800 z-0" />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
               {/* Step 1 */}
               <div className="space-y-4">
                 <div className="relative inline-block">
-                  <div className="w-14 h-14 rounded-2xl bg-white border border-teal-300/60 shadow-md flex items-center justify-center text-teal-700">
+                  <div className="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-md flex items-center justify-center text-emerald-400">
                     <MapPin className="w-6 h-6" />
                   </div>
-                  <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center shadow">
+                  <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-emerald-600 text-white text-[11px] font-bold flex items-center justify-center shadow">
                     1
                   </span>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="font-serif text-lg font-bold text-slate-900">
+                  <h3 className="font-serif text-lg font-bold text-white">
                     Define the land
                   </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Draw a field boundary or enter coordinates. TerraProof validates the geometry and builds the smallest useful study area.
+                  <p className="text-xs text-slate-400 leading-relaxed font-light">
+                    Draw field boundary or enter Khasra coordinates. TerraProof validates geometry and builds the minimum bounding study envelope.
                   </p>
                 </div>
               </div>
@@ -358,20 +346,20 @@ export const LandingPage: React.FC = () => {
               {/* Step 2 */}
               <div className="space-y-4">
                 <div className="relative inline-block">
-                  <div className="w-14 h-14 rounded-2xl bg-white border border-teal-300/60 shadow-md flex items-center justify-center text-teal-700">
+                  <div className="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-md flex items-center justify-center text-emerald-400">
                     <Satellite className="w-6 h-6" />
                   </div>
-                  <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center shadow">
+                  <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-emerald-600 text-white text-[11px] font-bold flex items-center justify-center shadow">
                     2
                   </span>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="font-serif text-lg font-bold text-slate-900">
+                  <h3 className="font-serif text-lg font-bold text-white">
                     Match the passes
                   </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    The engine finds Sentinel-1 and Sentinel-2 observations before and after the event, and records every acquisition date.
+                  <p className="text-xs text-slate-400 leading-relaxed font-light">
+                    The engine finds Sentinel-1 SAR and Sentinel-2 optical observations before and after the incident with exact timestamps.
                   </p>
                 </div>
               </div>
@@ -379,20 +367,20 @@ export const LandingPage: React.FC = () => {
               {/* Step 3 */}
               <div className="space-y-4">
                 <div className="relative inline-block">
-                  <div className="w-14 h-14 rounded-2xl bg-white border border-teal-300/60 shadow-md flex items-center justify-center text-teal-700">
+                  <div className="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-md flex items-center justify-center text-emerald-400">
                     <Activity className="w-6 h-6" />
                   </div>
-                  <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center shadow">
+                  <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-emerald-600 text-white text-[11px] font-bold flex items-center justify-center shadow">
                     3
                   </span>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="font-serif text-lg font-bold text-slate-900">
+                  <h3 className="font-serif text-lg font-bold text-white">
                     Run the analysis
                   </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Radar flood mapping, vegetation indices, change detection — each with its method, thresholds and parameters documented.
+                  <p className="text-xs text-slate-400 leading-relaxed font-light">
+                    Radar flood mapping, vegetation indices, change detection — with methods, thresholds, and sensor provenance transparently exposed.
                   </p>
                 </div>
               </div>
@@ -400,20 +388,20 @@ export const LandingPage: React.FC = () => {
               {/* Step 4 */}
               <div className="space-y-4">
                 <div className="relative inline-block">
-                  <div className="w-14 h-14 rounded-2xl bg-white border border-teal-300/60 shadow-md flex items-center justify-center text-teal-700">
+                  <div className="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-700/80 shadow-md flex items-center justify-center text-emerald-400">
                     <ShieldCheck className="w-6 h-6" />
                   </div>
-                  <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#0d9488] text-white text-[11px] font-bold flex items-center justify-center shadow">
+                  <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-emerald-600 text-white text-[11px] font-bold flex items-center justify-center shadow">
                     4
                   </span>
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="font-serif text-lg font-bold text-slate-900">
-                    Human review
+                  <h3 className="font-serif text-lg font-bold text-white">
+                    Quasi-judicial order
                   </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    An evidence report with confidence notes, limitations and uncertainties. A person — not an algorithm — makes the call.
+                  <p className="text-xs text-slate-400 leading-relaxed font-light">
+                    Evidence pack with SLA tracking, override logging, and cryptographic SHA-256 digital stamp for Patwari / Tehsildar adjudication.
                   </p>
                 </div>
               </div>
@@ -425,24 +413,32 @@ export const LandingPage: React.FC = () => {
       {/* =========================================================================
           SECTION 5: LIVE TEST DRIVE CALLOUT
          ========================================================================= */}
-      <section className="py-16 bg-[#0c201a] text-white">
+      <section className="py-20 bg-gradient-to-b from-slate-950 to-black border-t border-slate-800/80 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-teal-400">
-            TRY THE LIVE ENGINE
+          <span className="text-xs font-bold tracking-[0.2em] uppercase text-emerald-400">
+            QUICK EVALUATION ARCHETYPES
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight">
-            Ready to inspect satellite evidence on real farm plots?
+            Ready to inspect satellite evidence on real farm parcels?
           </h2>
-          <p className="text-slate-300 text-sm max-w-xl mx-auto leading-relaxed">
-            Register a claim, draw or pick pre-calibrated field boundaries, and compute NDVI / NDWI spectral deltas with one click.
+          <p className="text-slate-400 text-sm max-w-xl mx-auto leading-relaxed font-light">
+            Review live claims, inspect cadastral boundaries, evaluate NDBI land-use change, or verify signed statutory inspection orders on the public ledger.
           </p>
-          <div className="pt-2">
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
             <Link
               to="/claims"
-              className="px-8 py-3.5 rounded-full bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-sm shadow-xl shadow-teal-500/25 transition-all inline-flex items-center space-x-2"
+              className="px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-sm shadow-xl shadow-emerald-950/40 border border-emerald-500/30 transition-all inline-flex items-center space-x-2"
             >
-              <span>Launch Claim Verification</span>
+              <span>Launch Claims Queue</span>
               <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <Link
+              to="/verify"
+              className="px-8 py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-sm transition-all inline-flex items-center space-x-2"
+            >
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Public Verification Portal</span>
             </Link>
           </div>
         </div>

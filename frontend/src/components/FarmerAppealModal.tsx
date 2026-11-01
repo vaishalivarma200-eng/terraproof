@@ -218,3 +218,4 @@ export const FarmerAppealModal: React.FC<FarmerAppealModalProps> = ({
     </div>
   );
 };
+

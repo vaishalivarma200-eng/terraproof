@@ -25,3 +25,4 @@ def reset_demonstration_scenarios():
             {"ref": "CLM-2026-0312", "archetype": "Suspected Unauthorized Construction (Land-Use Change)"}
         ]
     }
+

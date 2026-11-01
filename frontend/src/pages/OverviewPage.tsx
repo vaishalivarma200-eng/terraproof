@@ -52,7 +52,7 @@ export const OverviewPage: React.FC = () => {
       {/* Page Title */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Geospatial Operations Overview</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent tracking-tight">Geospatial Operations Overview</h1>
           <p className="text-slate-400 text-xs mt-1">
             Real-time pipeline monitoring, provider connectivity status, and submitted agricultural loss claims.
           </p>
@@ -60,7 +60,7 @@ export const OverviewPage: React.FC = () => {
 
         <Link
           to="/claims"
-          className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs shadow-md transition-all self-start sm:self-auto"
+          className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-xs shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all self-start sm:self-auto"
         >
           <ShieldCheck className="w-4 h-4" />
           <span>New Claim Verification</span>

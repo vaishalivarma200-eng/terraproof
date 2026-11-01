@@ -41,3 +41,4 @@ class FarmerAppeal(Base):
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
 
     claim = relationship("Claim", backref="appeals_list")
+

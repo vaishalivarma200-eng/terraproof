@@ -18,7 +18,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isLanding = location.pathname === '/';
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#071613] text-slate-100 selection:bg-teal-400 selection:text-slate-950">
+    <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500/30 selection:text-white">
       <Navbar />
       <main className={`flex-1 ${isLanding ? 'pt-0' : 'pt-24'}`}>
         {children}
