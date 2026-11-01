@@ -30,6 +30,10 @@ export interface Claim {
   tenancy_type?: string;
   masked_aadhaar_ref?: string;
   kyc_status?: string;
+  risk_score?: number;
+  risk_tier?: string;
+  risk_signals?: any;
+  land_use_change_flags?: any;
   latitude: number;
   longitude: number;
   boundary_geojson: GeoJSONGeometry;

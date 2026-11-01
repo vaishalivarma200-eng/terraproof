@@ -154,3 +154,4 @@ class AgriStackDCSAdapter:
             "total_holding_ha": 3.0,
             "kyc_status": "PENDING_CONSENT"
         }
+

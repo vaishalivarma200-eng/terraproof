@@ -11,6 +11,7 @@ from app.api.satellite import router as satellite_router
 from app.api.identity import router as identity_router
 from app.api.documents import router as documents_router
 from app.api.integrations import router as integrations_router
+from app.api.risk import router as risk_router
 
 # Ensure tables and seed records exist
 init_db()
@@ -52,6 +53,7 @@ app.include_router(satellite_router, prefix="/api/v1")
 app.include_router(identity_router, prefix="/api/v1")
 app.include_router(documents_router, prefix="/api/v1")
 app.include_router(integrations_router, prefix="/api/v1")
+app.include_router(risk_router, prefix="/api/v1")
 
 @app.get("/")
 def root():

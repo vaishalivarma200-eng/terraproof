@@ -358,3 +358,4 @@ export const IdentityConsentModal: React.FC<IdentityConsentModalProps> = ({
     </div>
   );
 };
+

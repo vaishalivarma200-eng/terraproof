@@ -58,6 +58,10 @@ def init_db():
                 ("tenancy_type", "VARCHAR(32) DEFAULT 'OWNER'"),
                 ("masked_aadhaar_ref", "VARCHAR(32)"),
                 ("kyc_status", "VARCHAR(32) DEFAULT 'UNVERIFIED'"),
+                ("risk_score", "FLOAT DEFAULT 15.0"),
+                ("risk_tier", "VARCHAR(32) DEFAULT 'LOW_RISK'"),
+                ("risk_signals", "JSON"),
+                ("land_use_change_flags", "JSON"),
                 ("field_photos", "JSON"),
                 ("field_inspections", "JSON"),
             ]

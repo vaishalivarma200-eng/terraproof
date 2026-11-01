@@ -105,3 +105,4 @@ def delete_my_data(farmer_name: str, db: Session = Depends(get_db)):
     manager = ConsentManager(db)
     result = manager.purge_farmer_personal_data(farmer_name)
     return result
+

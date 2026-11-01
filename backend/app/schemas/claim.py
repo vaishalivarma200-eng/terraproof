@@ -84,6 +84,10 @@ class ClaimResponse(BaseModel):
     tenancy_type: Optional[str] = "OWNER"
     masked_aadhaar_ref: Optional[str] = None
     kyc_status: Optional[str] = "UNVERIFIED"
+    risk_score: Optional[float] = 15.0
+    risk_tier: Optional[str] = "LOW_RISK"
+    risk_signals: Optional[Dict[str, Any]] = None
+    land_use_change_flags: Optional[Dict[str, Any]] = None
     latitude: float
     longitude: float
     boundary_geojson: Dict[str, Any]

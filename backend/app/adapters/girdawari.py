@@ -136,3 +136,4 @@ class EGirdawariAdapter:
         Retrieves baseline state e-Girdawari record for discrepancy checking.
         """
         return MOCK_OFFICIAL_GIRDAWARI.get(khasra_no.strip())
+

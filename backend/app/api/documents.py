@@ -139,3 +139,4 @@ def get_claim_documents(claim_id: str, db: Session = Depends(get_db)):
         }
         for d in docs
     ]
+

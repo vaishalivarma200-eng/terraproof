@@ -266,5 +266,79 @@ export const api = {
   exportPmfbyCsvUrl(claimId: string): string {
     return `${API_BASE}/integrations/pmfby/export-csv/${claimId}`;
   },
+
+  // --- Phase 8: Risk Engine & Land-Use Change ---
+  async evaluateClaimRisk(claimId: string) {
+    const res = await fetch(`${API_BASE}/risk/claim/${claimId}`);
+    return handleResponse<{
+      composite_risk_score: number;
+      risk_tier: string;
+      triage_recommendation: string;
+      action_directive: string;
+      risk_factors_count: number;
+      risk_factors: Array<{
+        factor: string;
+        score_impact: number;
+        severity: string;
+        title: string;
+        explanation: string;
+      }>;
+    }>(res);
+  },
+
+  async detectLandUseChange(params: {
+    claim_id?: string;
+    boundary_geojson?: GeoJSONGeometry;
+    baseline_date?: string;
+    current_date?: string;
+  }) {
+    const res = await fetch(`${API_BASE}/risk/detect-land-use-change`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return handleResponse<{
+      has_suspected_change: boolean;
+      change_classification: string;
+      change_description: string;
+      change_area_ha: number;
+      change_percentage_of_parcel: number;
+      total_parcel_area_ha: number;
+      confidence_score: number;
+      baseline_period: string;
+      observation_period: string;
+      spectral_evidence: Record<string, any>;
+      overlays_geojson: any;
+      disclaimer: string;
+      inspector_task_directive: string;
+    }>(res);
+  },
+
+  async checkSpatialOverlap(boundaryGeoJSON: GeoJSONGeometry, excludeClaimId?: string) {
+    const res = await fetch(`${API_BASE}/risk/spatial-overlap-check`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        boundary_geojson: boundaryGeoJSON,
+        exclude_claim_id: excludeClaimId,
+      }),
+    });
+    return handleResponse<{
+      has_overlap: boolean;
+      max_overlap_percentage: number;
+      overlapping_claims_count: number;
+    }>(res);
+  },
+
+  async getVillageTriageQueue(district: string, village: string) {
+    const res = await fetch(`${API_BASE}/risk/village-triage/${encodeURIComponent(district)}/${encodeURIComponent(village)}`);
+    return handleResponse<{
+      district: string;
+      village: string;
+      total_claims: number;
+      urgent_audits_count: number;
+      triage_queue: any[];
+    }>(res);
+  },
 };
 

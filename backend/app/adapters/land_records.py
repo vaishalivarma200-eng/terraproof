@@ -75,3 +75,4 @@ class LandRecordImporter:
             ))
 
         return parcels
+

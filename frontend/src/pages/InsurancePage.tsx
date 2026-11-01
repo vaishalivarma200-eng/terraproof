@@ -30,6 +30,8 @@ import { WeatherCard } from '../components/WeatherCard';
 import { IdentityConsentModal } from '../components/IdentityConsentModal';
 import { LandDocumentVerifier } from '../components/LandDocumentVerifier';
 import { OfficialIntegrationsBar } from '../components/OfficialIntegrationsBar';
+import { RiskScoreCard } from '../components/RiskScoreCard';
+import { LandUseChangeViewer } from '../components/LandUseChangeViewer';
 import {
   INDIAN_STATES_DISTRICTS,
   CROP_SEASONS,
@@ -480,17 +482,30 @@ export const InsurancePage: React.FC = () => {
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-xs font-semibold text-emerald-400">{claim.reference_no}</span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-                      claim.status === 'REVIEWED'
-                        ? 'bg-purple-500/10 text-purple-400'
-                        : claim.status === 'FIELD_INSPECTION_RECORDED'
-                        ? 'bg-sky-500/10 text-sky-400'
-                        : claim.status === 'EVIDENCE_GENERATED'
-                        ? 'bg-emerald-500/10 text-emerald-400'
-                        : 'bg-amber-500/10 text-amber-400'
-                    }`}>
-                      {claim.status.replace(/_/g, ' ')}
-                    </span>
+                    <div className="flex items-center space-x-1.5">
+                      {claim.risk_tier && (
+                        <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                          claim.risk_tier === 'HIGH_RISK'
+                            ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                            : claim.risk_tier === 'MODERATE_RISK'
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                            : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                        }`}>
+                          {claim.risk_tier === 'HIGH_RISK' ? 'RED TRIAGE' : claim.risk_tier === 'MODERATE_RISK' ? 'AMBER TRIAGE' : 'GREEN FAST'}
+                        </span>
+                      )}
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                        claim.status === 'REVIEWED'
+                          ? 'bg-purple-500/10 text-purple-400'
+                          : claim.status === 'FIELD_INSPECTION_RECORDED'
+                          ? 'bg-sky-500/10 text-sky-400'
+                          : claim.status === 'EVIDENCE_GENERATED'
+                          ? 'bg-emerald-500/10 text-emerald-400'
+                          : 'bg-amber-500/10 text-amber-400'
+                      }`}>
+                        {claim.status.replace(/_/g, ' ')}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="text-sm font-medium text-slate-200 mt-1">{claim.farmer_name}</div>
@@ -589,6 +604,14 @@ export const InsurancePage: React.FC = () => {
                     </button>
                   </div>
                 </div>
+
+                {/* Phase 8: Claim Risk Score & Anti-Fraud Triage */}
+                <RiskScoreCard
+                  claimId={selectedClaim.id}
+                  initialRiskScore={selectedClaim.risk_score}
+                  initialRiskTier={selectedClaim.risk_tier}
+                  initialSignals={selectedClaim.risk_signals}
+                />
 
                 {/* Indian Land Record & Policy Parameters */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
@@ -993,6 +1016,17 @@ export const InsurancePage: React.FC = () => {
                     claimedAreaHa={selectedClaim.claimed_area_ha}
                     drawnBoundaryHa={selectedClaim.claimed_area_ha}
                     district={selectedClaim.district}
+                  />
+
+                  {/* Phase 8: Agricultural Land-Use Change & Construction Detection */}
+                  <LandUseChangeViewer
+                    claimId={selectedClaim.id}
+                    boundaryGeoJson={selectedClaim.boundary_geojson}
+                    khasraNo={selectedClaim.khasra_no}
+                    district={selectedClaim.district}
+                    onAssignToInspector={(dir) => {
+                      alert(`Task assigned to Patwari: ${dir}`);
+                    }}
                   />
 
                   {/* Ground Inspection Findings if recorded */}

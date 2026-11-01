@@ -100,3 +100,4 @@ class PMFBYNCIPAdapter:
         for d in dossiers:
             writer.writerow(d.model_dump())
         return output.getvalue()
+

@@ -302,3 +302,4 @@ export const OfficialIntegrationsBar: React.FC<OfficialIntegrationsBarProps> = (
     </>
   );
 };
+

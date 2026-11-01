@@ -63,6 +63,12 @@ class Claim(Base):
     masked_aadhaar_ref = Column(String(32), nullable=True)  # e.g. "XXXX-XXXX-4921" (Never raw 12 digits)
     kyc_status = Column(String(32), default="UNVERIFIED", nullable=True)  # VERIFIED, UNVERIFIED
 
+    # Phase 8: Risk Engine & Land-Use Change Signals
+    risk_score = Column(Float, nullable=True, default=15.0)  # 0 to 100
+    risk_tier = Column(String(32), nullable=True, default="LOW_RISK")  # LOW_RISK, MODERATE_RISK, HIGH_RISK
+    risk_signals = Column(JSON, nullable=True)  # Detailed factors breakdown
+    land_use_change_flags = Column(JSON, nullable=True)  # Suspected non-agri construction / clearing
+
     # Relationships
     analysis_jobs = relationship("AnalysisJob", back_populates="claim", cascade="all, delete-orphan")
     land_documents = relationship("LandDocument", back_populates="claim", cascade="all, delete-orphan")
