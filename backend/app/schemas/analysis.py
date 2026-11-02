@@ -52,17 +52,17 @@ class AnalysisResultSchema(BaseModel):
 
 class AnalysisJobResponse(BaseModel):
     id: str
-    claim_id: Optional[str]
+    claim_id: Optional[str] = None
     analysis_type: str
     status: str
     execution_mode: str
     integrity_hash: Optional[str] = None
     version: Optional[str] = "1.0.0"
-    parameters: Dict[str, Any]
-    results: Optional[AnalysisResultSchema]
-    report_pdf_url: Optional[str]
-    error_message: Optional[str]
+    parameters: Dict[str, Any] = Field(default_factory=dict)
+    results: Optional[Dict[str, Any]] = None
+    report_pdf_url: Optional[str] = None
+    error_message: Optional[str] = None
     created_at: datetime
-    completed_at: Optional[datetime]
+    completed_at: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)

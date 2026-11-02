@@ -180,8 +180,7 @@ def list_analyses(skip: int = 0, limit: int = 50, db: Session = Depends(get_db))
     out = []
     for j in jobs:
         d = j.__dict__.copy()
-        if j.report_pdf_path:
-            d["report_pdf_url"] = f"/api/v1/analyses/{j.id}/pdf"
+        d["report_pdf_url"] = f"/api/v1/analyses/{j.id}/pdf" if j.report_pdf_path else None
         out.append(d)
     return out
 
@@ -192,8 +191,7 @@ def get_analysis_job(analysis_id: str, db: Session = Depends(get_db)):
     if not job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Analysis job not found.")
     d = job.__dict__.copy()
-    if job.report_pdf_path:
-        d["report_pdf_url"] = f"/api/v1/analyses/{job.id}/pdf"
+    d["report_pdf_url"] = f"/api/v1/analyses/{job.id}/pdf" if job.report_pdf_path else None
     return d
 
 @router.get("/{analysis_id}/pdf")
