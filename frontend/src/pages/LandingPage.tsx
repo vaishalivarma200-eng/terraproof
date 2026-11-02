@@ -68,25 +68,22 @@ export const LandingPage: React.FC = () => {
 
               {/* Editorial Headline with Formal Gradient Accent */}
               <MotionText3D delay={0.25} depth={-60}>
-                <h1 className="font-serif text-4xl sm:text-6xl lg:text-[5rem] text-white font-medium tracking-tight leading-[1.08]">
-                  {isHindi ? (
-                    <>
-                      भूमि अपना इतिहास <br />
-                      लिखती है। <br />
-                      <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent italic font-normal drop-shadow-sm">
-                        हम इसे पढ़ने में आपकी सहायता करते हैं।
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      The land writes its <br />
-                      history. <br />
-                      <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent italic font-normal drop-shadow-sm">
-                        We help you read it.
-                      </span>
-                    </>
-                  )}
-                </h1>
+                {isHindi ? (
+                  <h1 className="font-sans text-2xl sm:text-4xl lg:text-[2.65rem] text-white font-semibold tracking-normal leading-relaxed sm:leading-[1.38] py-1">
+                    भूमि अपना इतिहास लिखती है। <br />
+                    <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent font-medium drop-shadow-sm inline-block mt-1 sm:mt-1.5">
+                      हम इसे पढ़ने में आपकी सहायता करते हैं।
+                    </span>
+                  </h1>
+                ) : (
+                  <h1 className="font-serif text-3xl sm:text-5xl lg:text-[4.25rem] text-white font-medium tracking-tight leading-[1.12]">
+                    The land writes its <br />
+                    history. <br />
+                    <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent italic font-normal drop-shadow-sm">
+                      We help you read it.
+                    </span>
+                  </h1>
+                )}
               </MotionText3D>
 
               {/* Subtitle */}
