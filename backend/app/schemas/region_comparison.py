@@ -59,3 +59,4 @@ class RegionComparisonResponse(BaseModel):
     roads_mask_geojson: Dict[str, Any]
     asdma_validation: Dict[str, Any]
     is_offline_demo: bool = True
+

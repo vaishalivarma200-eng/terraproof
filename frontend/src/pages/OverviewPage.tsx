@@ -18,8 +18,10 @@ import { api } from '../services/api';
 import { Claim, AnalysisJob, ProviderStatus, SystemHealth } from '../types';
 import { MetricCard } from '../components/MetricCard';
 import { DiscrepancyBadge } from '../components/DiscrepancyBadge';
+import { useLanguage } from '../context/LanguageContext';
 
 export const OverviewPage: React.FC = () => {
+  const { isHindi } = useLanguage();
   const [claims, setClaims] = useState<Claim[]>([]);
   const [analyses, setAnalyses] = useState<AnalysisJob[]>([]);
   const [provider, setProvider] = useState<ProviderStatus | null>(null);
@@ -52,9 +54,13 @@ export const OverviewPage: React.FC = () => {
       {/* Page Title */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
         <div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent tracking-tight">Geospatial Operations Overview</h1>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent tracking-tight">
+            {isHindi ? 'भू-स्थानिक परिचालन सिंहावलोकन' : 'Geospatial Operations Overview'}
+          </h1>
           <p className="text-slate-400 text-xs mt-1">
-            Real-time pipeline monitoring, provider connectivity status, and submitted agricultural loss claims.
+            {isHindi
+              ? 'वास्तविक समय पाइपलाइन निगरानी, प्रदाता कनेक्टिविटी स्थिति और प्रस्तुत कृषि हानि दावे।'
+              : 'Real-time pipeline monitoring, provider connectivity status, and submitted agricultural loss claims.'}
           </p>
         </div>
 
@@ -63,37 +69,37 @@ export const OverviewPage: React.FC = () => {
           className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-xs shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all self-start sm:self-auto"
         >
           <ShieldCheck className="w-4 h-4" />
-          <span>New Claim Verification</span>
+          <span>{isHindi ? 'नया दावा सत्यापन' : 'New Claim Verification'}</span>
         </Link>
       </div>
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
-          label="Registered Claims"
+          label={isHindi ? 'पंजीकृत दावे' : 'Registered Claims'}
           value={totalClaims}
-          subValue="Agricultural fields in database"
+          subValue={isHindi ? 'डेटाबेस में कृषि भूखंड' : 'Agricultural fields in database'}
           icon={FileText}
           variant="default"
         />
         <MetricCard
-          label="Evidence Dossiers"
+          label={isHindi ? 'साक्ष्य डोजियर' : 'Evidence Dossiers'}
           value={verifiedClaims}
-          subValue="Spectral analyses generated"
+          subValue={isHindi ? 'स्पेक्ट्रल विश्लेषण तैयार' : 'Spectral analyses generated'}
           icon={CheckCircle2}
           variant="emerald"
         />
         <MetricCard
-          label="Pending Audit"
+          label={isHindi ? 'लंबित अंकेक्षण' : 'Pending Audit'}
           value={pendingReview}
-          subValue="Awaiting human reviewer sign-off"
+          subValue={isHindi ? 'मानव समीक्षक स्वीकृति प्रतीक्षित' : 'Awaiting human reviewer sign-off'}
           icon={Clock}
           variant="amber"
         />
         <MetricCard
-          label="Satellite Mode"
-          value={provider?.active_mode === 'real' ? 'LIVE STAC' : 'DEMO MODE'}
-          subValue={provider?.satellite_provider.name ?? 'Connecting...'}
+          label={isHindi ? 'उपग्रह मोड' : 'Satellite Mode'}
+          value={provider?.active_mode === 'real' ? 'LIVE STAC' : (isHindi ? 'डेमो मोड' : 'DEMO MODE')}
+          subValue={provider?.satellite_provider.name ?? (isHindi ? 'कनेक्ट हो रहा...' : 'Connecting...')}
           icon={Satellite}
           variant="blue"
         />

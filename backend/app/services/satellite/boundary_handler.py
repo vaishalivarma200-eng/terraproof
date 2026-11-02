@@ -119,3 +119,4 @@ def compute_boundary_hash(boundary_geojson: Dict[str, Any]) -> str:
         canonical_str = json.dumps(boundary_geojson, sort_keys=True)
 
     return hashlib.sha256(canonical_str.encode("utf-8")).hexdigest()[:16]
+

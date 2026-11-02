@@ -66,3 +66,4 @@ class SatelliteDataService(ABC):
     ) -> List[SceneMetadata]:
         """Searches acquisition catalog for matching scenes."""
         pass
+

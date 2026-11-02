@@ -52,3 +52,4 @@ def test_export_flood_statistics_csv():
     assert "Morigaon" in content
     assert "Nagaon" in content
     assert "Flooded Hectares" in content
+

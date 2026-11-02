@@ -37,3 +37,4 @@ def test_assistant_offline_template_answering():
         assert res["ai_mode"] == "offline demo"
     finally:
         db.close()
+

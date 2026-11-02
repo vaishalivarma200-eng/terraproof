@@ -200,3 +200,4 @@ def simulate_what_if_scenario(req: SimulationRequest) -> SimulationResponse:
         comparison_table=comparison,
         inundation_geojson=sim_polygon
     )
+

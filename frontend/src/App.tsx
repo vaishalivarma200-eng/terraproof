@@ -19,12 +19,14 @@ import { JudgeGuidedTourModal } from './components/JudgeGuidedTourModal';
 import { RegionEventComparisonModal } from './components/RegionEventComparisonModal';
 import { WhatIfScenarioSimulatorModal } from './components/WhatIfScenarioSimulatorModal';
 import { TerraGuideChatPanel } from './components/TerraGuideChatPanel';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { Bot, Sparkles } from 'lucide-react';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isLanding = location.pathname === '/';
+  const { isHindi } = useLanguage();
 
   // Modal States
   const [isTourOpen, setIsTourOpen] = useState(false);
@@ -45,6 +47,21 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Listen for open-terraproof-tour custom events from any child or button
+  useEffect(() => {
+    const handleOpenTour = () => setIsTourOpen(true);
+    window.addEventListener('open-terraproof-tour', handleOpenTour);
+    return () => window.removeEventListener('open-terraproof-tour', handleOpenTour);
+  }, []);
+
+  // Check URL query parameters for ?tour=true or ?tour=1
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('tour') === 'true' || params.get('tour') === '1') {
+      setIsTourOpen(true);
+    }
+  }, [location.search]);
+
   const handleSelectScenario = (claimRef: string) => {
     navigate(`/claims?claimRef=${claimRef}`);
   };
@@ -60,9 +77,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         presentationMode ? 'text-[1.08rem] font-medium' : ''
       }`}
     >
-      <Navbar />
-
-      {/* Demo Mode & Executive Controls Banner */}
+      {/* 1. Top Executive Banner (Demo Mode) */}
       <DemoModeBanner
         onStartTour={() => setIsTourOpen(true)}
         onSelectScenario={handleSelectScenario}
@@ -72,7 +87,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         isPresentationMode={presentationMode}
       />
 
-      <main className={`flex-1 ${isLanding ? 'pt-0' : 'pt-4'}`}>
+      {/* 2. Floating / Sticky Navbar (sits cleanly right below banner, no overlap) */}
+      <Navbar onOpenTour={() => setIsTourOpen(true)} />
+
+      {/* 3. Main Page Content */}
+      <main className={`flex-1 ${isLanding ? 'pt-0' : 'pt-2'}`}>
         {children}
       </main>
 
@@ -86,14 +105,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             setIsChatOpen(!isChatOpen);
           }}
           className="flex items-center space-x-2 px-3.5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white shadow-2xl hover:scale-105 active:scale-95 border border-emerald-400/40 transition-all cursor-pointer group"
-          title="Open TerraGuide AI Decision Assistant"
+          title={isHindi ? "टेरागाइड एआई निर्णय सहायक खोलें" : "Open TerraGuide AI Decision Assistant"}
         >
           <div className="relative">
             <Bot className="w-5 h-5 text-white" />
             <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
           </div>
           <span className="text-xs font-bold tracking-wide hidden sm:inline">
-            TerraGuide AI
+            {isHindi ? 'टेरागाइड एआई' : 'TerraGuide AI'}
           </span>
           <Sparkles className="w-3.5 h-3.5 text-cyan-200 group-hover:rotate-12 transition-transform" />
         </button>
@@ -109,6 +128,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         onOpenTerraGuide={() => {
           setIsTourOpen(false);
           setIsChatOpen(true);
+        }}
+        onOpenOfficialWorkflow={() => {
+          setIsTourOpen(false);
+          navigate('/claims');
         }}
       />
 
@@ -138,24 +161,26 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 export const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/overview" element={<OverviewPage />} />
-          <Route path="/claims" element={<InsurancePage />} />
-          <Route path="/insurance" element={<InsurancePage />} />
-          <Route path="/verify" element={<PublicVerificationPage />} />
-          <Route path="/verify/:identifier" element={<PublicVerificationPage />} />
-          <Route path="/flood" element={<FloodPage />} />
-          <Route path="/drought" element={<DroughtPage />} />
-          <Route path="/deforestation" element={<DeforestationPage />} />
-          <Route path="/analyses/:id" element={<AnalysisDetailPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/overview" element={<OverviewPage />} />
+            <Route path="/claims" element={<InsurancePage />} />
+            <Route path="/insurance" element={<InsurancePage />} />
+            <Route path="/verify" element={<PublicVerificationPage />} />
+            <Route path="/verify/:identifier" element={<PublicVerificationPage />} />
+            <Route path="/flood" element={<FloodPage />} />
+            <Route path="/drought" element={<DroughtPage />} />
+            <Route path="/deforestation" element={<DeforestationPage />} />
+            <Route path="/analyses/:id" element={<AnalysisDetailPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Layout>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 };
 

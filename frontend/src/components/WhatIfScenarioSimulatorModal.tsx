@@ -396,3 +396,4 @@ export const WhatIfScenarioSimulatorModal: React.FC<WhatIfScenarioSimulatorModal
     </div>
   );
 };
+

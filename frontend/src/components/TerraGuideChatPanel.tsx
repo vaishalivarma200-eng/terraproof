@@ -365,3 +365,4 @@ export const TerraGuideChatPanel: React.FC<TerraGuideChatPanelProps> = ({
     </div>
   );
 };
+

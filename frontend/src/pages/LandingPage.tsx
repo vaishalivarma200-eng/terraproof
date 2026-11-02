@@ -16,12 +16,20 @@ import {
   Sparkles,
   CheckCircle2,
   Building2,
-  Scale
+  Scale,
+  Compass,
 } from 'lucide-react';
 import { ThreeCanvas3D } from '../components/ThreeCanvas3D';
 import { MotionText3D, FloatingCard3D } from '../components/MotionText3D';
+import { useLanguage } from '../context/LanguageContext';
 
 export const LandingPage: React.FC = () => {
+  const { isHindi, t } = useLanguage();
+
+  const handleStartTour = () => {
+    window.dispatchEvent(new CustomEvent('open-terraproof-tour'));
+  };
+
   return (
     <div className="bg-slate-950 text-slate-100 font-sans min-h-screen selection:bg-emerald-500/30 selection:text-white">
       {/* =========================================================================
@@ -46,7 +54,7 @@ export const LandingPage: React.FC = () => {
         <ThreeCanvas3D />
 
         {/* Hero Content Container */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 sm:pt-40 pb-16 w-full flex-1 flex flex-col justify-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-16 w-full flex-1 flex flex-col justify-center">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Column: 3D Animated Headline & Actions */}
             <div className="lg:col-span-8 space-y-6">
@@ -54,52 +62,79 @@ export const LandingPage: React.FC = () => {
               <MotionText3D delay={0.1} depth={-20}>
                 <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 text-xs text-emerald-400 font-medium tracking-wide shadow-lg backdrop-blur-md">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span>National Agricultural Decision-Support Layer</span>
+                  <span>{t('landing.heroBadge', 'National Agricultural Decision-Support Layer')}</span>
                 </div>
               </MotionText3D>
 
               {/* Editorial Headline with Formal Gradient Accent */}
               <MotionText3D delay={0.25} depth={-60}>
-                <h1 className="font-serif text-5xl sm:text-7xl lg:text-[5.25rem] text-white font-medium tracking-tight leading-[1.06]">
-                  The land writes its <br />
-                  history. <br />
-                  <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent italic font-normal drop-shadow-sm">
-                    We help you read it.
-                  </span>
+                <h1 className="font-serif text-4xl sm:text-6xl lg:text-[5rem] text-white font-medium tracking-tight leading-[1.08]">
+                  {isHindi ? (
+                    <>
+                      भूमि अपना इतिहास <br />
+                      लिखती है। <br />
+                      <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent italic font-normal drop-shadow-sm">
+                        हम इसे पढ़ने में आपकी सहायता करते हैं।
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      The land writes its <br />
+                      history. <br />
+                      <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300 bg-clip-text text-transparent italic font-normal drop-shadow-sm">
+                        We help you read it.
+                      </span>
+                    </>
+                  )}
                 </h1>
               </MotionText3D>
 
               {/* Subtitle */}
               <MotionText3D delay={0.4} depth={-30}>
                 <p className="max-w-xl text-base sm:text-lg text-slate-300/90 font-light leading-relaxed">
-                  TerraProof fuses Sentinel-1 SAR and Sentinel-2 optical imagery with meteorological archives into defensible, explainable evidence for revenue officers, PMFBY insurers, and farmers.
+                  {t(
+                    'landing.subhead',
+                    'TerraProof fuses Sentinel-1 SAR and Sentinel-2 optical imagery with meteorological archives into defensible, explainable evidence for revenue officers, PMFBY insurers, and farmers.'
+                  )}
                 </p>
               </MotionText3D>
 
               {/* CTA Buttons & Subtle Scroll Indicator */}
               <MotionText3D delay={0.55} depth={-20}>
                 <div className="flex flex-wrap items-center justify-between gap-6 pt-3 max-w-xl">
-                  <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-3.5">
+                    {/* Primary CTA */}
                     <Link
                       to="/claims"
-                      className="px-6 py-3.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-sm shadow-xl shadow-emerald-950/60 border border-emerald-500/30 transition-all flex items-center space-x-2 group"
+                      className="px-6 py-3 rounded-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-sm shadow-xl shadow-emerald-950/60 border border-emerald-500/30 transition-all flex items-center space-x-2 group cursor-pointer"
                     >
-                      <span>Verify a claim</span>
+                      <span>{t('landing.ctaVerify', 'Verify a claim')}</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
 
+                    {/* Guided Tour CTA */}
+                    <button
+                      onClick={handleStartTour}
+                      className="px-5 py-3 rounded-full bg-slate-900/90 hover:bg-slate-800 text-emerald-300 hover:text-emerald-200 border border-emerald-500/40 font-semibold text-sm backdrop-blur-md transition-all flex items-center space-x-2 cursor-pointer shadow-lg group"
+                      title={isHindi ? "3-मिनट का मार्गदर्शित दौरा शुरू करें" : "Start interactive 3-minute judge tour"}
+                    >
+                      <Compass className="w-4 h-4 text-emerald-400 group-hover:rotate-45 transition-transform" />
+                      <span>{t('landing.ctaTour', 'Tour (3 min)')}</span>
+                    </button>
+
+                    {/* Public Registry */}
                     <Link
                       to="/verify"
-                      className="px-6 py-3.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 font-medium text-sm backdrop-blur-md transition-all flex items-center space-x-2"
+                      className="px-5 py-3 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 font-medium text-sm backdrop-blur-md transition-all flex items-center space-x-2 cursor-pointer"
                     >
                       <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                      <span>Public Registry</span>
+                      <span>{t('landing.ctaRegistry', 'Public Registry')}</span>
                     </Link>
                   </div>
 
                   {/* Formal Scroll Indicator */}
                   <div className="hidden sm:flex items-center space-x-2 text-[10px] tracking-widest text-slate-400 font-mono uppercase">
-                    <span>EXPLORE</span>
+                    <span>{isHindi ? 'अन्वेषण' : 'EXPLORE'}</span>
                     <div className="w-3.5 h-5 rounded-full border border-slate-600 flex items-start justify-center p-0.5">
                       <div className="w-1 h-1.5 rounded-full bg-emerald-400 animate-bounce" />
                     </div>
@@ -117,7 +152,7 @@ export const LandingPage: React.FC = () => {
                     <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
                       <Radio className="w-3 h-3 text-emerald-400" />
                     </div>
-                    <span>Flood extent · 412 ha (est.)</span>
+                    <span>{isHindi ? 'बाढ़ फैलाव · 412 हेक्टेयर (अनु.)' : 'Flood extent · 412 ha (est.)'}</span>
                   </div>
                   <div className="text-[11px] text-slate-400 pl-7 font-mono">
                     Sentinel-1 SAR · VV/VH Dual-Pol
@@ -132,10 +167,10 @@ export const LandingPage: React.FC = () => {
                     <div className="w-5 h-5 rounded-full bg-teal-500/20 flex items-center justify-center">
                       <span className="text-teal-300 text-xs">🍃</span>
                     </div>
-                    <span>NDVI −0.31 vs. baseline</span>
+                    <span>{isHindi ? 'NDVI −0.31 विसंगति' : 'NDVI −0.31 vs. baseline'}</span>
                   </div>
                   <div className="text-[11px] text-slate-400 pl-7 font-mono">
-                    Phenological drop · Patwari audit
+                    {isHindi ? 'वनस्पति ह्रास · स्थलीय जांच' : 'Phenological drop · Patwari audit'}
                   </div>
                 </div>
               </FloatingCard3D>
@@ -147,7 +182,7 @@ export const LandingPage: React.FC = () => {
                     <div className="w-5 h-5 rounded-full bg-sky-500/20 flex items-center justify-center">
                       <Satellite className="w-3 h-3 text-sky-400" />
                     </div>
-                    <span>STAC Pass · 06:42 UTC</span>
+                    <span>{isHindi ? 'उपग्रह अवलोकन · 06:42 UTC' : 'STAC Pass · 06:42 UTC'}</span>
                   </div>
                   <div className="text-[11px] text-slate-400 pl-7 font-mono">
                     Planetary Computer · 10m L2A
@@ -170,27 +205,27 @@ export const LandingPage: React.FC = () => {
           <div className="flex flex-wrap items-center justify-between gap-6 text-xs text-slate-400 font-medium">
             <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
               <Radio className="w-4 h-4 text-emerald-400" />
-              <span>Sentinel-1 SAR Radar</span>
+              <span>{isHindi ? 'सेंटिनल-1 सार (SAR) रडार' : 'Sentinel-1 SAR Radar'}</span>
             </div>
 
             <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
               <Eye className="w-4 h-4 text-emerald-400" />
-              <span>Sentinel-2 Optical (10m)</span>
+              <span>{isHindi ? 'सेंटिनल-2 ऑप्टिकल (10 मीटर)' : 'Sentinel-2 Optical (10m)'}</span>
             </div>
 
             <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
               <LineChart className="w-4 h-4 text-emerald-400" />
-              <span>NDVI / NDWI Differencing</span>
+              <span>{isHindi ? 'NDVI / NDWI वनस्पति एवं जल अंतर' : 'NDVI / NDWI Differencing'}</span>
             </div>
 
             <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
               <CloudRain className="w-4 h-4 text-emerald-400" />
-              <span>Open-Meteo Rainfall Archive</span>
+              <span>{isHindi ? 'ओपन-मेटियो वर्षा अभिलेखागार' : 'Open-Meteo Rainfall Archive'}</span>
             </div>
 
             <div className="flex items-center space-x-2 hover:text-emerald-400 transition-colors">
               <Scale className="w-4 h-4 text-emerald-400" />
-              <span>Immutable Cryptographic Ledger</span>
+              <span>{isHindi ? 'अपरिवर्तनीय क्रिप्टोग्राफिक लेजर' : 'Immutable Cryptographic Ledger'}</span>
             </div>
           </div>
         </div>
@@ -204,13 +239,15 @@ export const LandingPage: React.FC = () => {
           {/* Header */}
           <div className="space-y-3 max-w-2xl">
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-emerald-400">
-              FOUR CORE DOMAINS
+              {isHindi ? 'चार प्रमुख क्षेत्र' : 'FOUR CORE DOMAINS'}
             </span>
             <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-white leading-tight">
-              Four lenses on the same land
+              {isHindi ? 'एक ही भूमि पर चार विशेष दृष्टियां' : 'Four lenses on the same land'}
             </h2>
             <p className="text-sm text-slate-400 leading-relaxed font-light">
-              Every analysis is decision support. The satellites observe; TerraProof drafts the evidence; designated human revenue officials make the quasi-judicial determination.
+              {isHindi
+                ? 'प्रत्येक विश्लेषण निर्णय-समर्थन है। उपग्रह केवल अवलोकन करते हैं; टेराप्रूफ साक्ष्य तैयार करता है; अधिकृत मानव राजस्व अधिकारी अंतिम अर्ध-न्यायिक निर्णय लेते हैं।'
+                : 'Every analysis is decision support. The satellites observe; TerraProof drafts the evidence; designated human revenue officials make the quasi-judicial determination.'}
             </p>
           </div>
 
@@ -226,16 +263,18 @@ export const LandingPage: React.FC = () => {
                   <ShieldCheck className="w-6 h-6" />
                 </div>
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-300 border border-emerald-800">
-                  CORE
+                  {isHindi ? 'प्रमुख' : 'CORE'}
                 </span>
               </div>
 
               <div className="space-y-2">
                 <h3 className="font-serif text-xl font-semibold text-white group-hover:text-emerald-400 transition-colors">
-                  Claim verification
+                  {isHindi ? 'दावा सत्यापन एवं छंटाई' : 'Claim verification'}
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed font-light">
-                  Correlate reported crop damage against pre- and post-disaster spectral signatures. Quantifies claimed vs. observed area discrepancy.
+                  {isHindi
+                    ? 'आपदा पूर्व एवं पश्चात के उपग्रह संकेतों से फसल क्षति का सह-संबंध। दावाकृत बनाम उपग्रह-प्रेक्षित क्षेत्रफल अंतर की मात्रात्मक गणना।'
+                    : 'Correlate reported crop damage against pre- and post-disaster spectral signatures. Quantifies claimed vs. observed area discrepancy.'}
                 </p>
               </div>
             </Link>
@@ -251,10 +290,12 @@ export const LandingPage: React.FC = () => {
 
               <div className="space-y-2">
                 <h3 className="font-serif text-xl font-semibold text-white group-hover:text-sky-400 transition-colors">
-                  Flood monitoring
+                  {isHindi ? 'बाढ़ एवं जलभराव निगरानी' : 'Flood monitoring'}
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed font-light">
-                  Radar-first inundation mapping with Sentinel-1 SAR and optical NDWI. Delineates standing water extent through dense monsoon clouds.
+                  {isHindi
+                    ? 'सेंटिनल-1 सार रडार और ऑप्टिकल एनडीडब्ल्यूआई से बादल-भेदी जलभराव मानचित्रण। घने मानसूनी बादलों के पार जल विस्तार का सटीक सीमांकन।'
+                    : 'Radar-first inundation mapping with Sentinel-1 SAR and optical NDWI. Delineates standing water extent through dense monsoon clouds.'}
                 </p>
               </div>
             </Link>
@@ -270,10 +311,12 @@ export const LandingPage: React.FC = () => {
 
               <div className="space-y-2">
                 <h3 className="font-serif text-xl font-semibold text-white group-hover:text-amber-400 transition-colors">
-                  Drought & crop stress
+                  {isHindi ? 'सूखा एवं फसल तनाव' : 'Drought & crop stress'}
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed font-light">
-                  Vegetation-greenness trends, soil moisture deficits, and meteorological precipitation integration across growing seasons.
+                  {isHindi
+                    ? 'फसल विकास चक्र में वनस्पति हरापन रुझान, मृदा नमी की कमी और मौसम संबंधी वर्षा विचलनों का एकीकृत आकलन।'
+                    : 'Vegetation-greenness trends, soil moisture deficits, and meteorological precipitation integration across growing seasons.'}
                 </p>
               </div>
             </Link>
@@ -289,10 +332,12 @@ export const LandingPage: React.FC = () => {
 
               <div className="space-y-2">
                 <h3 className="font-serif text-xl font-semibold text-white group-hover:text-teal-400 transition-colors">
-                  Land-cover change
+                  {isHindi ? 'भूमि आवरण एवं निर्माण परिवर्तन' : 'Land-cover change'}
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed font-light">
-                  Multi-temporal differencing detecting unauthorized construction, plinths, and forest clearing on agricultural parcels.
+                  {isHindi
+                    ? 'कृषि भूखंडों पर अनधिकृत निर्माण, नई सड़कों या वन आवरण हटाने की उपग्रह बहु-कालिक अंतर पहचान।'
+                    : 'Multi-temporal differencing detecting unauthorized construction, plinths, and forest clearing on agricultural parcels.'}
                 </p>
               </div>
             </Link>
@@ -309,10 +354,10 @@ export const LandingPage: React.FC = () => {
           {/* Header */}
           <div className="space-y-3 max-w-2xl">
             <span className="text-xs font-bold tracking-[0.2em] uppercase text-emerald-400">
-              AUDIT WORKFLOW
+              {isHindi ? 'अंकेक्षण कार्यप्रणाली' : 'AUDIT WORKFLOW'}
             </span>
             <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-white leading-tight">
-              From orbit to evidence, in four calm steps
+              {isHindi ? 'कक्षा से साक्ष्य तक, चार स्पष्ट चरणों में' : 'From orbit to evidence, in four calm steps'}
             </h2>
           </div>
 
@@ -335,10 +380,12 @@ export const LandingPage: React.FC = () => {
 
                 <div className="space-y-2">
                   <h3 className="font-serif text-lg font-bold text-white">
-                    Define the land
+                    {isHindi ? 'भूमि परिभाषित करें' : 'Define the land'}
                   </h3>
                   <p className="text-xs text-slate-400 leading-relaxed font-light">
-                    Draw field boundary or enter Khasra coordinates. TerraProof validates geometry and builds the minimum bounding study envelope.
+                    {isHindi
+                      ? 'खेत की सीमा बनाएं या खसरा नंबर दर्ज करें। टेराप्रूफ ज्यामिति को मान्य करता है और न्यूनतम अध्ययन लिफाफा बनाता है।'
+                      : 'Draw field boundary or enter Khasra coordinates. TerraProof validates geometry and builds the minimum bounding study envelope.'}
                   </p>
                 </div>
               </div>
@@ -356,10 +403,12 @@ export const LandingPage: React.FC = () => {
 
                 <div className="space-y-2">
                   <h3 className="font-serif text-lg font-bold text-white">
-                    Match the passes
+                    {isHindi ? 'उपग्रह डेटा मिलान' : 'Match the passes'}
                   </h3>
                   <p className="text-xs text-slate-400 leading-relaxed font-light">
-                    The engine finds Sentinel-1 SAR and Sentinel-2 optical observations before and after the incident with exact timestamps.
+                    {isHindi
+                      ? 'सिस्टम घटना से ठीक पहले और बाद के सेंटिनल-1 और सेंटिनल-2 उपग्रह चित्रों को सटीक समय-चिह्न के साथ प्राप्त करता है।'
+                      : 'The engine finds Sentinel-1 SAR and Sentinel-2 optical observations before and after the incident with exact timestamps.'}
                   </p>
                 </div>
               </div>
@@ -377,10 +426,12 @@ export const LandingPage: React.FC = () => {
 
                 <div className="space-y-2">
                   <h3 className="font-serif text-lg font-bold text-white">
-                    Run the analysis
+                    {isHindi ? 'विश्लेषण निष्पादन' : 'Run the analysis'}
                   </h3>
                   <p className="text-xs text-slate-400 leading-relaxed font-light">
-                    Radar flood mapping, vegetation indices, change detection — with methods, thresholds, and sensor provenance transparently exposed.
+                    {isHindi
+                      ? 'रडार बाढ़ मानचित्रण, वनस्पति सूचकांक और भूमि परिवर्तन — विधियों और संवेदक स्रोतों के पारदर्शी प्रकटीकरण के साथ।'
+                      : 'Radar flood mapping, vegetation indices, change detection — with methods, thresholds, and sensor provenance transparently exposed.'}
                   </p>
                 </div>
               </div>
@@ -398,10 +449,12 @@ export const LandingPage: React.FC = () => {
 
                 <div className="space-y-2">
                   <h3 className="font-serif text-lg font-bold text-white">
-                    Quasi-judicial order
+                    {isHindi ? 'अर्ध-न्यायिक आदेश' : 'Quasi-judicial order'}
                   </h3>
                   <p className="text-xs text-slate-400 leading-relaxed font-light">
-                    Evidence pack with SLA tracking, override logging, and cryptographic SHA-256 digital stamp for Patwari / Tehsildar adjudication.
+                    {isHindi
+                      ? 'पटवारी और तहसीलदार के सत्यापन हेतु एसएलए ट्रैकिंग, ओवरराइड लॉगिंग और क्रिप्टोग्राफिक SHA-256 डिजिटल मोहर युक्त साक्ष्य।'
+                      : 'Evidence pack with SLA tracking, override logging, and cryptographic SHA-256 digital stamp for Patwari / Tehsildar adjudication.'}
                   </p>
                 </div>
               </div>
@@ -416,29 +469,41 @@ export const LandingPage: React.FC = () => {
       <section className="py-20 bg-gradient-to-b from-slate-950 to-black border-t border-slate-800/80 text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <span className="text-xs font-bold tracking-[0.2em] uppercase text-emerald-400">
-            QUICK EVALUATION ARCHETYPES
+            {isHindi ? 'त्वरित मूल्यांकन एवं डेमो' : 'QUICK EVALUATION ARCHETYPES'}
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-medium tracking-tight">
-            Ready to inspect satellite evidence on real farm parcels?
+            {isHindi
+              ? 'वास्तविक कृषि भूखंडों पर उपग्रह साक्ष्य जांचने हेतु तैयार हैं?'
+              : 'Ready to inspect satellite evidence on real farm parcels?'}
           </h2>
           <p className="text-slate-400 text-sm max-w-xl mx-auto leading-relaxed font-light">
-            Review live claims, inspect cadastral boundaries, evaluate NDBI land-use change, or verify signed statutory inspection orders on the public ledger.
+            {isHindi
+              ? 'सक्रिय दावों की समीक्षा करें, कैडस्ट्रल सीमाओं का निरीक्षण करें, भूमि उपयोग परिवर्तन का मूल्यांकन करें या सार्वजनिक लेजर पर हस्ताक्षरित आदेश सत्यापित करें।'
+              : 'Review live claims, inspect cadastral boundaries, evaluate NDBI land-use change, or verify signed statutory inspection orders on the public ledger.'}
           </p>
           <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
             <Link
               to="/claims"
-              className="px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-sm shadow-xl shadow-emerald-950/40 border border-emerald-500/30 transition-all inline-flex items-center space-x-2"
+              className="px-7 py-3 rounded-full bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-sm shadow-xl shadow-emerald-950/40 border border-emerald-500/30 transition-all inline-flex items-center space-x-2"
             >
-              <span>Launch Claims Queue</span>
+              <span>{isHindi ? 'दावा छंटाई कतार खोलें' : 'Launch Claims Queue'}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 
+            <button
+              onClick={handleStartTour}
+              className="px-6 py-3 rounded-full bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-500/40 font-semibold text-sm transition-all inline-flex items-center space-x-2 cursor-pointer shadow-lg group"
+            >
+              <Compass className="w-4 h-4 text-emerald-400 group-hover:rotate-45 transition-transform" />
+              <span>{isHindi ? 'मार्गदर्शित दौरा (3 मिनट)' : 'Start Guided Tour (3 min)'}</span>
+            </button>
+
             <Link
               to="/verify"
-              className="px-8 py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-sm transition-all inline-flex items-center space-x-2"
+              className="px-6 py-3 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-sm transition-all inline-flex items-center space-x-2"
             >
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Public Verification Portal</span>
+              <span>{isHindi ? 'सार्वजनिक सत्यापन पोर्टल' : 'Public Verification Portal'}</span>
             </Link>
           </div>
         </div>

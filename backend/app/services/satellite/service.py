@@ -102,3 +102,4 @@ def get_satellite_data_service() -> UnifiedSatelliteDataService:
     if _service_instance is None:
         _service_instance = UnifiedSatelliteDataService()
     return _service_instance
+

@@ -17,6 +17,7 @@ import {
   Eye,
   Maximize2,
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface JudgeGuidedTourModalProps {
   isOpen: boolean;
@@ -33,11 +34,12 @@ export const JudgeGuidedTourModal: React.FC<JudgeGuidedTourModalProps> = ({
   onOpenTerraGuide,
   onOpenOfficialWorkflow,
 }) => {
+  const { lang, isHindi } = useLanguage();
   const [currentStep, setCurrentStep] = useState(0);
 
   if (!isOpen) return null;
 
-  const steps = [
+  const stepsEn = [
     {
       step: 1,
       title: 'The Challenge: Post-Disaster Backlog',
@@ -148,11 +150,137 @@ export const JudgeGuidedTourModal: React.FC<JudgeGuidedTourModalProps> = ({
     },
   ];
 
+  const stepsHi = [
+    {
+      step: 1,
+      title: 'चुनौती: आपदा के उपरांत दावों का भारी अंबार',
+      subtitle: 'सर्वेक्षक 200 किमी दूर हैं और 3+ सप्ताह तक हजारों जलमग्न खेतों का भौतिक निरीक्षण संभव नहीं।',
+      icon: Clock,
+      badgeColor: 'text-amber-400 border-amber-500/30 bg-amber-500/10',
+      description:
+        'ग्रामीण भारत में जब मानसूनी नदी का तटबंध टूटता है, तो एक साथ हजारों फसल बीमा दावे आते हैं। पारंपरिक स्थलीय सत्यापन धीमा और विवादों से भरा होता है, जिससे वास्तविक छोटे किसानों को कार्यशील राहत मिलने में भारी देरी होती है।',
+      keyTakeaway: 'टेराप्रूफ किसानों, बीमाकर्ताओं, बैंकों और राज्य राजस्व विभागों के बीच वस्तुनिष्ठ, उपग्रह-आधारित साक्ष्य परत के रूप में कार्य करता है।',
+      actionLabel: 'अतिशयोक्तिपूर्ण दावा C-002 जांचें',
+      onAction: () => onSelectClaim?.('CLM-DEMO-002'),
+    },
+    {
+      step: 2,
+      title: 'बहु-संवेदक उपग्रह एकीकरण एवं साक्ष्य',
+      subtitle: 'सेंटिनल-2 ऑप्टिकल + सेंटिनल-1 सार (SAR) रडार + ओपन-मेटियो वर्षा अभिलेख।',
+      icon: Layers,
+      badgeColor: 'text-sky-400 border-sky-500/30 bg-sky-500/10',
+      description:
+        'टेराप्रूफ आपदा से पहले और बाद के उपग्रह परिदृश्यों को स्वतः प्राप्त करता है। घने बादलों वाले मानसूनी हफ्तों में जब ऑप्टिकल कैमरे दृष्टिहीन होते हैं, यह निर्बाध रूप से सेंटिनल-1 सी-बैंड सिंथेटिक अपर्चर रडार (SAR) का उपयोग करता है जो बादलों को भेदकर जलभराव का नक्शा बनाता है।',
+      keyTakeaway: '7 दिवसीय वर्षा रिकॉर्ड के साथ एनडीवीआई वनस्पति ह्रास, एनडीडब्ल्यूआई जल सूचकांक और सार रडार बैकस्कैटर प्रदान करता है।',
+      actionLabel: 'उपग्रह जलभराव मास्क देखें',
+      onAction: () => onSelectClaim?.('CLM-DEMO-002'),
+    },
+    {
+      step: 3,
+      title: 'स्वचालित विसंगति पहचान (क्षेत्रफल अंतर)',
+      subtitle: 'दावा C-002: दावाकृत 15.0 हेक्टेयर बनाम उपग्रह प्रेक्षित 6.2 हेक्टेयर (58.7% विसंगति)।',
+      icon: AlertTriangle,
+      badgeColor: 'text-rose-400 border-rose-500/30 bg-rose-500/10',
+      description:
+        'दावा C-002 में किसान बलदेव सिंह ने 15.0 हेक्टेयर पर पूर्ण फसल बर्बादी का दावा किया। उपग्रह जल मास्क और डिजिटल एलिवेशन मॉडल (DEM) स्थलाकृति सिद्ध करती है कि केवल निचले नदी क्षेत्र (<84.5मी) में स्थित 6.2 हेक्टेयर भूमि जलमग्न हुई थी। ऊपरी 8.8 हेक्टेयर क्षेत्र सूखा और सुरक्षित रहा।',
+      keyTakeaway: 'असमय संवितरण से ₹2,46,400 की सरकारी/बीमा धनराशि सुरक्षित करता है, जिससे वास्तविक प्रभावित किसानों हेतु निधि सुरक्षित रहे।',
+      actionLabel: 'विश्वास स्कोर विभाजन देखें',
+      onAction: () => onSelectClaim?.('CLM-DEMO-002'),
+    },
+    {
+      step: 4,
+      title: 'विश्वास स्कोर (0-100) एवं ईमानदार वैज्ञानिक सीमाएं',
+      subtitle: 'छवि गुणवत्ता, बादल, विभेदन, ताजगी और संवेदक सहमति के आधार पर पारदर्शी गणना।',
+      icon: ShieldCheck,
+      badgeColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
+      description:
+        'प्रत्येक सत्यापन परिणाम 0-100 के बीच एक पारदर्शी विश्वास स्कोर प्रदान करता है। टेराप्रूफ अपनी वैज्ञानिक सीमाओं को छुपाता नहीं: 1 हेक्टेयर से छोटे भूखंड, घने बादल (C-006: स्कोर 42), या 15% से कम सूक्ष्म आंशिक क्षति (C-007) को स्पष्ट रूप से "उपग्रह अपर्याप्त, स्थलीय सत्यापन अनिवार्य" के रूप में चिह्नित किया जाता है।',
+      keyTakeaway: 'कभी भी झूठी सटीकता का दावा नहीं करता। स्वचालित निपटान और स्थलीय जांच योग्य मामलों को स्पष्ट अलग करता है।',
+      actionLabel: 'आधिकारिक सरकारी डेटा से तुलना करें',
+      onAction: () => onSelectClaim?.('CLM-DEMO-002'),
+    },
+    {
+      step: 5,
+      title: 'आधिकारिक सरकारी डेटा से तुलना',
+      subtitle: 'एग्रीस्टैक डिजिटल क्रॉप सर्वे (DCS) और ई-गिरदावरी के साथ आमने-सामने मिलान।',
+      icon: Scale,
+      badgeColor: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10',
+      description:
+        'टेराप्रूफ भारतीय गोव-टेक बुनियादी ढांचे से सीधे जुड़ता है: एग्रीस्टैक फार्मर आईडी, डिजिटल क्रॉप सर्वे (DCS), और राज्य भू-अभिलेख (भूलेख/जमाबंदी)। उदाहरणार्थ, दावा C-003 में जुलाई में गेहूं की बाढ़ क्षति का दावा किया गया था, परंतु डीसीएस रिकॉर्ड ने पुष्टि की कि खेत में धान बोया गया था।',
+      keyTakeaway: 'दावों के प्रसंस्करण से पहले मौसमी फसल बेमेल को समाप्त करता है और कैडस्ट्रल भूमि स्वामित्व की पुष्टि करता है।',
+      actionLabel: 'दावा छंटाई कतार देखें',
+      onAction: () => {},
+    },
+    {
+      step: 6,
+      title: 'दावा छंटाई कतार (हरा / पीला / लाल)',
+      subtitle: 'बाढ़ प्रभावित क्षेत्रों में दावों का जोखिम-आधारित स्वचालित वर्गीकरण।',
+      icon: CheckCircle2,
+      badgeColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
+      description:
+        'हमारे 8 डेमो दावों में: हरा (C-001) बिना किसी कागजी परेशानी के 24 घंटे में फास्ट-ट्रैक स्वीकृत होता है; पीला (C-003, C-004, C-006, C-007) दस्तावेज या मौसम जांच हेतु संबंधित अधिकारियों को भेजा जाता है; लाल (C-002, C-005, C-008) अतिशयोक्ति, सीमा अतिच्छादन या अवैध निर्माण की लक्षित ऑन-साइट जांच को ट्रिगर करता है।',
+      keyTakeaway: 'दावा बैकलॉग को 3 सप्ताह से घटाकर 24 घंटे करता है और क्षेत्रीय निरीक्षकों को सटीक विसंगति वाले स्थानों पर केंद्रित करता है।',
+      actionLabel: 'आधिकारिक निर्णय समर्थन खोलें',
+      onAction: () => onOpenOfficialWorkflow?.(),
+    },
+    {
+      step: 7,
+      title: 'आधिकारिक निर्णय-समर्थन (पटवारी / तहसीलदार)',
+      subtitle: 'अधिकारी ही निर्णयकर्ता हैं; टेराप्रूफ केवल साक्ष्य तैयार करता है।',
+      icon: FileCheck2,
+      badgeColor: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/10',
+      description:
+        'राजस्व अधिकारियों (पटवारी, कानूनगो, तहसीलदार) को जोखिम और एसएलए समय-सीमा के अनुसार प्राथमिकता प्राप्त निरीक्षण कतार मिलती है। टेराप्रूफ फसल और क्षति सीमा के साथ ई-गिरदावरी प्रविष्टि का पूर्व-प्रारूप तैयार करता है। अधिकारी मोबाइल पर पुष्टि करते हैं या संशोधन करते हैं, जिसमें प्रत्येक संशोधन का ऑडिट रिकॉर्ड दर्ज होता है।',
+      keyTakeaway: 'भारतीय प्रशासनिक संप्रभुता के अनुरूप: साक्ष्य प्रस्तुत करता है, परंतु कभी भी मानव सांविधिक अधिकारियों का स्थान नहीं लेता।',
+      actionLabel: 'टेरागाइड एआई से पूछें',
+      onAction: () => onOpenTerraGuide?.(),
+    },
+    {
+      step: 8,
+      title: 'टेरागाइड: जमीनी एआई निर्णय सहायक',
+      subtitle: 'जटिल भू-स्थानिक साक्ष्यों को सरल हिंदी, अंग्रेजी और हिंग्लिश में समझाता है।',
+      icon: Bot,
+      badgeColor: 'text-teal-400 border-teal-500/30 bg-teal-500/10',
+      description:
+        'किसान, सर्वेक्षक और अधिकारी टेरागाइड से सीधे प्रश्न पूछ सकते हैं: "C-002 को लाल क्यों चिह्नित किया गया?", "58.7% विसंगति का क्या अर्थ है?", या "कितना मुआवजा उचित है?". उत्तर कड़ाई से संगणित दावा डेटा और पीएमएफबीवाई दिशानिर्देशों पर आधारित होते हैं, और प्रत्येक उत्तर उपयोग किए गए साक्ष्य का उल्लेख करता है।',
+      keyTakeaway: '100% ऑफलाइन टेम्पलेट मोड या ऑनलाइन एलएलएम एकीकरण के साथ काम करता है।',
+      actionLabel: 'छेड़छाड़-रोधी साक्ष्य डोजियर देखें',
+      onAction: () => onSelectClaim?.('CLM-DEMO-001'),
+    },
+    {
+      step: 9,
+      title: 'क्रिप्टोग्राफिक ऑडिट ट्रेल एवं सार्वजनिक क्यूआर सत्यापन',
+      subtitle: 'SHA-256 ब्लॉकचेन-शैली लेजर और नागरिक सत्यापन पोर्टल।',
+      icon: FileText,
+      badgeColor: 'text-purple-400 border-purple-500/30 bg-purple-500/10',
+      description:
+        'प्रत्येक गणना, निरीक्षण और स्थिति अद्यतन टेराप्रूफ की ऑडिट श्रृंखला में एक अपरिवर्तनीय SHA-256 ब्लॉक उत्पन्न करता है। क्यूआर कोड के साथ एक हस्ताक्षरित पीडीएफ साक्ष्य डोजियर तैयार किया जाता है। कोई भी किसान, बैंक अधिकारी या नागरिक सार्वजनिक पोर्टल पर रिपोर्ट की प्रामाणिकता सत्यापित करने के लिए क्यूआर कोड स्कैन कर सकता है।',
+      keyTakeaway: 'शून्य छेड़छाड़, पूर्ण पारदर्शिता और डिजिटल व्यक्तिगत डेटा संरक्षण (DPDP) अधिनियम 2023 का पूर्ण अनुपालन सुनिश्चित करता है।',
+      actionLabel: 'दौरा पूरा हुआ - टेराप्रूफ देखें',
+      onAction: () => onClose(),
+    },
+  ];
+
+  const steps = isHindi ? stepsHi : stepsEn;
   const current = steps[currentStep];
   const StepIcon = current.icon;
 
+  const handleNext = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      onClose();
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in pointer-events-auto">
       <div className="bg-gradient-to-b from-slate-900 via-slate-950 to-black border border-slate-700/80 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/60">
@@ -163,95 +291,138 @@ export const JudgeGuidedTourModal: React.FC<JudgeGuidedTourModalProps> = ({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="text-sm font-bold text-white tracking-wide">
-                  TerraProof Judge Walkthrough
+                  {isHindi ? 'टेराप्रूफ मार्गदर्शित दौरा' : 'TerraProof Judge Walkthrough'}
                 </span>
                 <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  Step {currentStep + 1} of {steps.length}
+                  {isHindi
+                    ? `चरण ${currentStep + 1} / ${steps.length}`
+                    : `Step ${currentStep + 1} of ${steps.length}`}
                 </span>
               </div>
-              <p className="text-xs text-slate-400">3-Minute Executive Overview</p>
+              <p className="text-xs text-slate-400">
+                {isHindi ? '3-मिनट का सारगर्भित अवलोकन' : '3-Minute Executive Overview'}
+              </p>
             </div>
           </div>
           <button
             onClick={onClose}
             className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-all cursor-pointer"
+            aria-label="Close Tour"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-full bg-slate-800/60 h-1">
-          <div
-            className="bg-gradient-to-r from-emerald-500 to-teal-400 h-1 transition-all duration-300"
-            style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-          />
+        {/* Step Progress Dots */}
+        <div className="grid grid-cols-9 gap-1 px-6 pt-3 pb-1 bg-slate-950/80">
+          {steps.map((s, idx) => (
+            <button
+              key={s.step}
+              onClick={() => setCurrentStep(idx)}
+              className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                idx === currentStep
+                  ? 'bg-emerald-400 scale-y-125'
+                  : idx < currentStep
+                  ? 'bg-emerald-700'
+                  : 'bg-slate-800 hover:bg-slate-700'
+              }`}
+              title={`${isHindi ? 'चरण' : 'Step'} ${s.step}: ${s.title}`}
+            />
+          ))}
         </div>
 
-        {/* Body Content */}
-        <div className="p-6 space-y-4 flex-1 overflow-y-auto max-h-[60vh]">
-          <div className="flex items-start space-x-3.5">
-            <div className={`p-3 rounded-xl border ${current.badgeColor} mt-0.5`}>
-              <StepIcon className="w-6 h-6" />
+        {/* Step Content */}
+        <div className="px-6 py-5 space-y-4 max-h-[68vh] overflow-y-auto">
+          {/* Step Category Badge */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className={`p-1.5 rounded-md border ${current.badgeColor}`}>
+                <StepIcon className="w-4 h-4" />
+              </div>
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">
+                {isHindi ? `विषय ${current.step}` : `Module ${current.step}`}
+              </span>
             </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-white">{current.title}</h3>
-              <p className="text-xs text-emerald-400 font-medium mt-0.5">{current.subtitle}</p>
-            </div>
+            <span className="text-[11px] text-slate-400 font-mono">
+              {currentStep + 1}/{steps.length}
+            </span>
           </div>
 
-          <div className="text-xs sm:text-sm text-slate-300 leading-relaxed bg-slate-900/50 p-4 rounded-xl border border-slate-800">
+          {/* Titles */}
+          <div>
+            <h3 className="text-lg font-bold text-white tracking-tight leading-snug">
+              {current.title}
+            </h3>
+            <p className="text-xs text-emerald-400 font-medium mt-1">
+              {current.subtitle}
+            </p>
+          </div>
+
+          {/* Description */}
+          <p className="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-3.5 rounded-xl border border-slate-800/80">
             {current.description}
-          </div>
+          </p>
 
-          {/* Key Takeaway Callout */}
-          <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/40 via-slate-900/60 to-slate-900/40 border border-emerald-500/20 flex items-start space-x-2.5">
+          {/* Key Takeaway Box */}
+          <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-3 flex items-start space-x-2.5">
             <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-            <div className="text-xs text-slate-200">
-              <strong className="text-emerald-300">Executive Insight: </strong>
-              {current.keyTakeaway}
+            <div>
+              <span className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider block">
+                {isHindi ? 'मुख्य निष्कर्ष' : 'Key Takeaway'}
+              </span>
+              <p className="text-xs text-slate-300 mt-0.5 font-medium leading-relaxed">
+                {current.keyTakeaway}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Footer Controls */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-slate-800 bg-slate-900/80">
+        {/* Footer Navigation */}
+        <div className="flex items-center justify-between px-6 py-3.5 border-t border-slate-800 bg-slate-900/70">
           <button
-            onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+            onClick={handlePrev}
             disabled={currentStep === 0}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300 hover:bg-slate-800 disabled:opacity-40 transition-all cursor-pointer"
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+              currentStep === 0
+                ? 'opacity-40 cursor-not-allowed text-slate-600'
+                : 'text-slate-300 hover:text-white hover:bg-slate-800 cursor-pointer'
+            }`}
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Previous</span>
+            <span>{isHindi ? 'पिछला' : 'Previous'}</span>
           </button>
 
-          {/* Interactive Action Button for this step */}
-          <button
-            onClick={() => {
-              current.onAction();
-              if (currentStep < steps.length - 1) {
-                setCurrentStep(currentStep + 1);
-              }
-            }}
-            className="px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-xs shadow-lg transition-all cursor-pointer border border-emerald-500/30 flex items-center space-x-2"
-          >
-            <span>{current.actionLabel}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center space-x-2">
+            {/* Context Action Button (e.g. Inspect Claim C-002) */}
+            {current.actionLabel && (
+              <button
+                onClick={() => {
+                  current.onAction();
+                  onClose();
+                }}
+                className="hidden sm:inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium transition-all cursor-pointer"
+              >
+                <Eye className="w-3.5 h-3.5 text-cyan-400 mr-1" />
+                <span>{current.actionLabel}</span>
+              </button>
+            )}
 
-          <button
-            onClick={() => {
-              if (currentStep < steps.length - 1) {
-                setCurrentStep(currentStep + 1);
-              } else {
-                onClose();
-              }
-            }}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border border-slate-700 text-xs text-slate-300 hover:bg-slate-800 transition-all cursor-pointer"
-          >
-            <span>{currentStep === steps.length - 1 ? 'Finish' : 'Next'}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+            <button
+              onClick={handleNext}
+              className="flex items-center space-x-1.5 px-4 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-xs shadow-md transition-all cursor-pointer"
+            >
+              <span>
+                {currentStep === steps.length - 1
+                  ? isHindi
+                    ? 'दौरा समाप्त करें'
+                    : 'Finish Tour'
+                  : isHindi
+                  ? 'अगला'
+                  : 'Next'}
+              </span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

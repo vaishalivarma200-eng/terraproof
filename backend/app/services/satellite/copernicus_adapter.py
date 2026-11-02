@@ -142,3 +142,4 @@ class CopernicusSentinelHubAdapter(SatelliteDataService):
             layers={"status": "LIVE_CDSE_STREAM"},
             summary_stats={"mean_ndvi": 0.62, "mean_ndwi": -0.18}
         )
+

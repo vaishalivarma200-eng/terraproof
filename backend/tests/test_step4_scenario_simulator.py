@@ -51,3 +51,4 @@ def test_extreme_rainfall_runoff_simulation():
     assert res.scenario_type == "EXTREME_RAINFALL"
     assert res.incremental_flooded_ha > 0.0
     assert any("SCS Curve Number" in a for a in res.assumptions)
+

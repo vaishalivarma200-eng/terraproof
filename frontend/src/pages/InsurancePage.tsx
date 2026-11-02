@@ -39,6 +39,7 @@ import { OfficialWorkflowModal } from '../components/OfficialWorkflowModal';
 import { FarmerAppealModal } from '../components/FarmerAppealModal';
 import { FairnessMonitoringModal } from '../components/FairnessMonitoringModal';
 import { DemoImpactPanel } from '../components/DemoImpactPanel';
+import { useLanguage } from '../context/LanguageContext';
 import {
   INDIAN_STATES_DISTRICTS,
   CROP_SEASONS,
@@ -126,9 +127,9 @@ export const InsurancePage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedId = searchParams.get('selected');
 
-  // Language state: 'en' | 'hi'
-  const [lang, setLang] = useState<'en' | 'hi'>('en');
-  const t = UI_TRANSLATIONS[lang];
+  // Global Language state from LanguageContext
+  const { lang, setLang, isHindi } = useLanguage();
+  const t = UI_TRANSLATIONS[lang] || UI_TRANSLATIONS.en;
 
   const [claims, setClaims] = useState<Claim[]>([]);
   const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
@@ -460,11 +461,13 @@ export const InsurancePage: React.FC = () => {
         <div>
           <div className="inline-flex items-center space-x-2 text-xs text-emerald-400 font-semibold mb-1">
             <ShieldCheck className="w-4 h-4" />
-            <span>PMFBY Geospatial Decision-Support Engine</span>
+            <span>{isHindi ? 'पीएमएफबीवाई भू-स्थानिक निर्णय-समर्थन प्रणाली' : 'PMFBY Geospatial Decision-Support Engine'}</span>
           </div>
           <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent tracking-tight">{t.claimsTitle}</h1>
           <p className="text-slate-400 text-xs mt-0.5">
-            Cross-examine reported crop loss with Sentinel-1/2 spectral signatures, Open-Meteo rainfall, and EXIF field photographs.
+            {isHindi
+              ? 'सेंटिनल-1/2 उपग्रह संकेतों, ओपन-मेटियो वर्षा अभिलेखों और EXIF खेत तस्वीरों के साथ फसल क्षति का परीक्षण करें।'
+              : 'Cross-examine reported crop loss with Sentinel-1/2 spectral signatures, Open-Meteo rainfall, and EXIF field photographs.'}
           </p>
         </div>
 
@@ -473,11 +476,11 @@ export const InsurancePage: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowFairnessModal(true)}
-            className="px-3 py-1.5 rounded-lg bg-indigo-950/50 hover:bg-indigo-900/50 border border-indigo-700/50 text-indigo-300 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-sm"
+            className="px-3 py-1.5 rounded-lg bg-indigo-950/50 hover:bg-indigo-900/50 border border-indigo-700/50 text-indigo-300 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-sm cursor-pointer"
             title="Smallholder parity & model fairness monitoring"
           >
             <Scale className="w-3.5 h-3.5" />
-            <span>Fairness & Parity</span>
+            <span>{isHindi ? 'समानता एवं निष्पक्षता' : 'Fairness & Parity'}</span>
           </button>
 
           {/* Reset Demo Archetypes */}
@@ -485,18 +488,19 @@ export const InsurancePage: React.FC = () => {
             type="button"
             disabled={resettingDemo}
             onClick={handleResetDemoScenarios}
-            className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-sm disabled:opacity-50"
+            className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-sm disabled:opacity-50 cursor-pointer"
             title="Reload 4 evaluation archetypes"
           >
             <RotateCcw className={`w-3.5 h-3.5 text-amber-400 ${resettingDemo ? 'animate-spin' : ''}`} />
-            <span>{resettingDemo ? 'Resetting...' : '4 Archetypes'}</span>
+            <span>{resettingDemo ? (isHindi ? 'रीसेट हो रहा...' : 'Resetting...') : (isHindi ? '4 मूल्यांकन मॉडल' : '4 Archetypes')}</span>
           </button>
 
           {/* Language Toggle */}
           <button
             type="button"
             onClick={() => setLang(lang === 'en' ? 'hi' : 'en')}
-            className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-teal-400 text-xs text-teal-300 font-semibold flex items-center space-x-1.5 transition-all shadow-sm"
+            className="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 hover:border-teal-400 text-xs text-teal-300 font-semibold flex items-center space-x-1.5 transition-all shadow-sm cursor-pointer"
+            title={isHindi ? "Switch to English" : "पूरी वेबसाइट हिंदी में बदलें"}
           >
             <Globe2 className="w-3.5 h-3.5" />
             <span>{lang === 'en' ? 'हिन्दी (Hindi)' : 'English (EN)'}</span>
@@ -505,7 +509,7 @@ export const InsurancePage: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowModal(true)}
-            className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-xs shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all"
+            className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-semibold text-xs shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>{t.newClaim}</span>

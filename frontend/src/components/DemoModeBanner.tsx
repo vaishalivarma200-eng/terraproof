@@ -16,6 +16,7 @@ import {
   Minimize2,
 } from 'lucide-react';
 import { api } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 interface DemoModeBannerProps {
   onStartTour?: () => void;
@@ -34,6 +35,7 @@ export const DemoModeBanner: React.FC<DemoModeBannerProps> = ({
   onTogglePresentationMode,
   isPresentationMode = false,
 }) => {
+  const { lang, t, isHindi } = useLanguage();
   const [active, setActive] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
   const [liveApis, setLiveApis] = useState(false);
@@ -75,6 +77,13 @@ export const DemoModeBanner: React.FC<DemoModeBannerProps> = ({
     }
   };
 
+  const handleStartTour = () => {
+    if (onStartTour) {
+      onStartTour();
+    }
+    window.dispatchEvent(new CustomEvent('open-terraproof-tour'));
+  };
+
   if (!active) return null;
 
   if (collapsed) {
@@ -85,7 +94,9 @@ export const DemoModeBanner: React.FC<DemoModeBannerProps> = ({
           className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-slate-900/95 border border-amber-500/40 text-amber-300 text-xs shadow-xl backdrop-blur-md hover:bg-slate-800 transition-all cursor-pointer"
         >
           <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          <span className="font-semibold tracking-wide">DEMO MODE ACTIVE</span>
+          <span className="font-semibold tracking-wide">
+            {isHindi ? 'डेमो मोड सक्रिय' : 'DEMO MODE ACTIVE'}
+          </span>
           <ChevronUp className="w-3.5 h-3.5 ml-1 text-slate-400" />
         </button>
       </div>
@@ -93,19 +104,22 @@ export const DemoModeBanner: React.FC<DemoModeBannerProps> = ({
   }
 
   return (
-    <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-amber-500/30 text-slate-200 px-4 py-2 text-xs relative z-40 shadow-lg">
+    <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-amber-500/30 text-slate-200 px-4 py-2 text-xs relative z-30 shadow-lg">
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
         {/* Left: Badge & Synthetic Disclaimer */}
         <div className="flex items-center space-x-2.5">
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold tracking-wider bg-amber-500/10 text-amber-300 border border-amber-500/30">
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold tracking-wider bg-amber-500/10 text-amber-300 border border-amber-500/30 shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mr-1.5 animate-pulse"></span>
-            SYNTHETIC DEMO DATA
+            {t('banner.syntheticData', 'SYNTHETIC DEMO DATA')}
           </span>
           <span className="text-slate-300 font-medium">
-            Kharif Flood Scenario (Vikrampur Demo District, 12 July)
+            {t('banner.scenario', 'Kharif Flood Scenario (Vikrampur Demo District, 12 July)')}
           </span>
           <span className="hidden md:inline text-slate-400 text-[11px]">
-            • Modelled on monsoon riverine flood. Not real farmers or actual claims.
+            {t(
+              'banner.disclaimer',
+              '• Modelled on monsoon riverine flood. Not real farmers or actual claims.'
+            )}
           </span>
         </div>
 
@@ -119,7 +133,7 @@ export const DemoModeBanner: React.FC<DemoModeBannerProps> = ({
               title="Open Assam Brahmaputra Flood (July 2024) Regional Event Comparison"
             >
               <Layers className="w-3.5 h-3.5 text-sky-400" />
-              <span>Assam Flood Demo</span>
+              <span>{t('banner.assamDemo', 'Assam Flood Demo')}</span>
             </button>
           )}
 
@@ -131,56 +145,54 @@ export const DemoModeBanner: React.FC<DemoModeBannerProps> = ({
               title="Open What-If Scenario Simulator (Water Level, Rainfall, Breach, Dam)"
             >
               <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Simulator</span>
+              <span>{t('banner.simulator', 'Simulator')}</span>
             </button>
           )}
 
           {/* Quick Scenario Jumps */}
           {onSelectScenario && (
             <div className="hidden xl:flex items-center space-x-1.5 border-l border-r border-slate-800 px-2.5">
-              <span className="text-slate-400 text-[11px]">Jump:</span>
+              <span className="text-slate-400 text-[11px]">{t('banner.jump', 'Jump:')}</span>
               <button
                 onClick={() => onSelectScenario('CLM-DEMO-001')}
-                className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 hover:bg-emerald-500/20 text-[11px]"
-                title="Genuine fast-track approved claim"
+                className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 hover:bg-emerald-500/20 text-[11px] cursor-pointer"
+                title="C-001: Genuine fast-track approved claim"
               >
                 C-001
               </button>
               <button
                 onClick={() => onSelectScenario('CLM-DEMO-002')}
-                className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20 hover:bg-rose-500/20 text-[11px]"
-                title="Inflated 15 ha claim (DEM upland dry)"
+                className="px-2 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20 hover:bg-rose-500/20 text-[11px] cursor-pointer"
+                title="C-002: Inflated 15 ha claim (DEM upland dry)"
               >
                 C-002
               </button>
               <button
                 onClick={() => onSelectScenario('CLM-DEMO-005')}
-                className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 text-[11px]"
-                title="60% boundary overlap and duplicate document"
+                className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 hover:bg-amber-500/20 text-[11px] cursor-pointer"
+                title="C-005: 60% boundary overlap and duplicate document"
               >
                 C-005
               </button>
               <button
                 onClick={() => onSelectScenario('CLM-DEMO-008')}
-                className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 hover:bg-purple-500/20 text-[11px]"
-                title="Suspected unauthorized construction 0.4 ha"
+                className="px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/20 hover:bg-purple-500/20 text-[11px] cursor-pointer"
+                title="C-008: Suspected unauthorized construction 0.4 ha"
               >
                 C-008
               </button>
             </div>
           )}
 
-          {/* Guided Tour Trigger */}
-          {onStartTour && (
-            <button
-              onClick={onStartTour}
-              className="flex items-center space-x-1 px-2.5 py-1 rounded bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-medium text-[11px] shadow-sm transition-all cursor-pointer border border-emerald-500/30"
-              title="Launch interactive 3-minute judge walkthrough"
-            >
-              <Compass className="w-3.5 h-3.5 text-emerald-200" />
-              <span>Tour (3 min)</span>
-            </button>
-          )}
+          {/* Guided Tour Trigger (Banner) */}
+          <button
+            onClick={handleStartTour}
+            className="flex items-center space-x-1 px-2.5 py-1 rounded bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-medium text-[11px] shadow-sm transition-all cursor-pointer border border-emerald-500/30"
+            title={isHindi ? "3-मिनट का मार्गदर्शित दौरा शुरू करें" : "Launch interactive 3-minute judge walkthrough"}
+          >
+            <Compass className="w-3.5 h-3.5 text-emerald-200" />
+            <span>{t('banner.tour', 'Tour (3 min)')}</span>
+          </button>
 
           {/* Presentation Mode Toggle */}
           {onTogglePresentationMode && (
@@ -194,7 +206,7 @@ export const DemoModeBanner: React.FC<DemoModeBannerProps> = ({
               title="Toggle Presentation Mode (Larger fonts, cleans clutter for screen/projector)"
             >
               {isPresentationMode ? <Minimize2 className="w-3 h-3" /> : <Maximize2 className="w-3 h-3" />}
-              <span>{isPresentationMode ? 'Exit Pres' : 'Pres Mode'}</span>
+              <span>{isPresentationMode ? t('banner.exitPres', 'Exit Pres') : t('banner.presMode', 'Pres Mode')}</span>
             </button>
           )}
 
@@ -211,12 +223,12 @@ export const DemoModeBanner: React.FC<DemoModeBannerProps> = ({
             {liveApis ? (
               <>
                 <Wifi className="w-3 h-3 text-blue-400" />
-                <span>Live Data</span>
+                <span>{isHindi ? 'लाइव डेटा' : 'Live Data'}</span>
               </>
             ) : (
               <>
                 <WifiOff className="w-3 h-3 text-emerald-400" />
-                <span>Offline Seed</span>
+                <span>{isHindi ? 'ऑफलाइन डेटा' : 'Offline Seed'}</span>
               </>
             )}
           </button>
@@ -229,13 +241,13 @@ export const DemoModeBanner: React.FC<DemoModeBannerProps> = ({
             title="Restore pristine 8 demo claims"
           >
             <RotateCcw className={`w-3 h-3 text-slate-400 ${resetting ? 'animate-spin' : ''}`} />
-            <span>Reset</span>
+            <span>{resetting ? t('banner.resetting', 'Resetting...') : t('banner.reset', 'Reset')}</span>
           </button>
 
           {/* Minimize Button */}
           <button
             onClick={() => setCollapsed(true)}
-            className="text-slate-400 hover:text-slate-200 p-0.5 ml-0.5"
+            className="text-slate-400 hover:text-slate-200 p-0.5 ml-0.5 cursor-pointer"
             title="Minimize banner"
           >
             <ChevronUp className="w-4 h-4" />

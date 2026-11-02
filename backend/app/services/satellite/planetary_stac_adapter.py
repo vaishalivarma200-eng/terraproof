@@ -121,3 +121,4 @@ class PlanetaryComputerSTACAdapter(SatelliteDataService):
             layers={"sensor_mode": "SAR_RADAR" if is_sar else "OPTICAL_MULTISPECTRAL"},
             summary_stats={"water_detected": is_sar}
         )
+

@@ -47,3 +47,4 @@ class EarthEngineAdapter(SatelliteDataService):
         max_cloud_cover: float = 25.0
     ) -> SatelliteDatasetResult:
         raise NotImplementedError("EarthEngineAdapter requires a configured Google Cloud GEE Service Account.")
+

@@ -106,3 +106,4 @@ class LocalCacheAdapter(SatelliteDataService):
         )
         self.store_cached(result, target_date)
         return result
+
