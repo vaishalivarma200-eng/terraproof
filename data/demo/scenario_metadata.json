@@ -1,0 +1,56 @@
+{
+  "scenario_id": "DEMO-KHARIF-FLOOD-2026",
+  "scenario_title": "Kharif Flood, Demo District",
+  "description": "Synthetic multi-sensor flood evaluation modelled on an Indian monsoon riverine breach.",
+  "synthetic_notice": "DEMO DATA - synthetic, modelled on a monsoon flood pattern. Not real farmers or claims.",
+  "district": "Vikrampur (Fictional Demo District)",
+  "state": "Uttar Pradesh",
+  "event_date": "2026-07-12",
+  "season": "Kharif",
+  "main_crop": "Paddy",
+  "sum_insured_standard_inr_ha": 35000.0,
+  "villages": [
+    {
+      "name": "Kalyanpur (Fictional)",
+      "center": [
+        81.838,
+        25.435
+      ],
+      "elevation_m": 88.5
+    },
+    {
+      "name": "Rampur Kalan (Fictional)",
+      "center": [
+        81.852,
+        25.442
+      ],
+      "elevation_m": 84.2
+    },
+    {
+      "name": "Bishanpur (Fictional)",
+      "center": [
+        81.825,
+        25.45
+      ],
+      "elevation_m": 92.0
+    },
+    {
+      "name": "Shampur (Fictional)",
+      "center": [
+        81.86,
+        25.43
+      ],
+      "elevation_m": 87.0
+    },
+    {
+      "name": "Devgaon (Fictional)",
+      "center": [
+        81.845,
+        25.46
+      ],
+      "elevation_m": 89.2
+    }
+  ],
+  "generated_at": "2026-11-01T11:10:27.112508+00:00",
+  "random_seed": 42
+}

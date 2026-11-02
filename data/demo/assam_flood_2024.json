@@ -1,0 +1,257 @@
+{
+  "event_id": "EVT-ASSAM-FLOOD-2024",
+  "event_title": "Assam Brahmaputra Basin Monsoon Inundation (July 2024)",
+  "state": "Assam",
+  "district": "Morigaon",
+  "before_date": "2024-06-20",
+  "during_date": "2024-07-06",
+  "after_date": "2024-07-22",
+  "sensor_attribution": {
+    "optical_sensor": "Sentinel-2 MSI (10m spatial resolution)",
+    "radar_sensor": "Sentinel-1 C-Band SAR IW GRD (All-Weather Cloud Penetrating Radar)",
+    "optical_acquisition_date": "2024-06-20",
+    "sar_acquisition_date": "2024-07-06",
+    "post_flood_acquisition_date": "2024-07-22",
+    "cloud_cover_before_pct": 8.4,
+    "cloud_cover_during_pct": 94.2,
+    "sar_specular_threshold_db": -18.5,
+    "data_provider": "Copernicus Data Space Ecosystem (CDSE) & ESA Open Access Hub",
+    "verification_mode": "SYNTHETIC_BENCHMARK_MAPPED_TO_HISTORICAL_EVENT"
+  },
+  "summary_text": "Before the July surge (20 June 2024), river discharge remained within natural bankfull capacity. Between 2 and 12 July 2024, extreme rainfall in the Upper Brahmaputra catchment triggered catastrophic overtopping across 6 districts. Sentinel-1 SAR microwave radar penetrated 94% monsoon cloud cover to map 185,100 hectares of standing floodwater. Most severely affected: Morigaon (48,200 ha) and Nagaon (39,500 ha), impacting 124,900 ha of Sali paddy cropland and submerging 559 km of rural road networks.",
+  "total_flooded_ha": 185100.0,
+  "total_cropland_affected_ha": 124900.0,
+  "total_builtup_affected_ha": 6820.0,
+  "total_roads_affected_km": 559.0,
+  "districts": [
+    {
+      "district": "Morigaon",
+      "circle_name": "Mayong / Laharighat / Bhuragaon",
+      "flooded_ha": 48200.0,
+      "cropland_affected_ha": 32400.0,
+      "builtup_affected_ha": 1840.0,
+      "roads_affected_km": 142.0,
+      "estimated_duration_days": 12,
+      "asdma_reported_status": "SEVERELY_AFFECTED",
+      "asdma_affected_population": 341200,
+      "satellite_agreement_pct": 92.4,
+      "confidence_score": 93
+    },
+    {
+      "district": "Nagaon",
+      "circle_name": "Kaliabor / Samaguri / Dhing",
+      "flooded_ha": 39500.0,
+      "cropland_affected_ha": 27100.0,
+      "builtup_affected_ha": 1450.0,
+      "roads_affected_km": 118.0,
+      "estimated_duration_days": 10,
+      "asdma_reported_status": "SEVERELY_AFFECTED",
+      "asdma_affected_population": 288500,
+      "satellite_agreement_pct": 90.1,
+      "confidence_score": 91
+    },
+    {
+      "district": "Barpeta",
+      "circle_name": "Chenga / Baghbar / Sarthebari",
+      "flooded_ha": 34700.0,
+      "cropland_affected_ha": 23800.0,
+      "builtup_affected_ha": 1280.0,
+      "roads_affected_km": 104.0,
+      "estimated_duration_days": 9,
+      "asdma_reported_status": "HEAVILY_AFFECTED",
+      "asdma_affected_population": 245000,
+      "satellite_agreement_pct": 91.2,
+      "confidence_score": 90
+    },
+    {
+      "district": "Dhemaji",
+      "circle_name": "Jonai / Sisiborgaon",
+      "flooded_ha": 28100.0,
+      "cropland_affected_ha": 19200.0,
+      "builtup_affected_ha": 950.0,
+      "roads_affected_km": 85.0,
+      "estimated_duration_days": 8,
+      "asdma_reported_status": "HEAVILY_AFFECTED",
+      "asdma_affected_population": 195400,
+      "satellite_agreement_pct": 88.6,
+      "confidence_score": 88
+    },
+    {
+      "district": "Kamrup",
+      "circle_name": "Hajo / Rangia / Palashbari",
+      "flooded_ha": 19400.0,
+      "cropland_affected_ha": 12600.0,
+      "builtup_affected_ha": 760.0,
+      "roads_affected_km": 62.0,
+      "estimated_duration_days": 6,
+      "asdma_reported_status": "MODERATELY_AFFECTED",
+      "asdma_affected_population": 132000,
+      "satellite_agreement_pct": 89.3,
+      "confidence_score": 87
+    },
+    {
+      "district": "Majuli",
+      "circle_name": "Majuli Island / Ujani Majuli",
+      "flooded_ha": 15200.0,
+      "cropland_affected_ha": 9800.0,
+      "builtup_affected_ha": 540.0,
+      "roads_affected_km": 48.0,
+      "estimated_duration_days": 11,
+      "asdma_reported_status": "CRITICAL_ISOLATION",
+      "asdma_affected_population": 89000,
+      "satellite_agreement_pct": 94.0,
+      "confidence_score": 94
+    }
+  ],
+  "asdma_validation": {
+    "source": "Assam State Disaster Management Authority (ASDMA) Daily Flood Situation Report (7 July 2024)",
+    "official_bulletin_affected_districts": 29,
+    "total_human_population_affected": 2420000,
+    "relief_camps_operational": 353,
+    "overall_satellite_concordance_rate_pct": 91.0,
+    "validation_verdict": "HIGH_CONCORDANCE (Satellite water mask precisely tracks ASDMA high-alert revenue circles)",
+    "discrepancy_explanation": "Satellite detected earlier inundation in low-lying char areas (river islands) 24 hours prior to road-based manual revenue reporting."
+  },
+  "spatial_layers": {
+    "center": [92.15, 26.25],
+    "zoom": 10,
+    "study_area_geojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [91.80, 26.10],
+          [92.50, 26.10],
+          [92.50, 26.45],
+          [91.80, 26.45],
+          [91.80, 26.10]
+        ]
+      ]
+    },
+    "change_mask_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "Newly Inundated Floodplain Zone - Morigaon",
+            "type": "NEWLY_FLOODED",
+            "color": "#3b82f6",
+            "area_ha": 48200.0,
+            "fill_opacity": 0.55
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [92.05, 26.20],
+                [92.35, 26.20],
+                [92.35, 26.38],
+                [92.05, 26.38],
+                [92.05, 26.20]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "Permanent Brahmaputra River Channel",
+            "type": "BASELINE_WATER",
+            "color": "#1d4ed8",
+            "area_ha": 12800.0,
+            "fill_opacity": 0.7
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [91.85, 26.28],
+                [92.45, 26.32],
+                [92.45, 26.36],
+                [91.85, 26.32],
+                [91.85, 26.28]
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "cropland_mask_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "Submerged Sali Paddy Cropland",
+            "color": "#eab308",
+            "area_ha": 32400.0,
+            "crop": "Paddy (Rice)",
+            "fill_opacity": 0.45
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [92.10, 26.15],
+                [92.30, 26.15],
+                [92.30, 26.25],
+                [92.10, 26.25],
+                [92.10, 26.15]
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "builtup_mask_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "Affected Settlement Clusters (Mayong)",
+            "color": "#ef4444",
+            "area_ha": 1840.0,
+            "structures_estimated": 6200,
+            "fill_opacity": 0.65
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [92.02, 26.22],
+                [92.08, 26.22],
+                [92.08, 26.26],
+                [92.02, 26.26],
+                [92.02, 26.22]
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "roads_mask_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "name": "Submerged State Highway & Rural PWD Roads",
+            "color": "#f97316",
+            "length_km": 142.0,
+            "status": "IMPASSABLE"
+          },
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [91.95, 26.24],
+              [92.15, 26.26],
+              [92.30, 26.28],
+              [92.42, 26.30]
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

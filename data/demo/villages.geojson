@@ -1,0 +1,185 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "village_name": "Kalyanpur (Fictional)",
+        "elevation_m": 88.5,
+        "district": "Vikrampur (Fictional Demo District)",
+        "state": "Uttar Pradesh"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.83,
+              25.427
+            ],
+            [
+              81.846,
+              25.427
+            ],
+            [
+              81.846,
+              25.443
+            ],
+            [
+              81.83,
+              25.443
+            ],
+            [
+              81.83,
+              25.427
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "village_name": "Rampur Kalan (Fictional)",
+        "elevation_m": 84.2,
+        "district": "Vikrampur (Fictional Demo District)",
+        "state": "Uttar Pradesh"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.844,
+              25.434
+            ],
+            [
+              81.86,
+              25.434
+            ],
+            [
+              81.86,
+              25.45
+            ],
+            [
+              81.844,
+              25.45
+            ],
+            [
+              81.844,
+              25.434
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "village_name": "Bishanpur (Fictional)",
+        "elevation_m": 92.0,
+        "district": "Vikrampur (Fictional Demo District)",
+        "state": "Uttar Pradesh"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.817,
+              25.442
+            ],
+            [
+              81.833,
+              25.442
+            ],
+            [
+              81.833,
+              25.458
+            ],
+            [
+              81.817,
+              25.458
+            ],
+            [
+              81.817,
+              25.442
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "village_name": "Shampur (Fictional)",
+        "elevation_m": 87.0,
+        "district": "Vikrampur (Fictional Demo District)",
+        "state": "Uttar Pradesh"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.852,
+              25.422
+            ],
+            [
+              81.868,
+              25.422
+            ],
+            [
+              81.868,
+              25.438
+            ],
+            [
+              81.852,
+              25.438
+            ],
+            [
+              81.852,
+              25.422
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "village_name": "Devgaon (Fictional)",
+        "elevation_m": 89.2,
+        "district": "Vikrampur (Fictional Demo District)",
+        "state": "Uttar Pradesh"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.837,
+              25.452
+            ],
+            [
+              81.853,
+              25.452
+            ],
+            [
+              81.853,
+              25.468
+            ],
+            [
+              81.837,
+              25.468
+            ],
+            [
+              81.837,
+              25.452
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

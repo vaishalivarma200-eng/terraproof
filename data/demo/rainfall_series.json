@@ -1,0 +1,59 @@
+{
+  "scenario": "Monsoon Inundation Pulse",
+  "peak_date": "2026-07-12",
+  "peak_precipitation_mm": 84.8,
+  "total_period_precipitation_mm": 199.6,
+  "normal_baseline_mm": 32.0,
+  "divergence_from_normal_pct": 523.8,
+  "source": "Open-Meteo Historical Reanalysis (Synthetic Seed Archive)",
+  "daily_readings": [
+    {
+      "date": "2026-07-08",
+      "precipitation_mm": 4.1,
+      "baseline_normal_mm": 3.8,
+      "status": "NORMAL"
+    },
+    {
+      "date": "2026-07-09",
+      "precipitation_mm": 5.2,
+      "baseline_normal_mm": 4.1,
+      "status": "NORMAL"
+    },
+    {
+      "date": "2026-07-10",
+      "precipitation_mm": 14.8,
+      "baseline_normal_mm": 3.9,
+      "status": "MODERATE_RAIN"
+    },
+    {
+      "date": "2026-07-11",
+      "precipitation_mm": 28.5,
+      "baseline_normal_mm": 4.2,
+      "status": "HEAVY_RAIN"
+    },
+    {
+      "date": "2026-07-12",
+      "precipitation_mm": 84.8,
+      "baseline_normal_mm": 4.0,
+      "status": "EXTREME_CLOUD_BURST"
+    },
+    {
+      "date": "2026-07-13",
+      "precipitation_mm": 42.1,
+      "baseline_normal_mm": 3.9,
+      "status": "HEAVY_RAIN"
+    },
+    {
+      "date": "2026-07-14",
+      "precipitation_mm": 15.3,
+      "baseline_normal_mm": 4.1,
+      "status": "RECEDING"
+    },
+    {
+      "date": "2026-07-15",
+      "precipitation_mm": 4.8,
+      "baseline_normal_mm": 4.0,
+      "status": "NORMAL"
+    }
+  ]
+}

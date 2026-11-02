@@ -574,5 +574,143 @@ export const api = {
     });
     return handleResponse<any>(res);
   },
+
+  async getDemoStatus() {
+    const res = await fetch(`${API_BASE}/demo/status`);
+    return handleResponse<{
+      demo_mode_active: boolean;
+      live_apis_enabled: boolean;
+      synthetic_notice: string;
+      scenario: any;
+      mode: string;
+    }>(res);
+  },
+
+  async toggleDemoLiveApis() {
+    const res = await fetch(`${API_BASE}/demo/toggle-live`, {
+      method: 'POST',
+    });
+    return handleResponse<{
+      status: string;
+      live_apis_enabled: boolean;
+      mode: string;
+      message: string;
+    }>(res);
+  },
+
+  async getDemoRainfall() {
+    const res = await fetch(`${API_BASE}/demo/rainfall`);
+    return handleResponse<any>(res);
+  },
+
+  async getDemoDemLayer() {
+    const res = await fetch(`${API_BASE}/demo/dem-layer`);
+    return handleResponse<any>(res);
+  },
+
+  async getDemoVillages() {
+    const res = await fetch(`${API_BASE}/demo/villages`);
+    return handleResponse<any>(res);
+  },
+
+  async getDemoImpactSummary() {
+    const res = await fetch(`${API_BASE}/demo/impact-summary`);
+    return handleResponse<{
+      disclaimer: string;
+      total_claims: number;
+      fast_track_approved: number;
+      field_visits_prioritized: number;
+      field_visits_avoided: number;
+      total_claimed_ha: number;
+      total_observed_damaged_ha: number;
+      area_divergence_gap_ha: number;
+      rupees_flagged_for_review: number;
+      estimated_settlement_time_hours: number;
+      baseline_traditional_days: number;
+    }>(res);
+  },
+
+  // TerraGuide AI Assistant
+  async askAssistant(params: {
+    message: string;
+    claim_id?: string;
+    role?: string;
+    language?: string;
+  }) {
+    const res = await fetch(`${API_BASE}/assistant/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return handleResponse<{
+      reply: string;
+      evidence_used: string[];
+      knowledge_references: string[];
+      tools_called: string[];
+      role: string;
+      language: string;
+      ai_mode: string;
+    }>(res);
+  },
+
+  async getSuggestedQuestions(claimId?: string, role?: string) {
+    const params = new URLSearchParams();
+    if (claimId) params.append('claim_id', claimId);
+    if (role) params.append('role', role);
+    const res = await fetch(`${API_BASE}/assistant/suggested-questions?${params.toString()}`);
+    return handleResponse<{ suggested_questions: string[] }>(res);
+  },
+
+  // Regional Event Comparison & Assam Floods
+  async getAssamFloodDemo() {
+    const res = await fetch(`${API_BASE}/events/assam-demo`);
+    return handleResponse<any>(res);
+  },
+
+  async compareRegionalEvent(params: {
+    state: string;
+    district: string;
+    circle_or_village?: string;
+    before_date: string;
+    after_date: string;
+    custom_boundary_geojson?: any;
+    is_offline_demo?: boolean;
+  }) {
+    const res = await fetch(`${API_BASE}/events/compare-region`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return handleResponse<any>(res);
+  },
+
+  getExportFloodStatisticsCsvUrl(eventId: string = 'EVT-ASSAM-FLOOD-2024') {
+    return `${API_BASE}/events/export-table-csv?event_id=${eventId}`;
+  },
+
+  // What-If Scenario Simulator
+  async getSimulationPresets() {
+    const res = await fetch(`${API_BASE}/simulator/presets`);
+    return handleResponse<any>(res);
+  },
+
+  async runScenarioSimulation(params: {
+    scenario_type: string;
+    region_name?: string;
+    water_level_rise_m?: number;
+    rainfall_mm?: number;
+    breach_width_m?: number;
+    breach_coordinate?: [number, number];
+    full_reservoir_level_m?: number;
+    dam_coordinate?: [number, number];
+    builtup_expansion_pct?: number;
+  }) {
+    const res = await fetch(`${API_BASE}/simulator/run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return handleResponse<any>(res);
+  },
 };
 

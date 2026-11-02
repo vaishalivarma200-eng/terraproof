@@ -38,6 +38,7 @@ import { LandUseChangeViewer } from '../components/LandUseChangeViewer';
 import { OfficialWorkflowModal } from '../components/OfficialWorkflowModal';
 import { FarmerAppealModal } from '../components/FarmerAppealModal';
 import { FairnessMonitoringModal } from '../components/FairnessMonitoringModal';
+import { DemoImpactPanel } from '../components/DemoImpactPanel';
 import {
   INDIAN_STATES_DISTRICTS,
   CROP_SEASONS,
@@ -145,6 +146,7 @@ export const InsurancePage: React.FC = () => {
   const [showAppealModal, setShowAppealModal] = useState(false);
   const [showFairnessModal, setShowFairnessModal] = useState(false);
   const [resettingDemo, setResettingDemo] = useState(false);
+  const [fieldSwipePos, setFieldSwipePos] = useState<number>(50);
 
   // Form State
   const [refNo, setRefNo] = useState(`CLM-2026-${Math.floor(1000 + Math.random() * 9000)}`);
@@ -198,8 +200,13 @@ export const InsurancePage: React.FC = () => {
       setLoading(true);
       const data = await api.getClaims();
       setClaims(data);
+      const claimRef = searchParams.get('claimRef');
       if (data.length > 0) {
-        const found = selectedId ? data.find((c) => c.id === selectedId) || data[0] : data[0];
+        const found = selectedId
+          ? data.find((c) => c.id === selectedId) || data[0]
+          : claimRef
+          ? data.find((c) => c.reference_no === claimRef) || data[0]
+          : data[0];
         setSelectedClaim(found);
       }
     } catch (err) {
@@ -506,6 +513,9 @@ export const InsurancePage: React.FC = () => {
         </div>
       </div>
 
+      {/* Illustrative Regional Demo Impact Summary Panel */}
+      <DemoImpactPanel />
+
       {/* Main Content: Split Master-Detail */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Claims List */}
@@ -755,13 +765,32 @@ export const InsurancePage: React.FC = () => {
 
               {/* Interactive Geospatial Map Display */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs">
+                <div className="flex flex-wrap items-center justify-between text-xs gap-1.5">
                   <span className="font-semibold text-slate-200 flex items-center gap-1.5">
                     <Layers className="w-3.5 h-3.5 text-emerald-400" />
-                    Interactive Satellite Evidence Map
+                    Interactive Satellite Evidence Map (Field-Level Parcel)
                   </span>
-                  <span className="text-slate-400 text-[11px]">
-                    Green: Field Boundary • Red: Observed Spectral Loss
+                  <div className="flex items-center space-x-1.5 text-[10px] bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-slate-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Sensor: Sentinel-1 C-SAR & Sentinel-2 MSI (10m)</span>
+                  </div>
+                </div>
+
+                {/* Field-Level Before / Peak Flood Swipe Slider */}
+                <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800 flex items-center space-x-2.5 text-xs text-slate-300">
+                  <span className="text-[10px] text-emerald-400 font-semibold whitespace-nowrap">
+                    Pre: {selectedClaim.incident_date_start} (Optical)
+                  </span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={fieldSwipePos}
+                    onChange={(e) => setFieldSwipePos(Number(e.target.value))}
+                    className="w-full accent-emerald-500 cursor-pointer h-1 bg-slate-800 rounded-lg"
+                  />
+                  <span className="text-[10px] text-sky-400 font-semibold whitespace-nowrap">
+                    Post: {selectedClaim.incident_date_end} (SAR Inundation)
                   </span>
                 </div>
 
@@ -1067,6 +1096,21 @@ export const InsurancePage: React.FC = () => {
                         </div>
                       </div>
                     </div>
+
+                    {/* Discrepancy Rupee Protection Callout (C-002 Benchmark) */}
+                    {(selectedClaim.reference_no === 'CLM-DEMO-002' || ((activeAnalysis as any)?.results?.compensation_scenario?.flagged_discrepancy_rupees > 0)) && (
+                      <div className="p-3 rounded-lg bg-rose-950/30 border border-rose-500/40 text-xs flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <span className="font-bold text-rose-300">Claimed vs Observed Rupee Gap: </span>
+                          <span className="text-slate-300">
+                            Claimed ₹{(selectedClaim.claimed_area_ha * (selectedClaim.sum_insured_per_ha || 35000) * 0.8).toLocaleString()} ({selectedClaim.claimed_area_ha} ha) vs Verified ₹{(observedHa * (selectedClaim.sum_insured_per_ha || 35000) * 0.8).toLocaleString()} ({observedHa.toFixed(1)} ha)
+                          </span>
+                        </div>
+                        <div className="font-bold text-rose-300 bg-rose-950/80 px-2.5 py-1 rounded border border-rose-500/30">
+                          ₹{(Math.max(0, (selectedClaim.claimed_area_ha - observedHa) * (selectedClaim.sum_insured_per_ha || 35000) * 0.8)).toLocaleString()} Protected from Premature Payout
+                        </div>
+                      </div>
+                    )}
 
                     <p className="text-[10px] text-slate-400 italic">
                       * Disclaimer: This calculation is for decision-support and scenario planning only. Final payout is governed by applicable PMFBY threshold yield rules and survey committee certification.

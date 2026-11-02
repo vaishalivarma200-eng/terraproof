@@ -1,211 +1,207 @@
 """
 TerraProof Seed Data & Demonstration Scenarios
-Generates the 4 comprehensive verification archetypes requested for evaluation:
-1. Genuine Flood Claim (Fast-Track Approved, high confidence, consistent docs)
-2. Inflated Area Claim (Flagged by Risk Engine, document 3.2 ha vs claimed 14.5 ha)
-3. Land Document Tenancy Mismatch (Tenant claim with missing owner lease declaration)
-4. Suspected Unauthorized Construction (NDBI increase & SAR double-bounce detected)
+Loads either the canonical 8 Kharif Flood demo evaluation claims (Judge-Ready)
+or fallback starter scenarios.
+Integrates complete end-to-end evidence chains: Claim, AnalysisJob, LandDocument,
+OfficialInspection, and Cryptographic AuditLedger.
 """
-from datetime import date
+
+import os
+import json
+import logging
+from datetime import date, datetime, timezone
 from sqlalchemy.orm import Session
 from app.core.database import SessionLocal, init_db
 from app.models.claim import Claim
+from app.models.analysis import AnalysisJob
 from app.models.document import LandDocument
 from app.models.decision import OfficialInspection
 from app.core.audit_chain import append_audit_block
 
+logger = logging.getLogger(__name__)
+
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+BASE_DIR = REPO_ROOT
+DEMO_CLAIMS_PATH = os.path.join(BASE_DIR, "data", "demo", "claims_seed.json")
+
+def seed_demo_kharif_flood(db: Session) -> int:
+    """Loads the 8 canonical demonstration claims from data/demo/claims_seed.json."""
+    if not os.path.exists(DEMO_CLAIMS_PATH):
+        logger.warning(f"Demo claims file not found at {DEMO_CLAIMS_PATH}. Running generator...")
+        import subprocess
+        script_path = os.path.join(BASE_DIR, "scripts", "generate_demo_data.py")
+        subprocess.run(["python", script_path], check=True)
+
+    with open(DEMO_CLAIMS_PATH, "r", encoding="utf-8") as f:
+        demo_claims = json.load(f)
+
+    # 1. Clean up existing records for clean demo state
+    db.query(OfficialInspection).delete()
+    db.query(LandDocument).delete()
+    db.query(AnalysisJob).delete()
+    db.query(Claim).delete()
+    db.commit()
+
+    created_claims = []
+    for c_data in demo_claims:
+        start_d = date.fromisoformat(c_data["incident_date_start"])
+        end_d = date.fromisoformat(c_data["incident_date_end"])
+        payout = c_data.get("payout_calculation", {})
+
+        claim = Claim(
+            reference_no=c_data["reference_no"],
+            farmer_name=c_data["farmer_name"],
+            crop_type=c_data["crop_type"],
+            crop_season=c_data.get("crop_season", "Kharif"),
+            claimed_area_ha=float(c_data["claimed_area_ha"]),
+            cultivated_area_ha=float(c_data.get("cultivated_area_ha", c_data["claimed_area_ha"])),
+            damage_type=c_data["damage_type"],
+            incident_date_start=start_d,
+            incident_date_end=end_d,
+            state=c_data.get("state", "Uttar Pradesh"),
+            district=c_data.get("district", "Vikrampur (Fictional Demo District)"),
+            claimed_loss_amount=float(payout.get("claimed_total_inr", 150000.0)),
+            sum_insured_per_ha=float(payout.get("sum_insured_per_ha", 35000.0)),
+            khasra_no=c_data.get("khasra_no"),
+            khatauni_no=c_data.get("khatauni_no"),
+            tenancy_type=c_data.get("tenancy_type", "OWNER"),
+            masked_aadhaar_ref=c_data.get("masked_aadhaar_ref", "XXXX-XXXX-1234"),
+            kyc_status=c_data.get("kyc_status", "VERIFIED"),
+            latitude=float(c_data["latitude"]),
+            longitude=float(c_data["longitude"]),
+            boundary_geojson=c_data["boundary_geojson"],
+            field_photos=c_data.get("field_photos", []),
+            supporting_notes=f"Synthetic demonstration claim: {c_data.get('claim_archetype')}. {c_data.get('risk_assessment', {}).get('recommended_action', '')}",
+            status=c_data.get("status", "SUBMITTED"),
+            risk_score=float(c_data.get("risk_assessment", {}).get("composite_risk_score", 15.0)),
+            risk_tier=c_data.get("risk_assessment", {}).get("risk_tier", "LOW_RISK"),
+            risk_signals=c_data.get("risk_assessment", {}),
+            land_use_change_flags=c_data.get("land_use_change_flags", None)
+        )
+        db.add(claim)
+        db.flush()
+
+        # 2. Attach Precomputed Completed AnalysisJob
+        fusion_mode = "SENTINEL_1_SAR_MONSOON_FALLBACK" if c_data["reference_no"] == "CLM-DEMO-006" else "SENTINEL_2_OPTICAL_CONFIRMED"
+        job_results = {
+            "damaged_area_ha": c_data["observed_damaged_ha"],
+            "divergence_percentage": c_data["divergence_pct"],
+            "confidence_score": c_data["confidence_score"],
+            "confidence_breakdown": c_data.get("confidence_breakdown", {}),
+            "overlays_geojson": c_data.get("overlays_geojson"),
+            "compensation_scenario": payout,
+            "peril_classification": {
+                "primary_peril": c_data["damage_type"],
+                "confidence": c_data["confidence_score"]
+            },
+            "sensor_fusion_mode": fusion_mode,
+            "weather_summary": {
+                "peak_precipitation_mm": 84.8,
+                "total_period_precipitation_mm": 199.6,
+                "normal_baseline_mm": 28.0,
+                "anomaly_percentage": 612.9
+            },
+            "crop_calendar_context": {
+                "crop_type": c_data["crop_type"],
+                "season": c_data["crop_season"],
+                "sowing_window": "June 15 - July 15",
+                "harvest_window": "October 20 - November 25"
+            }
+        }
+
+        analysis_job = AnalysisJob(
+            claim_id=claim.id,
+            analysis_type="INSURANCE_VERIFICATION",
+            status="COMPLETED",
+            execution_mode="demo",
+            parameters={
+                "boundary_geojson": c_data["boundary_geojson"],
+                "damage_type": c_data["damage_type"],
+                "incident_start": c_data["incident_date_start"],
+                "incident_end": c_data["incident_date_end"],
+                "crop_type": c_data["crop_type"],
+                "claimed_area_ha": c_data["claimed_area_ha"],
+                "crop_season": c_data["crop_season"]
+            },
+            results=job_results,
+            compensation_scenario=payout,
+            integrity_hash=f"SHA256-{c_data['reference_no']}-VERIFIED",
+            completed_at=datetime.now(timezone.utc)
+        )
+        db.add(analysis_job)
+
+        # 3. Attach Land Documents
+        for doc in c_data.get("documents", []):
+            land_doc = LandDocument(
+                claim_id=claim.id,
+                document_type=doc.get("document_type", "7/12_JAMABANDI"),
+                filename=doc.get("file_name", "document.pdf"),
+                file_hash=doc.get("document_hash", "HASH123"),
+                tenancy_type=claim.tenancy_type or "OWNER",
+                extracted_data=doc.get("ocr_extracted", {}),
+                verification_status=doc.get("verification_status", "VERIFIED"),
+                verification_report=doc,
+                created_at=datetime.now(timezone.utc)
+            )
+            db.add(land_doc)
+
+        # 4. Attach Pre-inspection for relevant archetypes
+        if c_data["reference_no"] in ["CLM-DEMO-002", "CLM-DEMO-008"]:
+            inspection = OfficialInspection(
+                claim_id=claim.id,
+                officer_name="Kailash Sharma (Patwari)",
+                officer_role="PATWARI",
+                jurisdiction_village=c_data.get("village", "Rampur Kalan"),
+                jurisdiction_tehsil="Vikrampur Tehsil",
+                jurisdiction_district=claim.district,
+                inspection_date=date(2026, 7, 15),
+                device_latitude=claim.latitude,
+                device_longitude=claim.longitude,
+                checklist_crop_present=True,
+                checklist_water_marks_observed=True,
+                checklist_structure_present=(c_data["reference_no"] == "CLM-DEMO-008"),
+                checklist_boundary_matches=(c_data["reference_no"] != "CLM-DEMO-002"),
+                prefilled_satellite_damage_percent=float(c_data["divergence_pct"]),
+                confirmed_damage_percent=float(c_data["observed_damaged_ha"] / c_data["claimed_area_ha"] * 100.0) if c_data["claimed_area_ha"] > 0 else 0.0,
+                decision_action="REQUEST_MORE_INFO" if c_data["reference_no"] == "CLM-DEMO-002" else "ESCALATE_TO_TEHSILDAR",
+                decision_remarks="Automated pre-screening priority assigned following multi-sensor satellite divergence analysis.",
+                signature_hash=f"SHA256-INSP-{c_data['reference_no']}",
+                signed_at=datetime.now(timezone.utc)
+            )
+            db.add(inspection)
+
+        # 5. Append Genesis Audit Block
+        append_audit_block(
+            db=db,
+            event_type="DEMO_CLAIM_SEEDED",
+            record_id=claim.id,
+            actor=f"DEMO_SCENARIO:{c_data['reference_no']}",
+            payload={
+                "reference_no": claim.reference_no,
+                "crop_type": claim.crop_type,
+                "claimed_area_ha": claim.claimed_area_ha,
+                "observed_damaged_ha": c_data["observed_damaged_ha"],
+                "divergence_pct": c_data["divergence_pct"],
+                "triage_color": c_data["triage_color"],
+                "status": claim.status
+            }
+        )
+        created_claims.append(claim)
+
+    db.commit()
+    print(f"Successfully loaded {len(created_claims)} demo claims with full analysis and evidence chains.")
+    return len(created_claims)
+
 def seed_initial_claims(force: bool = False):
-    """Seeds initial demonstration scenarios into the database."""
+    """Entry point for database initial seed / reset."""
     init_db()
     db = SessionLocal()
     try:
         existing_count = db.query(Claim).count()
-        if existing_count > 0 and not force:
-            print(f"Database already contains {existing_count} claims. Skipping seed.")
+        if existing_count >= 8 and not force:
             return
 
-        if force:
-            # Clean up old records for clean demo reset
-            db.query(LandDocument).delete()
-            db.query(OfficialInspection).delete()
-            db.query(Claim).delete()
-            db.commit()
-
-        # Scenario 1: Genuine Flood Claim (Fast-Track Approved)
-        # Farmer: Gurpreet Singh, Ludhiana, Punjab. 3.5 ha paddy inundated by canal breach.
-        claim_1 = Claim(
-            reference_no="CLM-2026-0891",
-            farmer_name="Gurpreet Singh",
-            crop_type="Rice",
-            claimed_area_ha=3.5,
-            damage_type="Flood",
-            incident_date_start=date(2026, 7, 10),
-            incident_date_end=date(2026, 7, 18),
-            state="Punjab",
-            district="Ludhiana",
-            crop_season="Kharif",
-            cultivated_area_ha=3.5,
-            claimed_loss_amount=133000.0,
-            sum_insured_per_ha=38000.0,
-            khasra_no="142/2",
-            khatauni_no="84",
-            tenancy_type="OWNER",
-            masked_aadhaar_ref="XXXX-XXXX-1098",
-            kyc_status="VERIFIED",
-            latitude=30.901,
-            longitude=75.857,
-            boundary_geojson={
-                "type": "Polygon",
-                "coordinates": [[
-                    [75.855, 30.900],
-                    [75.859, 30.900],
-                    [75.859, 30.903],
-                    [75.855, 30.903],
-                    [75.855, 30.900]
-                ]]
-            },
-            supporting_notes="Sustained monsoon canal breach flooded rice paddy field. Satellite NDWI confirmed 78% water coverage.",
-            status="FAST_TRACK_APPROVED"
-        )
-
-        # Scenario 2: Inflated Area Claim (Flagged by Risk Engine)
-        # Farmer: Vikramaditya Singh, Kota, Rajasthan. Claimed 14.5 ha, but Khasra title & drawn parcel is only 3.2 ha.
-        claim_2 = Claim(
-            reference_no="CLM-2026-1044",
-            farmer_name="Vikramaditya Singh",
-            crop_type="Soybean",
-            claimed_area_ha=14.5,  # 353% inflation!
-            damage_type="Drought",
-            incident_date_start=date(2026, 6, 1),
-            incident_date_end=date(2026, 6, 28),
-            state="Rajasthan",
-            district="Kota",
-            crop_season="Kharif",
-            cultivated_area_ha=3.2,
-            claimed_loss_amount=435000.0,
-            sum_insured_per_ha=30000.0,
-            khasra_no="88/1",
-            khatauni_no="112",
-            tenancy_type="OWNER",
-            masked_aadhaar_ref="XXXX-XXXX-5542",
-            kyc_status="VERIFIED",
-            latitude=25.213,
-            longitude=75.864,
-            boundary_geojson={
-                "type": "Polygon",
-                "coordinates": [[
-                    [75.862, 25.211],
-                    [75.866, 25.211],
-                    [75.866, 25.215],
-                    [75.862, 25.215],
-                    [75.862, 25.211]
-                ]]
-            },
-            supporting_notes="Claimant reported total loss of 14.5 hectares. Land records and satellite boundary quantify parcel as 3.2 ha.",
-            status="FLAGGED_AREA_INFLATION"
-        )
-
-        # Scenario 3: Land Document Tenancy Mismatch (Tenancy Dispute)
-        # Farmer: Devendra Meena, Karnal, Haryana. Filed as tenant farmer on 4.0 ha Wheat, but uploaded Jamabandi
-        # belongs to landowner without registered tenant lease agreement affidavit.
-        claim_3 = Claim(
-            reference_no="CLM-2026-0520",
-            farmer_name="Devendra Meena",
-            crop_type="Wheat",
-            claimed_area_ha=4.0,
-            damage_type="Hail",
-            incident_date_start=date(2026, 3, 12),
-            incident_date_end=date(2026, 3, 14),
-            state="Haryana",
-            district="Karnal",
-            crop_season="Rabi",
-            cultivated_area_ha=4.0,
-            claimed_loss_amount=140000.0,
-            sum_insured_per_ha=35000.0,
-            khasra_no="203/4",
-            khatauni_no="49",
-            tenancy_type="TENANT",
-            masked_aadhaar_ref="XXXX-XXXX-8921",
-            kyc_status="VERIFIED",
-            latitude=29.685,
-            longitude=76.990,
-            boundary_geojson={
-                "type": "Polygon",
-                "coordinates": [[
-                    [76.988, 29.683],
-                    [76.992, 29.683],
-                    [76.992, 29.687],
-                    [76.988, 29.687],
-                    [76.988, 29.683]
-                ]]
-            },
-            supporting_notes="Tenant claim filed. Uploaded Jamabandi names landowner without annexed Tehsildar-notarized lease deed.",
-            status="NEEDS_TENANCY_REVIEW"
-        )
-
-        # Scenario 4: Suspected Unauthorized Construction on Farmland
-        # Farmer: Rajeshwari Bai, Ujjain, MP. 2.5 ha plot. NDBI temporal jump and SAR backscatter indicate
-        # 0.45 ha concrete plinth / warehouse shed built on agricultural revenue parcel.
-        claim_4 = Claim(
-            reference_no="CLM-2026-0312",
-            farmer_name="Rajeshwari Bai",
-            crop_type="Cotton",
-            claimed_area_ha=2.5,
-            damage_type="Waterlogging",
-            incident_date_start=date(2026, 8, 5),
-            incident_date_end=date(2026, 8, 12),
-            state="Madhya Pradesh",
-            district="Ujjain",
-            crop_season="Kharif",
-            cultivated_area_ha=2.5,
-            claimed_loss_amount=105000.0,
-            sum_insured_per_ha=42000.0,
-            khasra_no="512/3",
-            khatauni_no="77",
-            tenancy_type="OWNER",
-            masked_aadhaar_ref="XXXX-XXXX-3341",
-            kyc_status="VERIFIED",
-            latitude=23.176,
-            longitude=75.788,
-            boundary_geojson={
-                "type": "Polygon",
-                "coordinates": [[
-                    [75.786, 23.174],
-                    [75.790, 23.174],
-                    [75.790, 23.178],
-                    [75.786, 23.178],
-                    [75.786, 23.174]
-                ]]
-            },
-            supporting_notes="Satellite change analysis detected +0.38 NDBI jump and severe SAR double-bounce consistent with concrete construction.",
-            status="FLAGGED_UNAUTHORIZED_CONSTRUCTION"
-        )
-
-        claims_list = [claim_1, claim_2, claim_3, claim_4]
-        for c in claims_list:
-            db.add(c)
-        db.commit()
-
-        for c in claims_list:
-            db.refresh(c)
-            # Record Genesis / Initial state in cryptographic audit ledger
-            append_audit_block(
-                db=db,
-                event_type="CLAIM_SUBMITTED",
-                record_id=c.id,
-                actor=f"SYSTEM_SEED:{c.reference_no}",
-                payload={
-                    "reference_no": c.reference_no,
-                    "crop_type": c.crop_type,
-                    "claimed_area_ha": c.claimed_area_ha,
-                    "state": c.state,
-                    "district": c.district,
-                    "damage_type": c.damage_type,
-                    "status": c.status
-                }
-            )
-
-        print(f"Successfully seeded {len(claims_list)} master demonstration scenarios into TerraProof.")
+        seed_demo_kharif_flood(db)
     finally:
         db.close()
 

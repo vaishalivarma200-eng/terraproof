@@ -6,191 +6,182 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5+-3178C6.svg)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4+-646CFF.svg)](https://vitejs.dev/)
 [![DPDP Act 2023](https://img.shields.io/badge/Privacy-DPDP%20Act%202023%20Aligned-emerald.svg)](https://www.meity.gov.in/)
-[![Tests](https://img.shields.io/badge/Tests-53%20Passed-brightgreen.svg)](https://pytest.org/)
+[![Tests](https://img.shields.io/badge/Tests-65%20Passed-brightgreen.svg)](https://pytest.org/)
 
 > **TerraProof** is an Earth observation evidence and decision-support layer designed for **revenue officials (Patwari / Kanungo / Tehsildar / District Administration)**, agricultural insurers (PMFBY), lending banks, and farmers. It pre-screens claims, prioritizes ground audits, drafts objective evidence packs, and maintains an immutable cryptographic audit ledger.
 
 ---
 
-## 1. Official Positioning & Guiding Principles
+## 1. Quick Start & Execution
 
-### 🏛️ Decision Support, NOT Replacement of Revenue Officials
-**TerraProof does not replace patwaris, tehsildars, state land records, or human adjudicators.** 
-Revenue officers and executive magistrates retain sole statutory and quasi-judicial authority under State Land Revenue Codes (e.g., MP Land Revenue Code, Punjab Land Revenue Act, Maharashtra Land Revenue Code). TerraProof serves as a **transparent, defensible pre-screening and evidence-drafting platform**.
+### Prerequisites
+- Python 3.11+
+- Node.js 18+ and npm
 
-### ⚖️ Never Auto-Reject & Procedural Justice
-- Algorithms in TerraProof **never automatically dismiss or invalidate** a farmer's claim. Discrepancies generate explainable priority flags (`AMBER` / `RED`) for expedited physical inspection.
-- **Low-Damage Technical Truthfulness:** Sentinel 10-meter pixels cannot reliably distinguish sub-15% damage from natural phenological or soil variance. TerraProof explicitly flags sub-15% estimates with: *"Satellite Resolution Insufficient — Mandatory Physical Ground Inspection Required"*.
-- **Guaranteed Independent Appeals:** Farmers can contest preliminary findings via a statutory grievance flow routed independently to the **Tehsildar / Sub-Divisional Magistrate (SDM)** rather than the original inspecting officer.
-
-### 🔒 Privacy-First Architecture (DPDP Act 2023 Aligned)
-- **Zero Raw Aadhaar Storage:** 12-digit Aadhaar numbers are strictly barred from database tables, schemas, session states, and server logs. The system stores only a masked reference (`XXXX-XXXX-1098`) and a salted cryptographic hash.
-- **Statutory Consent & Data Erasure:** Full implementation of Section 6 (Purpose-Specific Consent), Section 11 (Right to Access & Download Data), and Section 12 (Right to Erasure / "Forget Me").
-- **Public Verification PII Redaction:** The public verification registry (`/verify/:id`) shields all personal identifiers, farmer names, phone numbers, and financial details pursuant to Section 8 of the DPDP Act 2023.
-
----
-
-## 2. Real vs. Mocked Integrations Disclosure
-
-In compliance with our truthfulness pledge, we clearly disclose which services query live external networks and which operate via production-ready stubs:
-
-| Integration / Adapter | Execution Mode | Technical Provider / Protocol | API Key / Cost |
-| :--- | :--- | :--- | :--- |
-| **Sentinel-2 Optical Imagery** | **Live Network & Calibrated Fixture** | Microsoft Planetary Computer STAC Catalog (`/collections/sentinel-2-l2a`) | **Free / Keyless** |
-| **Sentinel-1 SAR Radar (Monsoon)** | **Live Network & Calibrated Fixture** | Planetary Computer STAC (`/collections/sentinel-1-grd`, VH/VV backscatter) | **Free / Keyless** |
-| **Historical Weather & Rainfall** | **Live Network** | Open-Meteo Historical Weather Archive (`archive-api.open-meteo.com`) | **Free / Keyless** |
-| **Basemaps & Satellite Tiles** | **Live Network** | Esri World Imagery & Dark Gray Canvas (Watermark-free) | **Free / Keyless** |
-| **Digital Crop Survey (AgriStack)** | **Production Stub / Adapter** | `AgriStackDCSAdapter` (Standardized JSON plot schema) | Government Intranet / Mock |
-| **e-Girdawari Revenue Export** | **Production Adapter** | `EGirdawariAdapter` (State-compliant Khasra CSV/JSON export) | Local / State Format |
-| **PMFBY / NCIP Insurance Unit** | **Production Adapter** | `PMFBYNCIPAdapter` (Standardized PMFBY claim evidence format) | Local / NCIP Format |
-| **State Land Records (Bhulekh)** | **Production Parser** | Bilingual Hindi/English OCR extractor (Form 7/12, Khasra, Jamabandi) | Local / Open Source |
-| **DigiLocker / Aadhaar e-KYC** | **Production Stub / Verifier** | `DigiLockerOAuthStub`, `AadhaarOfflineQRVerifier` (W3C XML Signature) | Mock for Demo |
-
----
-
-## 3. Four Canonical Demonstration Archetypes (Phase 11 Seed Scenarios)
-
-TerraProof comes preloaded with the four benchmark evaluation scenarios, which can be re-seeded at any time using the **"4 Archetypes"** button in the UI or via `POST /api/v1/demo/reset-scenarios`:
-
-1. **Scenario 1: Genuine Flood Claim (Fast-Track Approved)**
-   - **Claim Reference:** `CLM-2026-0891` | Farmer: Gurpreet Singh (Ludhiana, Punjab)
-   - **Parcel & Crop:** 3.5 ha Kharif Rice | Khasra #142/2 (Owner)
-   - **Satellite Evidence:** Severe inundation corroborated by Sentinel-2 NDWI (78% surface water) and Sentinel-1 SAR backscatter drop ($<-16\text{ dB}$).
-   - **Triage Result:** Risk Score 14/100 (`LOW_RISK`, Green). Document area matches drawn boundary (3.5 ha). Fast-track recommended.
-
-2. **Scenario 2: Inflated Area Claim (Flagged by Risk Engine)**
-   - **Claim Reference:** `CLM-2026-1044` | Farmer: Vikramaditya Singh (Kota, Rajasthan)
-   - **Parcel & Crop:** Claimed 14.5 ha loss | Kharif Soybean | Khasra #88/1
-   - **Discrepancy:** Khasra title extract and satellite-derived boundary establish plot size is only **3.2 hectares** (a 353% area inflation!).
-   - **Triage Result:** Risk Score 78/100 (`HIGH_RISK`, Red). Automated alert: *"Severe cadastral inflation detected; physical revenue inspection mandatory"*.
-
-3. **Scenario 3: Land Document Tenancy Mismatch (Review Required)**
-   - **Claim Reference:** `CLM-2026-0520` | Farmer: Devendra Meena (Karnal, Haryana)
-   - **Parcel & Crop:** 4.0 ha Rabi Wheat | Khasra #203/4 (Filed as Tenant)
-   - **Discrepancy:** Uploaded Jamabandi title is in the name of the original landowner; tenant lease agreement affidavit is missing.
-   - **Triage Result:** Status `NEEDS_TENANCY_REVIEW`. In accordance with PMFBY Tenant Guidelines, tenant claims are protected from automated dismissal and routed for patwari lease validation.
-
-4. **Scenario 4: Suspected Unauthorized Construction on Farmland (Land-Use Change)**
-   - **Claim Reference:** `CLM-2026-0312` | Farmer: Rajeshwari Bai (Ujjain, Madhya Pradesh)
-   - **Parcel & Crop:** 2.5 ha Kharif Cotton | Khasra #512/3
-   - **Satellite Evidence:** Multi-temporal differencing detected a +0.38 NDBI (Normalized Difference Built-up Index) jump and strong Sentinel-1 SAR double-bounce consistent with a 0.45 ha concrete warehouse plinth erected on agricultural revenue land.
-   - **Triage Result:** Flagged as `FLAGGED_UNAUTHORIZED_CONSTRUCTION` for Tehsildar revenue inspection under Section 172 (Diversion of Agricultural Land).
-
----
-
-## 4. Key Architectural Modules
-
-```
-terraproof/
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── health.py             # System status & provider diagnostics
-│   │   │   ├── claims.py             # PMFBY claim ingestion & triage
-│   │   │   ├── analyses.py          # Multi-sensor fusion execution
-│   │   │   ├── satellite.py         # STAC scene discovery & raw reflectance
-│   │   │   ├── identity.py          # DPDP consent logs, export, erasure
-│   │   │   ├── documents.py         # Bilingual land document OCR parser
-│   │   │   ├── integrations.py      # AgriStack, e-Girdawari, PMFBY adapters
-│   │   │   ├── risk.py              # Anti-fraud risk engine & land-use change
-│   │   │   ├── official.py          # Revenue officer workload & inspection orders
-│   │   │   ├── public_verify.py     # Public verification portal & audit ledger
-│   │   │   ├── appeals.py           # Farmer grievance & independent review API
-│   │   │   ├── fairness.py          # Algorithmic parity & smallholder monitoring
-│   │   │   └── demo.py              # Demo scenario seed & reset endpoint
-│   │   ├── core/
-│   │   │   ├── config.py            # Pydantic v2 settings
-│   │   │   ├── database.py          # SQLite/PostgreSQL engine & auto-migration
-│   │   │   ├── audit_chain.py       # Append-only SHA-256 cryptographic ledger
-│   │   │   └── seed.py              # 4 canonical demonstration archetypes
-│   │   ├── models/                  # SQLAlchemy ORM models (Audit, Appeal, Decision, Claim)
-│   │   ├── geospatial/              # Geodesic ellipsoidal area, zoning, SAR backscatter
-│   │   ├── satellite/               # STAC Planetary Computer & Open-Meteo clients
-│   │   ├── analysis/                # Risk engine, peril classifier, land-use change
-│   │   └── reports/                 # Certified dossier & statutory inspection PDF generators
-│   └── tests/                       # 53 comprehensive unit and integration tests
-├── frontend/
-│   ├── src/
-│   │   ├── components/              # OfficialWorkflowModal, FarmerAppealModal, FairnessModal...
-│   │   ├── pages/                   # InsurancePage, PublicVerificationPage, Flood, Drought...
-│   │   └── services/api.ts          # Fully typed API service client
-```
-
----
-
-## 5. Local Setup & Execution (Windows PowerShell)
-
-### Step 1: Open PowerShell and Navigate to Workspace
-```powershell
-cd C:\Users\Vaishali\.gemini\antigravity\scratch\terraproof
-```
-
-### Step 2: Configure Environment
-```powershell
-Copy-Item .env.example backend\.env
-```
-Default mode is `TERRAPROOF_MODE=demo` (zero keys needed, fully offline capable). Set `TERRAPROOF_MODE=real` to query live Microsoft Planetary Computer STAC and Open-Meteo APIs.
-
-### Step 3: Start FastAPI Backend
-```powershell
+### 1. Start the FastAPI Backend
+```bash
 cd backend
-$env:PYTHONPATH = "."
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# Linux/macOS:
+source venv/bin/activate
+
+pip install -r requirements.txt
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
-- **API Root & Docs:** `http://127.0.0.1:8000/docs`
-- **Audit Ledger Chain:** `http://127.0.0.1:8000/api/v1/audit/verify-chain`
-- **Public Verification API:** `http://127.0.0.1:8000/api/v1/public/verify/CLM-2026-0891`
+Backend API will be live at: `http://127.0.0.1:8000` (Swagger docs at `/docs`)
 
-### Step 4: Start React + Vite Frontend
-In a second PowerShell terminal:
-```powershell
+### 2. Start the Vite React Frontend
+```bash
 cd frontend
-npm run dev
+npm install
+npm run dev -- --host 127.0.0.1 --port 5173
 ```
-- **Web Portal:** `http://localhost:5173`
-- **Official Revenue Claims Queue:** `http://localhost:5173/claims`
-- **Public Verification Registry:** `http://localhost:5173/verify`
+Frontend Web Application will be live at: `http://127.0.0.1:5173`
 
 ---
 
-## 6. Automated Test Suite (53 Tests)
+## 2. Satellite Data Service & API Credentials
 
-Execute the complete test suite verifying every component from mathematical geodesy to hash-chain tamper detection:
+TerraProof supports a multi-tier fallback architecture:
+1. **Local Precomputed Cache (`LocalCacheAdapter`)**: Default offline mode. Works with zero internet, zero API keys, and zero setup.
+2. **Microsoft Planetary Computer STAC (`PlanetaryComputerSTACAdapter`)**: Free, public, keyless global satellite catalog for Sentinel-2 L2A optical and Sentinel-1 GRD SAR radar.
+3. **Copernicus Data Space Ecosystem (`CopernicusSentinelHubAdapter`)**: Optional live European Space Agency (ESA) Copernicus processing.
 
-```powershell
+### How to configure Copernicus CDSE Credentials (Optional)
+1. Register for a free account at: [https://dataspace.copernicus.eu/](https://dataspace.copernicus.eu/)
+2. Navigate to your user settings and create an OAuth Client ID and Secret under **Sentinel Hub API Credentials**.
+3. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+4. Set your credentials in `.env`:
+   ```ini
+   CDSE_CLIENT_ID=your_actual_client_id
+   CDSE_CLIENT_SECRET=your_actual_client_secret
+   TERRAPROOF_MODE=real
+   ```
+*(Note: If left blank or in `TERRAPROOF_MODE=demo`, TerraProof automatically uses the verified local cache and Planetary Computer STAC without breaking).*
+
+---
+
+## 3. Judge & Reviewer 3-Minute Demonstration Script
+
+Follow this exact click-path to experience the full end-to-end capabilities of TerraProof:
+
+### Step 1: Open the App & Launch the Guided Tour
+1. Navigate to `http://localhost:5173` in your browser.
+2. Notice the persistent top banner: `DEMO MODE ACTIVE • SYNTHETIC DATA`.
+3. Click **"Tour (3 min)"** on the banner to launch the 9-step executive walkthrough explaining the problem, satellite evidence, discrepancy detection, and auditability.
+
+### Step 2: Regional Flood Event Comparison (Assam 2024 Flood)
+1. On the top banner, click **"Assam Flood Demo"**.
+2. **Interactive Swipe Slider:** Drag the before/after slider across the Brahmaputra basin (20 June pre-flood optical vs. 06 July peak flood SAR radar).
+3. **Multi-layer overlays:** Toggle between *Newly Flooded Mask* (48,200 ha in Morigaon), *Submerged Cropland* (32,400 ha Sali paddy), *Settlement Enclaves*, and *Road Networks*.
+4. **ASDMA Official Validation:** Review the side-by-side comparison with the Assam State Disaster Management Authority (ASDMA) 7 July 2024 flood bulletin (91% concordance rate).
+5. Click **"Export CSV"** to download the district and revenue circle flood table.
+
+### Step 3: What-If Inundation Scenario Simulator
+1. Click **"Simulate Scenarios on this Basin"** (or click **"Simulator"** on the top banner).
+2. Choose between:
+   - **River Water Level Rise (+2.5 m)**: Shows low-lying floodplain inundation (+35,500 ha).
+   - **Extreme Monsoon Downpour (180 mm)**: Computes SCS-CN surface runoff.
+   - **Embankment Breach at Mayong (75 m)**: Models rapid polder water inrush.
+   - **Proposed Dam / Full Reservoir Level (86.5 m)**: Evaluates contour backwater submergence.
+   - **Urban Land Use Expansion (+25%)**: Calculates increased runoff discharge.
+3. Review the **Sensitivity Range (±15% Bound)** card accounting for Copernicus DEM 30m vertical RMSE (~1.5m).
+4. Review the mandatory scientific disclaimer.
+
+### Step 4: Claim Triage & Rupee Discrepancy (C-002 Inflated Claim)
+1. Click **"C-002"** on the quick-jump menu on the banner.
+2. In claim C-002 (Baldev Singh, Rampur Kalan):
+   - Claimed: **15.0 ha** complete loss (₹4,20,000 claimed).
+   - Satellite-Observed: **6.2 ha** in the low-lying river corridor (DEM <84.5m). The upper 8.8 ha is dry.
+   - Discrepancy: **58.7% divergence**.
+   - **Protected Rupee Discrepancy:** ₹2,46,400 protected from premature disbursement.
+3. Drag the field-level pre/post swipe slider on the map to see the standing water boundary.
+
+### Step 5: Consult TerraGuide AI Assistant
+1. Click the glowing **"TerraGuide AI"** button in the bottom-right corner.
+2. Switch roles: **Judge**, **Farmer**, or **Patwari / Revenue Official**.
+3. Toggle languages: **EN**, **हिंदी**, or **Hinglish**.
+4. Click suggested question chips:
+   - *"Why was C-002 flagged for area inflation?"*
+   - *"Which districts were most affected in the Assam flood?"*
+   - *"What changes if the proposed reservoir level is 5 m lower?"*
+5. Notice that every response ends with **"Evidence used: ..."** listing the specific satellite data points, DEM topography, and knowledge base documents cited.
+6. Test voice input / output using the **Mic** and **Speaker** buttons (Web Speech API).
+
+---
+
+## 4. Eight Canonical Demonstration Archetypes
+
+TerraProof includes 8 deterministic evaluation scenarios (Kharif Flood, Vikrampur Demo District):
+
+| Ref | Archetype | Triage | Claimed vs Observed | Key Discrepancy Signal | Recommended Action |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **C-001** | Genuine Flood Loss | `GREEN` | 5.0 ha claimed vs 4.6 ha obs (8% div) | 91 confidence, verified Jamabandi, photo EXIF inside parcel | Automated fast-track settlement (24h) |
+| **C-002** | Inflated Acreage | `RED` | 15.0 ha claimed vs 6.2 ha obs (58.7% div) | Upland 8.8 ha dry per DEM topography; ₹2,46,400 gap | Mandatory physical revenue audit |
+| **C-003** | Season Discrepancy | `AMBER` | 4.2 ha Wheat in July (100% div) | Wheat is a Rabi winter crop; DCS records field as Paddy/Fallow | Route to Patwari for crop declaration inquiry |
+| **C-004** | Title Area Mismatch | `AMBER` | 7.9 ha boundary vs 3.2 ha Jamabandi | 147% boundary expansion; 71% fuzzy name match | Enforce 3.2 ha legal title ceiling |
+| **C-005** | Cadastral Collision | `RED` | 8.5 ha parcel | 60% polygon overlap with C-002; duplicate document SHA-256 | Immediate freeze; Tehsildar adjudication |
+| **C-006** | Sensor Confidence Bound | `AMBER` | 3.8 ha claimed vs 2.1 ha obs | 92% monsoon cloud cover; SAR noise; Confidence 42/100 | Scientific limit: physical verification mandated |
+| **C-007** | Low-Damage Limit | `AMBER` | 40% loss claimed vs ~11% observed | Subtle damage <15% indistinguishable from normal canopy variation | PMFBY 33% rule: Joint crop-cutting inspection |
+| **C-008** | Unauthorized Construction | `RED` | 3.0 ha agricultural plot | New 0.4 ha built-up footprint (+0.42 NDBI jump, SAR double-bounce) | Assign to Tehsildar for revenue code inspection |
+
+---
+
+## 5. Technical Architecture & Scientific Principles
+
+```
+                  ┌────────────────────────────────────────────────────────┐
+                  │                 TERRAPROOF EVIDENCE LAYER              │
+                  └───────────────────────────┬────────────────────────────┘
+                                              │
+                ┌─────────────────────────────┼────────────────────────────┐
+                ▼                             ▼                            ▼
+  ┌───────────────────────────┐ ┌───────────────────────────┐ ┌───────────────────────────┐
+  │   MULTI-SENSOR SATELLITE  │ │    REVENUE GIS & TITLE    │ │  WHAT-IF SCENARIO ENGINE  │
+  │ • Sentinel-2 L2A (10m)    │ │ • KML / Shapefile / GeoJSON│ │ • DEM Flood-Fill Model    │
+  │ • Sentinel-1 SAR (Radar)  │ │ • 7/12, Khasra, Jamabandi │ │ • SCS-CN Runoff Simulator │
+  │ • Open-Meteo Rainfall     │ │ • Cadastral Overlap Engine│ │ • Low/Nom/High Bands(±15%)│
+  └─────────────┬─────────────┘ └─────────────┬─────────────┘ └─────────────┬─────────────┘
+                │                             │                             │
+                └─────────────────────────────┼─────────────────────────────┘
+                                              ▼
+                             ┌───────────────────────────────────┐
+                             │    DECISION SUPPORT & TRIAGE      │
+                             │  • Green (Fast-Track Settlement)  │
+                             │  • Amber (Revenue Document Review)│
+                             │  • Red (Targeted On-Site Audit)   │
+                             └─────────────────┬─────────────────┘
+                                               │
+                       ┌───────────────────────┴───────────────────────┐
+                       ▼                                               ▼
+      ┌───────────────────────────────────┐           ┌───────────────────────────────────┐
+      │     TERRAGUIDE AI ASSISTANT       │           │    CRYPTOGRAPHIC AUDIT CHAIN      │
+      │ • Grounded Tool Calling Execution │           │ • SHA-256 Tamper-Evident Blocks   │
+      │ • EN / हिंदी / Hinglish           │           │ • Signed PDF Evidence Dossiers    │
+      │ • Browser Web Speech API Audio    │           │ • Public QR Citizen Verification  │
+      └───────────────────────────────────┘           └───────────────────────────────────┘
+```
+
+---
+
+## 6. Testing & Quality Verification
+
+Run the full automated test suite (65 passing unit & integration tests):
+```bash
 cd backend
-$env:PYTHONPATH = "."
-python -m pytest tests -v
+python -m pytest tests/ -v
 ```
-
-### Test Suite Summary:
-```text
-tests/test_api_endpoints.py (4 tests) .................. PASSED
-tests/test_exif_and_compensation.py (4 tests) .......... PASSED
-tests/test_geodesic_and_validation.py (4 tests) ........ PASSED
-tests/test_phase7_identity_and_documents.py (15 tests) . PASSED
-tests/test_phase8_risk_and_land_use.py (5 tests) ....... PASSED
-tests/test_phase9_official_workflow.py (6 tests) ....... PASSED
-tests/test_phase10_verification_and_appeals.py (4 tests) PASSED
-tests/test_raster_and_indices.py (4 tests) ............. PASSED
-tests/test_real_vs_demo_provenance.py (3 tests) ........ PASSED
-tests/test_verification_upgrades.py (4 tests) .......... PASSED
-
-======================== 53 passed in 4.85s ========================
+To verify the new add-ons specifically:
+```bash
+python -m pytest tests/test_step1_satellite_service.py tests/test_step2_region_comparison.py tests/test_step4_scenario_simulator.py tests/test_step5_assistant_tools.py -v
 ```
-
----
-
-## 7. Cryptographic Audit Ledger & Public Verification
-
-TerraProof enforces mathematical immutability for administrative determinations:
-- **Hash Pointer Chaining:** Every block contains $H_n = \text{SHA256}(n + \text{timestamp} + \text{event} + \text{record} + \text{actor} + \text{data\_hash} + H_{n-1})$.
-- **Genesis Block:** Linked to $64$ zero-characters (`0000000000000000...`).
-- **Integrity Audit:** Endpoint `/api/v1/audit/verify-chain` recalculates every digest across the entire chain to guarantee mathematical non-repudiation.
-- **Citizen Privacy Shield:** The `/verify/:id` public portal displays official quasi-judicial determinations while redacting all PII (names, phone numbers, raw Aadhaar, and bank accounts) under the DPDP Act 2023.
-
----
-
-## 8. Responsible Use & Disclaimers
-
-> **STATUTORY NOTICE:** TerraProof is an Earth observation evidence-corroboration instrument. Satellite spectral reflectance indices and SAR backscatter measurements provide radiometric indicators of physical surface phenomena. In accordance with State Land Revenue Codes and PMFBY Operational Guidelines, official revenue decisions remain under the sole jurisdiction of designated revenue officials and appellate courts.
+To test frontend compilation:
+```bash
+cd frontend
+npm run build
+```

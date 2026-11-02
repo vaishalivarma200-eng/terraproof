@@ -1,0 +1,2240 @@
+[
+  {
+    "reference_no": "CLM-DEMO-001",
+    "claim_archetype": "GENUINE_CLAIM",
+    "triage_color": "GREEN",
+    "triage_label": "Fast-Track Eligible",
+    "farmer_name": "Ramprasad Verma",
+    "persona": {
+      "age": 48,
+      "gender": "M",
+      "language_preference": "hi",
+      "phone_masked": "+91 98XXX XX104",
+      "village": "Kalyanpur (Fictional)",
+      "panchayat": "Kalyanpur Gram Panchayat",
+      "farmer_id": "AGRI-STK-2026-1049"
+    },
+    "crop_type": "Paddy",
+    "crop_season": "Kharif",
+    "claimed_area_ha": 5.0,
+    "cultivated_area_ha": 5.0,
+    "observed_damaged_ha": 4.6,
+    "divergence_pct": 8.0,
+    "confidence_score": 91,
+    "confidence_breakdown": {
+      "image_quality": 94,
+      "cloud_cover_score": 90,
+      "field_size_resolution": 92,
+      "data_freshness": 90,
+      "sensor_agreement": 90
+    },
+    "damage_type": "Flood",
+    "incident_date_start": "2026-07-10",
+    "incident_date_end": "2026-07-16",
+    "state": "Uttar Pradesh",
+    "district": "Vikrampur (Fictional Demo District)",
+    "village": "Kalyanpur (Fictional)",
+    "khasra_no": "104/1",
+    "khatauni_no": "32",
+    "tenancy_type": "OWNER",
+    "masked_aadhaar_ref": "XXXX-XXXX-8812",
+    "kyc_status": "VERIFIED",
+    "latitude": 25.435,
+    "longitude": 81.838,
+    "boundary_geojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            81.836,
+            25.434
+          ],
+          [
+            81.841,
+            25.434
+          ],
+          [
+            81.841,
+            25.438
+          ],
+          [
+            81.836,
+            25.438
+          ],
+          [
+            81.836,
+            25.434
+          ]
+        ]
+      ]
+    },
+    "payout_calculation": {
+      "sum_insured_per_ha": 35000.0,
+      "claimed_total_inr": 175000.0,
+      "severity_rate": 0.9,
+      "observed_recommended_payout_inr": 144900.0,
+      "payout_range_min_inr": 138000.0,
+      "payout_range_max_inr": 151800.0,
+      "status": "APPROVED_AUTOMATED_SETTLEMENT"
+    },
+    "documents": [
+      {
+        "document_type": "7/12_JAMABANDI",
+        "file_name": "jamabandi_khasra_104_1.pdf",
+        "document_hash": "c55a6e9fa1a7a118a846f0f167525c0d168705108f6d2f70f18f0e4fe7c7ad6e",
+        "ocr_extracted": {
+          "owner_name": "Ramprasad Verma",
+          "survey_number": "104/1",
+          "registered_area_ha": 5.0,
+          "village": "Kalyanpur",
+          "district": "Vikrampur"
+        },
+        "verification_status": "VERIFIED",
+        "area_match_status": "PASS",
+        "owner_match_pct": 100.0
+      }
+    ],
+    "field_photos": [
+      {
+        "photo_id": "PHOTO-DEMO-001",
+        "caption": "Submerged paddy canopy near south field boundary",
+        "latitude": 25.4352,
+        "longitude": 81.8383,
+        "exif_timestamp": "2026-07-14T09:30:00Z",
+        "gps_accuracy_m": 3.2,
+        "status_label": "INSIDE",
+        "is_inside_boundary": true
+      }
+    ],
+    "risk_assessment": {
+      "composite_risk_score": 12.0,
+      "risk_tier": "LOW_RISK",
+      "recommended_action": "Fast-track settlement without physical inspection",
+      "signals": [
+        {
+          "code": "AREA_MATCH",
+          "label": "Area Divergence <= 10%",
+          "severity": "PASS",
+          "detail": "8.0% divergence between claimed and observed area."
+        },
+        {
+          "code": "CROP_MATCH",
+          "label": "AgriStack Sown Record",
+          "severity": "PASS",
+          "detail": "Paddy confirmed sown in Kharif 2026."
+        },
+        {
+          "code": "DOCS_VALID",
+          "label": "Land Document Valid",
+          "severity": "PASS",
+          "detail": "Jamabandi verified with 100% name match."
+        },
+        {
+          "code": "EXIF_VALID",
+          "label": "Photo Geotag Match",
+          "severity": "PASS",
+          "detail": "Captured inside parcel boundary (3.2m accuracy)."
+        }
+      ]
+    },
+    "status": "FAST_TRACK_APPROVED",
+    "overlays_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "SEVERE",
+            "severity_label": "Severe Inundation / Complete Loss",
+            "color": "#ef4444",
+            "zone_area_ha": 2.99,
+            "zone_percentage": 59.8,
+            "fill_opacity": 0.6
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.838,
+                  25.435
+                ],
+                [
+                  81.841,
+                  25.435
+                ],
+                [
+                  81.841,
+                  25.437
+                ],
+                [
+                  81.838,
+                  25.437
+                ],
+                [
+                  81.838,
+                  25.435
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MODERATE",
+            "severity_label": "Moderate Siltation & Waterlogging",
+            "color": "#f97316",
+            "zone_area_ha": 1.15,
+            "zone_percentage": 23.0,
+            "fill_opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.841,
+                  25.435
+                ],
+                [
+                  81.843,
+                  25.435
+                ],
+                [
+                  81.843,
+                  25.437
+                ],
+                [
+                  81.841,
+                  25.437
+                ],
+                [
+                  81.841,
+                  25.435
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MILD",
+            "severity_label": "Mild Vegetative Stress",
+            "color": "#facc15",
+            "zone_area_ha": 0.46,
+            "zone_percentage": 9.2,
+            "fill_opacity": 0.4
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.838,
+                  25.437
+                ],
+                [
+                  81.84,
+                  25.437
+                ],
+                [
+                  81.84,
+                  25.438
+                ],
+                [
+                  81.838,
+                  25.438
+                ],
+                [
+                  81.838,
+                  25.437
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "HEALTHY",
+            "severity_label": "Unaffected Canopy / Healthy Crop",
+            "color": "#10b981",
+            "zone_area_ha": 0.4,
+            "zone_percentage": 8.0,
+            "fill_opacity": 0.2
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.84,
+                  25.437
+                ],
+                [
+                  81.843,
+                  25.437
+                ],
+                [
+                  81.843,
+                  25.438
+                ],
+                [
+                  81.84,
+                  25.438
+                ],
+                [
+                  81.84,
+                  25.437
+                ]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "reference_no": "CLM-DEMO-002",
+    "claim_archetype": "INFLATED_CLAIM",
+    "triage_color": "RED",
+    "triage_label": "Physical Audit Required",
+    "farmer_name": "Baldev Singh",
+    "persona": {
+      "age": 54,
+      "gender": "M",
+      "language_preference": "hi",
+      "phone_masked": "+91 97XXX XX441",
+      "village": "Rampur Kalan (Fictional)",
+      "panchayat": "Rampur Kalan Gram Panchayat",
+      "farmer_id": "AGRI-STK-2026-2180"
+    },
+    "crop_type": "Paddy",
+    "crop_season": "Kharif",
+    "claimed_area_ha": 15.0,
+    "cultivated_area_ha": 15.0,
+    "observed_damaged_ha": 6.2,
+    "divergence_pct": 58.7,
+    "confidence_score": 88,
+    "confidence_breakdown": {
+      "image_quality": 90,
+      "cloud_cover_score": 86,
+      "field_size_resolution": 92,
+      "data_freshness": 88,
+      "sensor_agreement": 84
+    },
+    "damage_type": "Flood",
+    "incident_date_start": "2026-07-10",
+    "incident_date_end": "2026-07-16",
+    "state": "Uttar Pradesh",
+    "district": "Vikrampur (Fictional Demo District)",
+    "village": "Rampur Kalan (Fictional)",
+    "khasra_no": "88/1",
+    "khatauni_no": "19",
+    "tenancy_type": "OWNER",
+    "masked_aadhaar_ref": "XXXX-XXXX-4419",
+    "kyc_status": "VERIFIED",
+    "latitude": 25.442,
+    "longitude": 81.852,
+    "boundary_geojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            81.848,
+            25.438
+          ],
+          [
+            81.857,
+            25.438
+          ],
+          [
+            81.857,
+            25.446
+          ],
+          [
+            81.848,
+            25.446
+          ],
+          [
+            81.848,
+            25.438
+          ]
+        ]
+      ]
+    },
+    "payout_calculation": {
+      "sum_insured_per_ha": 35000.0,
+      "claimed_total_inr": 420000.0,
+      "severity_rate": 0.8,
+      "observed_recommended_payout_inr": 173600.0,
+      "flagged_discrepancy_rupees": 246400.0,
+      "payout_range_min_inr": 156000.0,
+      "payout_range_max_inr": 191000.0,
+      "status": "HELD_PENDING_PHYSICAL_AUDIT"
+    },
+    "documents": [
+      {
+        "document_type": "7/12_JAMABANDI",
+        "file_name": "jamabandi_khasra_88_1.pdf",
+        "document_hash": "afd3fe8e1defca79bb92c3649720c7c17b5e119e5988c14c3306240e1f1c42e3",
+        "ocr_extracted": {
+          "owner_name": "Baldev Singh",
+          "survey_number": "88/1",
+          "registered_area_ha": 6.5,
+          "village": "Rampur Kalan",
+          "district": "Vikrampur"
+        },
+        "verification_status": "NEEDS_REVIEW",
+        "area_match_status": "FAIL",
+        "owner_match_pct": 95.0
+      }
+    ],
+    "field_photos": [
+      {
+        "photo_id": "PHOTO-DEMO-002",
+        "caption": "Water in low-lying furrow; upper terrace dry",
+        "latitude": 25.4425,
+        "longitude": 81.8522,
+        "exif_timestamp": "2026-07-15T11:00:00Z",
+        "gps_accuracy_m": 4.1,
+        "status_label": "INSIDE",
+        "is_inside_boundary": true
+      }
+    ],
+    "risk_assessment": {
+      "composite_risk_score": 78.0,
+      "risk_tier": "HIGH_RISK",
+      "recommended_action": "Physical revenue audit recommended before disbursement. Upland zone is dry.",
+      "signals": [
+        {
+          "code": "AREA_DIVERGENCE",
+          "label": "Severe Area Inflation",
+          "severity": "CRITICAL",
+          "detail": "58.7% divergence. Claimed 15.0 ha vs 6.2 ha observed in depression."
+        },
+        {
+          "code": "DEM_TOPOGRAPHY",
+          "label": "DEM Low-Lying Containment",
+          "severity": "WARNING",
+          "detail": "Water mask strictly confined to elevation <84.5m. Upland 8.8 ha is undamaged."
+        },
+        {
+          "code": "DOC_AREA_GAP",
+          "label": "Document Area Gap",
+          "severity": "CRITICAL",
+          "detail": "Registered Jamabandi area is 6.5 ha, but farmer claimed 15.0 ha."
+        }
+      ]
+    },
+    "status": "FLAGGED_AREA_INFLATION",
+    "overlays_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "SEVERE",
+            "severity_label": "Severe Inundation / Complete Loss",
+            "color": "#ef4444",
+            "zone_area_ha": 4.03,
+            "zone_percentage": 26.9,
+            "fill_opacity": 0.6
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.852,
+                  25.442
+                ],
+                [
+                  81.855,
+                  25.442
+                ],
+                [
+                  81.855,
+                  25.444
+                ],
+                [
+                  81.852,
+                  25.444
+                ],
+                [
+                  81.852,
+                  25.442
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MODERATE",
+            "severity_label": "Moderate Siltation & Waterlogging",
+            "color": "#f97316",
+            "zone_area_ha": 1.55,
+            "zone_percentage": 10.3,
+            "fill_opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.855,
+                  25.442
+                ],
+                [
+                  81.857,
+                  25.442
+                ],
+                [
+                  81.857,
+                  25.444
+                ],
+                [
+                  81.855,
+                  25.444
+                ],
+                [
+                  81.855,
+                  25.442
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MILD",
+            "severity_label": "Mild Vegetative Stress",
+            "color": "#facc15",
+            "zone_area_ha": 0.62,
+            "zone_percentage": 4.1,
+            "fill_opacity": 0.4
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.852,
+                  25.444
+                ],
+                [
+                  81.854,
+                  25.444
+                ],
+                [
+                  81.854,
+                  25.445
+                ],
+                [
+                  81.852,
+                  25.445
+                ],
+                [
+                  81.852,
+                  25.444
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "HEALTHY",
+            "severity_label": "Unaffected Canopy / Healthy Crop",
+            "color": "#10b981",
+            "zone_area_ha": 8.8,
+            "zone_percentage": 58.7,
+            "fill_opacity": 0.2
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.854,
+                  25.444
+                ],
+                [
+                  81.857,
+                  25.444
+                ],
+                [
+                  81.857,
+                  25.445
+                ],
+                [
+                  81.854,
+                  25.445
+                ],
+                [
+                  81.854,
+                  25.444
+                ]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "reference_no": "CLM-DEMO-003",
+    "claim_archetype": "SEASON_MISMATCH",
+    "triage_color": "AMBER",
+    "triage_label": "Agronomic Inquiry",
+    "farmer_name": "Shivnarayan Patel",
+    "persona": {
+      "age": 41,
+      "gender": "M",
+      "language_preference": "hi",
+      "phone_masked": "+91 94XXX XX829",
+      "village": "Bishanpur (Fictional)",
+      "panchayat": "Bishanpur Gram Panchayat",
+      "farmer_id": "AGRI-STK-2026-3391"
+    },
+    "crop_type": "Wheat",
+    "crop_season": "Kharif",
+    "claimed_area_ha": 4.2,
+    "cultivated_area_ha": 4.2,
+    "observed_damaged_ha": 0.0,
+    "divergence_pct": 100.0,
+    "confidence_score": 84,
+    "confidence_breakdown": {
+      "image_quality": 88,
+      "cloud_cover_score": 85,
+      "field_size_resolution": 84,
+      "data_freshness": 82,
+      "sensor_agreement": 81
+    },
+    "damage_type": "Flood",
+    "incident_date_start": "2026-07-10",
+    "incident_date_end": "2026-07-16",
+    "state": "Uttar Pradesh",
+    "district": "Vikrampur (Fictional Demo District)",
+    "village": "Bishanpur (Fictional)",
+    "khasra_no": "203/4",
+    "khatauni_no": "49",
+    "tenancy_type": "OWNER",
+    "masked_aadhaar_ref": "XXXX-XXXX-3391",
+    "kyc_status": "VERIFIED",
+    "latitude": 25.45,
+    "longitude": 81.825,
+    "boundary_geojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            81.823,
+            25.448
+          ],
+          [
+            81.827,
+            25.448
+          ],
+          [
+            81.827,
+            25.452
+          ],
+          [
+            81.823,
+            25.452
+          ],
+          [
+            81.823,
+            25.448
+          ]
+        ]
+      ]
+    },
+    "payout_calculation": {
+      "sum_insured_per_ha": 35000.0,
+      "claimed_total_inr": 147000.0,
+      "severity_rate": 0.0,
+      "observed_recommended_payout_inr": 0.0,
+      "payout_range_min_inr": 0.0,
+      "payout_range_max_inr": 0.0,
+      "status": "REFERRED_TO_PATWARI"
+    },
+    "documents": [
+      {
+        "document_type": "KHASRA_EXTRACT",
+        "file_name": "khasra_extract_203_4.pdf",
+        "document_hash": "60f0de9acd5833e777c1e90a99426a50bcae6b02e2c40a80d8175f75fb3936f8",
+        "ocr_extracted": {
+          "owner_name": "Shivnarayan Patel",
+          "survey_number": "203/4",
+          "registered_area_ha": 4.2,
+          "village": "Bishanpur",
+          "district": "Vikrampur"
+        },
+        "verification_status": "VERIFIED",
+        "area_match_status": "PASS",
+        "owner_match_pct": 100.0
+      }
+    ],
+    "field_photos": [],
+    "risk_assessment": {
+      "composite_risk_score": 68.0,
+      "risk_tier": "MODERATE_RISK",
+      "recommended_action": "Route to Patwari for crop declaration correction. Wheat is not cultivated in Kharif.",
+      "signals": [
+        {
+          "code": "SEASON_MISMATCH",
+          "label": "Phenological Season Conflict",
+          "severity": "CRITICAL",
+          "detail": "Claimed 'Wheat' loss in July flood. Wheat is a Rabi winter crop; Digital Crop Survey records field as Paddy/Fallow."
+        },
+        {
+          "code": "SPECTRAL_UNMATCHED",
+          "label": "No Standing Wheat Canopy",
+          "severity": "WARNING",
+          "detail": "Multi-spectral signature matches vegetative paddy nursery, not mature wheat."
+        }
+      ]
+    },
+    "status": "NEEDS_TENANCY_REVIEW",
+    "overlays_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "SEVERE",
+            "severity_label": "Severe Inundation / Complete Loss",
+            "color": "#ef4444",
+            "zone_area_ha": 0.0,
+            "zone_percentage": 0.0,
+            "fill_opacity": 0.6
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.825,
+                  25.45
+                ],
+                [
+                  81.828,
+                  25.45
+                ],
+                [
+                  81.828,
+                  25.452
+                ],
+                [
+                  81.825,
+                  25.452
+                ],
+                [
+                  81.825,
+                  25.45
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MODERATE",
+            "severity_label": "Moderate Siltation & Waterlogging",
+            "color": "#f97316",
+            "zone_area_ha": 0.0,
+            "zone_percentage": 0.0,
+            "fill_opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.828,
+                  25.45
+                ],
+                [
+                  81.83,
+                  25.45
+                ],
+                [
+                  81.83,
+                  25.452
+                ],
+                [
+                  81.828,
+                  25.452
+                ],
+                [
+                  81.828,
+                  25.45
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MILD",
+            "severity_label": "Mild Vegetative Stress",
+            "color": "#facc15",
+            "zone_area_ha": 0.0,
+            "zone_percentage": 0.0,
+            "fill_opacity": 0.4
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.825,
+                  25.452
+                ],
+                [
+                  81.827,
+                  25.452
+                ],
+                [
+                  81.827,
+                  25.453
+                ],
+                [
+                  81.825,
+                  25.453
+                ],
+                [
+                  81.825,
+                  25.452
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "HEALTHY",
+            "severity_label": "Unaffected Canopy / Healthy Crop",
+            "color": "#10b981",
+            "zone_area_ha": 4.2,
+            "zone_percentage": 100.0,
+            "fill_opacity": 0.2
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.827,
+                  25.452
+                ],
+                [
+                  81.83,
+                  25.452
+                ],
+                [
+                  81.83,
+                  25.453
+                ],
+                [
+                  81.827,
+                  25.453
+                ],
+                [
+                  81.827,
+                  25.452
+                ]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "reference_no": "CLM-DEMO-004",
+    "claim_archetype": "DOCUMENT_MISMATCH",
+    "triage_color": "AMBER",
+    "triage_label": "Title Rectification",
+    "farmer_name": "Sunita Devi",
+    "persona": {
+      "age": 39,
+      "gender": "F",
+      "language_preference": "hi",
+      "phone_masked": "+91 93XXX XX512",
+      "village": "Shampur (Fictional)",
+      "panchayat": "Shampur Gram Panchayat",
+      "farmer_id": "AGRI-STK-2026-4402"
+    },
+    "crop_type": "Paddy",
+    "crop_season": "Kharif",
+    "claimed_area_ha": 7.9,
+    "cultivated_area_ha": 7.9,
+    "observed_damaged_ha": 3.1,
+    "divergence_pct": 60.7,
+    "confidence_score": 82,
+    "confidence_breakdown": {
+      "image_quality": 84,
+      "cloud_cover_score": 80,
+      "field_size_resolution": 85,
+      "data_freshness": 80,
+      "sensor_agreement": 81
+    },
+    "damage_type": "Flood",
+    "incident_date_start": "2026-07-10",
+    "incident_date_end": "2026-07-16",
+    "state": "Uttar Pradesh",
+    "district": "Vikrampur (Fictional Demo District)",
+    "village": "Shampur (Fictional)",
+    "khasra_no": "219/1",
+    "khatauni_no": "67",
+    "tenancy_type": "OWNER",
+    "masked_aadhaar_ref": "XXXX-XXXX-7102",
+    "kyc_status": "VERIFIED",
+    "latitude": 25.43,
+    "longitude": 81.86,
+    "boundary_geojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            81.857,
+            25.428
+          ],
+          [
+            81.864,
+            25.428
+          ],
+          [
+            81.864,
+            25.433
+          ],
+          [
+            81.857,
+            25.433
+          ],
+          [
+            81.857,
+            25.428
+          ]
+        ]
+      ]
+    },
+    "payout_calculation": {
+      "sum_insured_per_ha": 35000.0,
+      "claimed_total_inr": 276500.0,
+      "severity_rate": 0.85,
+      "observed_recommended_payout_inr": 92225.0,
+      "payout_range_min_inr": 85000.0,
+      "payout_range_max_inr": 100000.0,
+      "status": "PENDING_DOCUMENT_REVISION"
+    },
+    "documents": [
+      {
+        "document_type": "KHASRA_KHATAUNI",
+        "file_name": "khasra_219_1_extract.pdf",
+        "document_hash": "6934bc9bcbdeff0063e9bdca90462249a6c9862a26d8c0c4bd7901e7d1a55024",
+        "ocr_extracted": {
+          "owner_name": "Sunita Kumari",
+          "survey_number": "219/1",
+          "registered_area_ha": 3.2,
+          "village": "Shampur",
+          "district": "Vikrampur"
+        },
+        "verification_status": "NEEDS_REVIEW",
+        "area_match_status": "FAIL",
+        "owner_match_pct": 71.4,
+        "mismatch_reasons": [
+          "Document area 3.2 ha vs drawn boundary 7.9 ha (147% boundary expansion)",
+          "Owner name on document 'Sunita Kumari' vs claimant 'Sunita Devi' (71% fuzzy match)"
+        ]
+      }
+    ],
+    "field_photos": [],
+    "risk_assessment": {
+      "composite_risk_score": 64.0,
+      "risk_tier": "MODERATE_RISK",
+      "recommended_action": "Enforce 3.2 ha title ceiling and verify claimant identity affidavit.",
+      "signals": [
+        {
+          "code": "AREA_EXCEEDS_TITLE",
+          "label": "Drawn Area Exceeds Legal Title",
+          "severity": "WARNING",
+          "detail": "Document states 3.2 ha; submitted boundary encompasses 7.9 ha."
+        },
+        {
+          "code": "FUZZY_NAME",
+          "label": "Partial Name Match",
+          "severity": "WARNING",
+          "detail": "Claimant 'Sunita Devi' vs Record 'Sunita Kumari' (71% similarity)."
+        }
+      ]
+    },
+    "status": "REVIEW_IN_PROGRESS",
+    "overlays_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "SEVERE",
+            "severity_label": "Severe Inundation / Complete Loss",
+            "color": "#ef4444",
+            "zone_area_ha": 2.02,
+            "zone_percentage": 25.6,
+            "fill_opacity": 0.6
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.86,
+                  25.43
+                ],
+                [
+                  81.863,
+                  25.43
+                ],
+                [
+                  81.863,
+                  25.432
+                ],
+                [
+                  81.86,
+                  25.432
+                ],
+                [
+                  81.86,
+                  25.43
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MODERATE",
+            "severity_label": "Moderate Siltation & Waterlogging",
+            "color": "#f97316",
+            "zone_area_ha": 0.78,
+            "zone_percentage": 9.9,
+            "fill_opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.863,
+                  25.43
+                ],
+                [
+                  81.865,
+                  25.43
+                ],
+                [
+                  81.865,
+                  25.432
+                ],
+                [
+                  81.863,
+                  25.432
+                ],
+                [
+                  81.863,
+                  25.43
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MILD",
+            "severity_label": "Mild Vegetative Stress",
+            "color": "#facc15",
+            "zone_area_ha": 0.31,
+            "zone_percentage": 3.9,
+            "fill_opacity": 0.4
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.86,
+                  25.432
+                ],
+                [
+                  81.862,
+                  25.432
+                ],
+                [
+                  81.862,
+                  25.433
+                ],
+                [
+                  81.86,
+                  25.433
+                ],
+                [
+                  81.86,
+                  25.432
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "HEALTHY",
+            "severity_label": "Unaffected Canopy / Healthy Crop",
+            "color": "#10b981",
+            "zone_area_ha": 4.8,
+            "zone_percentage": 60.8,
+            "fill_opacity": 0.2
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.862,
+                  25.432
+                ],
+                [
+                  81.865,
+                  25.432
+                ],
+                [
+                  81.865,
+                  25.433
+                ],
+                [
+                  81.862,
+                  25.433
+                ],
+                [
+                  81.862,
+                  25.432
+                ]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "reference_no": "CLM-DEMO-005",
+    "claim_archetype": "DUPLICATE_OVERLAP",
+    "triage_color": "RED",
+    "triage_label": "Severe Overlap Collision",
+    "farmer_name": "Jagdish Prasad",
+    "persona": {
+      "age": 62,
+      "gender": "M",
+      "language_preference": "hi",
+      "phone_masked": "+91 96XXX XX773",
+      "village": "Rampur Kalan (Fictional)",
+      "panchayat": "Rampur Kalan Gram Panchayat",
+      "farmer_id": "AGRI-STK-2026-5591"
+    },
+    "crop_type": "Paddy",
+    "crop_season": "Kharif",
+    "claimed_area_ha": 8.5,
+    "cultivated_area_ha": 8.5,
+    "observed_damaged_ha": 5.8,
+    "divergence_pct": 31.8,
+    "confidence_score": 86,
+    "confidence_breakdown": {
+      "image_quality": 88,
+      "cloud_cover_score": 84,
+      "field_size_resolution": 88,
+      "data_freshness": 86,
+      "sensor_agreement": 84
+    },
+    "damage_type": "Flood",
+    "incident_date_start": "2026-07-10",
+    "incident_date_end": "2026-07-16",
+    "state": "Uttar Pradesh",
+    "district": "Vikrampur (Fictional Demo District)",
+    "village": "Rampur Kalan (Fictional)",
+    "khasra_no": "88/2",
+    "khatauni_no": "19",
+    "tenancy_type": "OWNER",
+    "masked_aadhaar_ref": "XXXX-XXXX-9914",
+    "kyc_status": "VERIFIED",
+    "latitude": 25.443,
+    "longitude": 81.854,
+    "boundary_geojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            81.85,
+            25.44
+          ],
+          [
+            81.858,
+            25.44
+          ],
+          [
+            81.858,
+            25.447
+          ],
+          [
+            81.85,
+            25.447
+          ],
+          [
+            81.85,
+            25.44
+          ]
+        ]
+      ]
+    },
+    "payout_calculation": {
+      "sum_insured_per_ha": 35000.0,
+      "claimed_total_inr": 297500.0,
+      "severity_rate": 0.8,
+      "observed_recommended_payout_inr": 0.0,
+      "payout_range_min_inr": 0.0,
+      "payout_range_max_inr": 0.0,
+      "status": "FROZEN_DUPLICATE_COLLISION"
+    },
+    "documents": [
+      {
+        "document_type": "7/12_JAMABANDI",
+        "file_name": "jamabandi_khasra_88_duplicate.pdf",
+        "document_hash": "afd3fe8e1defca79bb92c3649720c7c17b5e119e5988c14c3306240e1f1c42e3",
+        "ocr_extracted": {
+          "owner_name": "Baldev Singh / Jagdish Prasad",
+          "survey_number": "88/1",
+          "registered_area_ha": 6.5,
+          "village": "Rampur Kalan",
+          "district": "Vikrampur"
+        },
+        "verification_status": "COLLISION_DETECTED",
+        "area_match_status": "FAIL",
+        "owner_match_pct": 52.0
+      }
+    ],
+    "field_photos": [],
+    "risk_assessment": {
+      "composite_risk_score": 94.0,
+      "risk_tier": "HIGH_RISK",
+      "recommended_action": "Freeze claim immediately. 60% polygon overlap with CLM-DEMO-002 and identical document hash.",
+      "signals": [
+        {
+          "code": "POLYGON_OVERLAP",
+          "label": "Cadastral Boundary Overlap 60%",
+          "severity": "CRITICAL",
+          "detail": "Spatial intersection detected with active claim CLM-DEMO-002 (Baldev Singh)."
+        },
+        {
+          "code": "DUPLICATE_HASH",
+          "label": "Document Fingerprint Collision",
+          "severity": "CRITICAL",
+          "detail": "Uploaded PDF SHA-256 matches file already recorded on CLM-DEMO-002."
+        }
+      ]
+    },
+    "status": "FLAGGED_DUPLICATE_OVERLAP",
+    "overlays_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "SEVERE",
+            "severity_label": "Severe Inundation / Complete Loss",
+            "color": "#ef4444",
+            "zone_area_ha": 3.77,
+            "zone_percentage": 44.4,
+            "fill_opacity": 0.6
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.854,
+                  25.443
+                ],
+                [
+                  81.857,
+                  25.443
+                ],
+                [
+                  81.857,
+                  25.445
+                ],
+                [
+                  81.854,
+                  25.445
+                ],
+                [
+                  81.854,
+                  25.443
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MODERATE",
+            "severity_label": "Moderate Siltation & Waterlogging",
+            "color": "#f97316",
+            "zone_area_ha": 1.45,
+            "zone_percentage": 17.1,
+            "fill_opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.857,
+                  25.443
+                ],
+                [
+                  81.859,
+                  25.443
+                ],
+                [
+                  81.859,
+                  25.445
+                ],
+                [
+                  81.857,
+                  25.445
+                ],
+                [
+                  81.857,
+                  25.443
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MILD",
+            "severity_label": "Mild Vegetative Stress",
+            "color": "#facc15",
+            "zone_area_ha": 0.58,
+            "zone_percentage": 6.8,
+            "fill_opacity": 0.4
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.854,
+                  25.445
+                ],
+                [
+                  81.856,
+                  25.445
+                ],
+                [
+                  81.856,
+                  25.446
+                ],
+                [
+                  81.854,
+                  25.446
+                ],
+                [
+                  81.854,
+                  25.445
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "HEALTHY",
+            "severity_label": "Unaffected Canopy / Healthy Crop",
+            "color": "#10b981",
+            "zone_area_ha": 2.7,
+            "zone_percentage": 31.8,
+            "fill_opacity": 0.2
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.856,
+                  25.445
+                ],
+                [
+                  81.859,
+                  25.445
+                ],
+                [
+                  81.859,
+                  25.446
+                ],
+                [
+                  81.856,
+                  25.446
+                ],
+                [
+                  81.856,
+                  25.445
+                ]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "reference_no": "CLM-DEMO-006",
+    "claim_archetype": "LOW_CONFIDENCE",
+    "triage_color": "AMBER",
+    "triage_label": "Sensor Limit / Manual Visit",
+    "farmer_name": "Manju Meena",
+    "persona": {
+      "age": 45,
+      "gender": "F",
+      "language_preference": "hi",
+      "phone_masked": "+91 92XXX XX319",
+      "village": "Devgaon (Fictional)",
+      "panchayat": "Devgaon Gram Panchayat",
+      "farmer_id": "AGRI-STK-2026-6102"
+    },
+    "crop_type": "Paddy",
+    "crop_season": "Kharif",
+    "claimed_area_ha": 3.8,
+    "cultivated_area_ha": 3.8,
+    "observed_damaged_ha": 2.1,
+    "divergence_pct": 44.7,
+    "confidence_score": 42,
+    "confidence_breakdown": {
+      "image_quality": 38,
+      "cloud_cover_score": 25,
+      "field_size_resolution": 60,
+      "data_freshness": 45,
+      "sensor_agreement": 42
+    },
+    "damage_type": "Flood",
+    "incident_date_start": "2026-07-10",
+    "incident_date_end": "2026-07-16",
+    "state": "Uttar Pradesh",
+    "district": "Vikrampur (Fictional Demo District)",
+    "village": "Devgaon (Fictional)",
+    "khasra_no": "312/1",
+    "khatauni_no": "88",
+    "tenancy_type": "OWNER",
+    "masked_aadhaar_ref": "XXXX-XXXX-6612",
+    "kyc_status": "VERIFIED",
+    "latitude": 25.46,
+    "longitude": 81.845,
+    "boundary_geojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            81.843,
+            25.458
+          ],
+          [
+            81.847,
+            25.458
+          ],
+          [
+            81.847,
+            25.462
+          ],
+          [
+            81.843,
+            25.462
+          ],
+          [
+            81.843,
+            25.458
+          ]
+        ]
+      ]
+    },
+    "payout_calculation": {
+      "sum_insured_per_ha": 35000.0,
+      "claimed_total_inr": 133000.0,
+      "severity_rate": 0.65,
+      "observed_recommended_payout_inr": 47775.0,
+      "payout_range_min_inr": 35000.0,
+      "payout_range_max_inr": 65000.0,
+      "status": "MANUAL_INSPECTION_MANDATED"
+    },
+    "documents": [
+      {
+        "document_type": "7/12_JAMABANDI",
+        "file_name": "jamabandi_khasra_312_1.pdf",
+        "document_hash": "2fd50068510b5aa86470664a911c504e665eea48e8a5943a4fa7657209649946",
+        "ocr_extracted": {
+          "owner_name": "Manju Meena",
+          "survey_number": "312/1",
+          "registered_area_ha": 3.8,
+          "village": "Devgaon",
+          "district": "Vikrampur"
+        },
+        "verification_status": "VERIFIED",
+        "area_match_status": "PASS",
+        "owner_match_pct": 100.0
+      }
+    ],
+    "field_photos": [],
+    "risk_assessment": {
+      "composite_risk_score": 38.0,
+      "risk_tier": "MODERATE_RISK",
+      "recommended_action": "System limitation: Insufficient optical data, SAR noise high. Physical verification required.",
+      "signals": [
+        {
+          "code": "CLOUD_OCCLUSION",
+          "label": "92% Cloud Cover",
+          "severity": "WARNING",
+          "detail": "Optical Sentinel-2 blinded by monsoon cloud layer; SAR backscatter attenuation high."
+        },
+        {
+          "code": "CONFIDENCE_LIMIT",
+          "label": "Confidence Below 50%",
+          "severity": "WARNING",
+          "detail": "Score 42/100. System policy mandates ground inspection when confidence is below 50."
+        }
+      ]
+    },
+    "status": "FIELD_INSPECTION_MANDATED",
+    "overlays_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "SEVERE",
+            "severity_label": "Severe Inundation / Complete Loss",
+            "color": "#ef4444",
+            "zone_area_ha": 1.37,
+            "zone_percentage": 36.1,
+            "fill_opacity": 0.6
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.845,
+                  25.46
+                ],
+                [
+                  81.848,
+                  25.46
+                ],
+                [
+                  81.848,
+                  25.462
+                ],
+                [
+                  81.845,
+                  25.462
+                ],
+                [
+                  81.845,
+                  25.46
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MODERATE",
+            "severity_label": "Moderate Siltation & Waterlogging",
+            "color": "#f97316",
+            "zone_area_ha": 0.53,
+            "zone_percentage": 13.9,
+            "fill_opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.848,
+                  25.46
+                ],
+                [
+                  81.85,
+                  25.46
+                ],
+                [
+                  81.85,
+                  25.462
+                ],
+                [
+                  81.848,
+                  25.462
+                ],
+                [
+                  81.848,
+                  25.46
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MILD",
+            "severity_label": "Mild Vegetative Stress",
+            "color": "#facc15",
+            "zone_area_ha": 0.21,
+            "zone_percentage": 5.5,
+            "fill_opacity": 0.4
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.845,
+                  25.462
+                ],
+                [
+                  81.847,
+                  25.462
+                ],
+                [
+                  81.847,
+                  25.463
+                ],
+                [
+                  81.845,
+                  25.463
+                ],
+                [
+                  81.845,
+                  25.462
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "HEALTHY",
+            "severity_label": "Unaffected Canopy / Healthy Crop",
+            "color": "#10b981",
+            "zone_area_ha": 1.7,
+            "zone_percentage": 44.7,
+            "fill_opacity": 0.2
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.847,
+                  25.462
+                ],
+                [
+                  81.85,
+                  25.462
+                ],
+                [
+                  81.85,
+                  25.463
+                ],
+                [
+                  81.847,
+                  25.463
+                ],
+                [
+                  81.847,
+                  25.462
+                ]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "reference_no": "CLM-DEMO-007",
+    "claim_archetype": "SMALL_DAMAGE",
+    "triage_color": "AMBER",
+    "triage_label": "Resolution Sensitivity Bound",
+    "farmer_name": "Hariram Yadav",
+    "persona": {
+      "age": 51,
+      "gender": "M",
+      "language_preference": "hi",
+      "phone_masked": "+91 95XXX XX209",
+      "village": "Kalyanpur (Fictional)",
+      "panchayat": "Kalyanpur Gram Panchayat",
+      "farmer_id": "AGRI-STK-2026-7781"
+    },
+    "crop_type": "Paddy",
+    "crop_season": "Kharif",
+    "claimed_area_ha": 4.5,
+    "cultivated_area_ha": 4.5,
+    "observed_damaged_ha": 0.5,
+    "divergence_pct": 88.9,
+    "confidence_score": 70,
+    "confidence_breakdown": {
+      "image_quality": 82,
+      "cloud_cover_score": 75,
+      "field_size_resolution": 65,
+      "data_freshness": 78,
+      "sensor_agreement": 70
+    },
+    "damage_type": "Flood",
+    "incident_date_start": "2026-07-10",
+    "incident_date_end": "2026-07-16",
+    "state": "Uttar Pradesh",
+    "district": "Vikrampur (Fictional Demo District)",
+    "village": "Kalyanpur (Fictional)",
+    "khasra_no": "118/3",
+    "khatauni_no": "44",
+    "tenancy_type": "OWNER",
+    "masked_aadhaar_ref": "XXXX-XXXX-5521",
+    "kyc_status": "VERIFIED",
+    "latitude": 25.437,
+    "longitude": 81.84,
+    "boundary_geojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            81.838,
+            25.435
+          ],
+          [
+            81.843,
+            25.435
+          ],
+          [
+            81.843,
+            25.439
+          ],
+          [
+            81.838,
+            25.439
+          ],
+          [
+            81.838,
+            25.435
+          ]
+        ]
+      ]
+    },
+    "payout_calculation": {
+      "sum_insured_per_ha": 35000.0,
+      "claimed_total_inr": 63000.0,
+      "severity_rate": 0.3,
+      "observed_recommended_payout_inr": 5250.0,
+      "payout_range_min_inr": 3500.0,
+      "payout_range_max_inr": 18000.0,
+      "status": "REFERRED_FOR_CCE_INSPECTION"
+    },
+    "documents": [
+      {
+        "document_type": "7/12_JAMABANDI",
+        "file_name": "jamabandi_khasra_118_3.pdf",
+        "document_hash": "47b53e196b40fb19e1237ce205f2c5c85494316240246aa4a3b9fbbba69fe827",
+        "ocr_extracted": {
+          "owner_name": "Hariram Yadav",
+          "survey_number": "118/3",
+          "registered_area_ha": 4.5,
+          "village": "Kalyanpur",
+          "district": "Vikrampur"
+        },
+        "verification_status": "VERIFIED",
+        "area_match_status": "PASS",
+        "owner_match_pct": 100.0
+      }
+    ],
+    "field_photos": [],
+    "risk_assessment": {
+      "composite_risk_score": 45.0,
+      "risk_tier": "MODERATE_RISK",
+      "recommended_action": "Satellite resolution cannot reliably detect subtle partial damage (10-15%). Field CCE inspection required.",
+      "signals": [
+        {
+          "code": "SUBTLE_DAMAGE",
+          "label": "Loss Near Resolution Threshold",
+          "severity": "WARNING",
+          "detail": "Observed loss is ~11% (0.5 ha). Sentinel-2 10m pixels cannot separate light lodging from natural variation."
+        },
+        {
+          "code": "HONEST_BOUND",
+          "label": "PMFBY 33% Calamity Threshold",
+          "severity": "INFO",
+          "detail": "Under PMFBY localized calamity guidelines, loss below 33% requires joint field inspection."
+        }
+      ]
+    },
+    "status": "FIELD_INSPECTION_MANDATED",
+    "overlays_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "SEVERE",
+            "severity_label": "Severe Inundation / Complete Loss",
+            "color": "#ef4444",
+            "zone_area_ha": 0.33,
+            "zone_percentage": 7.3,
+            "fill_opacity": 0.6
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.84,
+                  25.437
+                ],
+                [
+                  81.843,
+                  25.437
+                ],
+                [
+                  81.843,
+                  25.439
+                ],
+                [
+                  81.84,
+                  25.439
+                ],
+                [
+                  81.84,
+                  25.437
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MODERATE",
+            "severity_label": "Moderate Siltation & Waterlogging",
+            "color": "#f97316",
+            "zone_area_ha": 0.12,
+            "zone_percentage": 2.7,
+            "fill_opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.843,
+                  25.437
+                ],
+                [
+                  81.845,
+                  25.437
+                ],
+                [
+                  81.845,
+                  25.439
+                ],
+                [
+                  81.843,
+                  25.439
+                ],
+                [
+                  81.843,
+                  25.437
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MILD",
+            "severity_label": "Mild Vegetative Stress",
+            "color": "#facc15",
+            "zone_area_ha": 0.05,
+            "zone_percentage": 1.1,
+            "fill_opacity": 0.4
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.84,
+                  25.439
+                ],
+                [
+                  81.842,
+                  25.439
+                ],
+                [
+                  81.842,
+                  25.44
+                ],
+                [
+                  81.84,
+                  25.44
+                ],
+                [
+                  81.84,
+                  25.439
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "HEALTHY",
+            "severity_label": "Unaffected Canopy / Healthy Crop",
+            "color": "#10b981",
+            "zone_area_ha": 4.0,
+            "zone_percentage": 88.9,
+            "fill_opacity": 0.2
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.842,
+                  25.439
+                ],
+                [
+                  81.845,
+                  25.439
+                ],
+                [
+                  81.845,
+                  25.44
+                ],
+                [
+                  81.842,
+                  25.44
+                ],
+                [
+                  81.842,
+                  25.439
+                ]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "reference_no": "CLM-DEMO-008",
+    "claim_archetype": "CONSTRUCTION_ALERT",
+    "triage_color": "RED",
+    "triage_label": "Unauthorized Construction Flag",
+    "farmer_name": "Radheshyam Maurya",
+    "persona": {
+      "age": 49,
+      "gender": "M",
+      "language_preference": "hi",
+      "phone_masked": "+91 91XXX XX882",
+      "village": "Devgaon (Fictional)",
+      "panchayat": "Devgaon Gram Panchayat",
+      "farmer_id": "AGRI-STK-2026-8819"
+    },
+    "crop_type": "Paddy",
+    "crop_season": "Kharif",
+    "claimed_area_ha": 3.0,
+    "cultivated_area_ha": 3.0,
+    "observed_damaged_ha": 0.4,
+    "divergence_pct": 86.7,
+    "confidence_score": 89,
+    "confidence_breakdown": {
+      "image_quality": 92,
+      "cloud_cover_score": 88,
+      "field_size_resolution": 90,
+      "data_freshness": 90,
+      "sensor_agreement": 86
+    },
+    "damage_type": "Waterlogging",
+    "incident_date_start": "2026-07-10",
+    "incident_date_end": "2026-07-16",
+    "state": "Uttar Pradesh",
+    "district": "Vikrampur (Fictional Demo District)",
+    "village": "Devgaon (Fictional)",
+    "khasra_no": "405/2",
+    "khatauni_no": "77",
+    "tenancy_type": "OWNER",
+    "masked_aadhaar_ref": "XXXX-XXXX-9941",
+    "kyc_status": "VERIFIED",
+    "latitude": 25.462,
+    "longitude": 81.848,
+    "boundary_geojson": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            81.846,
+            25.46
+          ],
+          [
+            81.851,
+            25.46
+          ],
+          [
+            81.851,
+            25.464
+          ],
+          [
+            81.846,
+            25.464
+          ],
+          [
+            81.846,
+            25.46
+          ]
+        ]
+      ]
+    },
+    "payout_calculation": {
+      "sum_insured_per_ha": 35000.0,
+      "claimed_total_inr": 105000.0,
+      "severity_rate": 0.0,
+      "observed_recommended_payout_inr": 0.0,
+      "payout_range_min_inr": 0.0,
+      "payout_range_max_inr": 0.0,
+      "status": "REFERRED_TO_TEHSILDAR_REVENUE_INSPECTION"
+    },
+    "documents": [
+      {
+        "document_type": "7/12_JAMABANDI",
+        "file_name": "jamabandi_khasra_405_2.pdf",
+        "document_hash": "442fabb27ca34fd574fff5a814eb698e197508724aad20ed63f8381a71f7c644",
+        "ocr_extracted": {
+          "owner_name": "Radheshyam Maurya",
+          "survey_number": "405/2",
+          "registered_area_ha": 3.0,
+          "land_classification": "Agricultural (Paddy)",
+          "village": "Devgaon",
+          "district": "Vikrampur"
+        },
+        "verification_status": "VERIFIED",
+        "area_match_status": "PASS",
+        "owner_match_pct": 100.0
+      }
+    ],
+    "field_photos": [],
+    "risk_assessment": {
+      "composite_risk_score": 82.0,
+      "risk_tier": "HIGH_RISK",
+      "recommended_action": "Suspected non-agricultural construction (0.4 ha). Assign to Tehsildar for land revenue inspection.",
+      "signals": [
+        {
+          "code": "LAND_USE_CHANGE",
+          "label": "New Built-Up Footprint (~0.4 ha)",
+          "severity": "CRITICAL",
+          "detail": "NDBI spectral index increased by +0.42 between June 2025 and July 2026. Strong SAR C-band double-bounce confirms masonry/metal roof structure."
+        },
+        {
+          "code": "ILLEGAL_CONVERSION",
+          "label": "Revenue Code Section 143 Violation",
+          "severity": "CRITICAL",
+          "detail": "Parcel is registered as Agricultural; structure built without non-agricultural diversion sanad."
+        }
+      ]
+    },
+    "status": "FLAGGED_UNAUTHORIZED_CONSTRUCTION",
+    "overlays_geojson": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "SEVERE",
+            "severity_label": "Severe Inundation / Complete Loss",
+            "color": "#ef4444",
+            "zone_area_ha": 0.26,
+            "zone_percentage": 8.7,
+            "fill_opacity": 0.6
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.848,
+                  25.462
+                ],
+                [
+                  81.851,
+                  25.462
+                ],
+                [
+                  81.851,
+                  25.464
+                ],
+                [
+                  81.848,
+                  25.464
+                ],
+                [
+                  81.848,
+                  25.462
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MODERATE",
+            "severity_label": "Moderate Siltation & Waterlogging",
+            "color": "#f97316",
+            "zone_area_ha": 0.1,
+            "zone_percentage": 3.3,
+            "fill_opacity": 0.5
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.851,
+                  25.462
+                ],
+                [
+                  81.853,
+                  25.462
+                ],
+                [
+                  81.853,
+                  25.464
+                ],
+                [
+                  81.851,
+                  25.464
+                ],
+                [
+                  81.851,
+                  25.462
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "MILD",
+            "severity_label": "Mild Vegetative Stress",
+            "color": "#facc15",
+            "zone_area_ha": 0.04,
+            "zone_percentage": 1.3,
+            "fill_opacity": 0.4
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.848,
+                  25.464
+                ],
+                [
+                  81.85,
+                  25.464
+                ],
+                [
+                  81.85,
+                  25.465
+                ],
+                [
+                  81.848,
+                  25.465
+                ],
+                [
+                  81.848,
+                  25.464
+                ]
+              ]
+            ]
+          }
+        },
+        {
+          "type": "Feature",
+          "properties": {
+            "zone": "HEALTHY",
+            "severity_label": "Unaffected Canopy / Healthy Crop",
+            "color": "#10b981",
+            "zone_area_ha": 2.6,
+            "zone_percentage": 86.7,
+            "fill_opacity": 0.2
+          },
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  81.85,
+                  25.464
+                ],
+                [
+                  81.853,
+                  25.464
+                ],
+                [
+                  81.853,
+                  25.465
+                ],
+                [
+                  81.85,
+                  25.465
+                ],
+                [
+                  81.85,
+                  25.464
+                ]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  }
+]

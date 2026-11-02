@@ -1,0 +1,45 @@
+{
+  "dataset": "ISRO Cartosat-1 / Copernicus DEM 30m Resampled",
+  "district": "Vikrampur (Fictional Demo District)",
+  "floodplain_critical_elevation_m": 85.0,
+  "zones": [
+    {
+      "zone_name": "Low-Lying Inundation Basin",
+      "elevation_range_m": [
+        82.0,
+        85.0
+      ],
+      "risk_class": "HIGH_FLOOD_SUSCEPTIBILITY",
+      "affected_villages": [
+        "Rampur Kalan (Fictional)"
+      ],
+      "description": "Depression corridor adjacent to stream channel; collects overflow runoff during peak monsoon pulses."
+    },
+    {
+      "zone_name": "Mid-Elevation Agricultural Plain",
+      "elevation_range_m": [
+        85.1,
+        89.5
+      ],
+      "risk_class": "MODERATE_WATERLOGGING",
+      "affected_villages": [
+        "Kalyanpur (Fictional)",
+        "Shampur (Fictional)",
+        "Devgaon (Fictional)"
+      ],
+      "description": "Gentle gradient with moderate drainage; standing water clears within 48-72 hours."
+    },
+    {
+      "zone_name": "Upland Ridge Terraces",
+      "elevation_range_m": [
+        89.6,
+        94.0
+      ],
+      "risk_class": "MINIMAL_FLOOD_RISK",
+      "affected_villages": [
+        "Bishanpur (Fictional)"
+      ],
+      "description": "Naturally elevated agricultural land immune to localized flash inundation."
+    }
+  ]
+}
