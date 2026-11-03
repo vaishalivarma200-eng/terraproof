@@ -10,6 +10,7 @@ import {
   Layers,
   MapPin,
   AlertTriangle,
+  AlertCircle,
   CheckCircle2,
   XCircle,
   HelpCircle,
@@ -220,7 +221,12 @@ export const InsurancePage: React.FC = () => {
   useEffect(() => {
     if (selectedClaim) {
       api.getAnalyses().then((jobs) => {
-        const matching = jobs.find((j) => j.claim_id === selectedClaim.id);
+        const matching = jobs.find(
+          (j) =>
+            j.claim_id === selectedClaim.id ||
+            j.claim_id?.toLowerCase() === selectedClaim.reference_no?.toLowerCase() ||
+            j.claim_id?.toLowerCase() === selectedClaim.reference_no?.toLowerCase().replace(/_/g, '-')
+        );
         if (matching) {
           setActiveAnalysis(matching);
           if (matching.results?.metrics?.compensation_scenario) {
@@ -530,64 +536,87 @@ export const InsurancePage: React.FC = () => {
           </div>
 
           <div className="divide-y divide-slate-800/80 max-h-[720px] overflow-y-auto">
-            {claims.map((claim) => {
-              const isSelected = selectedClaim?.id === claim.id;
-              return (
-                <div
-                  key={claim.id}
-                  onClick={() => {
-                    setSelectedClaim(claim);
-                    setSearchParams({ selected: claim.id });
-                  }}
-                  className={`p-4 cursor-pointer transition-colors ${
-                    isSelected ? 'bg-emerald-500/10 border-l-4 border-emerald-500' : 'hover:bg-slate-800/50'
-                  }`}
+            {claims.length === 0 ? (
+              <div className="p-8 text-center space-y-3">
+                <AlertCircle className="w-8 h-8 text-amber-400 mx-auto animate-bounce" />
+                <p className="text-sm text-slate-300 font-semibold">Claims triage initializing...</p>
+                <p className="text-xs text-slate-400">Click below to restore all 8 evaluation archetypes.</p>
+                <button
+                  type="button"
+                  onClick={handleResetDemoScenarios}
+                  className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md transition-all cursor-pointer"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-semibold text-emerald-400">{claim.reference_no}</span>
-                    <div className="flex items-center space-x-1.5">
-                      {claim.risk_tier && (
-                        <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
-                          claim.risk_tier === 'HIGH_RISK'
-                            ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
-                            : claim.risk_tier === 'MODERATE_RISK'
-                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                            : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                  Load 8 Demo Archetypes
+                </button>
+              </div>
+            ) : (
+              claims.map((claim) => {
+                const isSelected = selectedClaim?.id === claim.id;
+                return (
+                  <div
+                    key={claim.id}
+                    onClick={() => {
+                      setSelectedClaim(claim);
+                      setSearchParams({ selected: claim.id });
+                    }}
+                    className={`p-4 cursor-pointer transition-colors ${
+                      isSelected ? 'bg-emerald-500/10 border-l-4 border-emerald-500' : 'hover:bg-slate-800/50'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-1.5">
+                        <span className="font-mono text-xs font-semibold text-emerald-400">{claim.reference_no}</span>
+                        {claim.reference_no === 'CLM-DEMO-001' && (
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center gap-0.5">
+                            <Sparkles className="w-2.5 h-2.5" />
+                            <span>EXPO SHOWCASE</span>
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center space-x-1.5">
+                        {claim.risk_tier && (
+                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
+                            claim.risk_tier === 'HIGH_RISK'
+                              ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                              : claim.risk_tier === 'MODERATE_RISK'
+                              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                              : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
+                          }`}>
+                            {claim.risk_tier === 'HIGH_RISK' ? 'RED TRIAGE' : claim.risk_tier === 'MODERATE_RISK' ? 'AMBER TRIAGE' : 'GREEN FAST'}
+                          </span>
+                        )}
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                          claim.status === 'REVIEWED'
+                            ? 'bg-purple-500/10 text-purple-400'
+                            : claim.status === 'FIELD_INSPECTION_RECORDED'
+                            ? 'bg-sky-500/10 text-sky-400'
+                            : claim.status === 'EVIDENCE_GENERATED'
+                            ? 'bg-emerald-500/10 text-emerald-400'
+                            : 'bg-amber-500/10 text-amber-400'
                         }`}>
-                          {claim.risk_tier === 'HIGH_RISK' ? 'RED TRIAGE' : claim.risk_tier === 'MODERATE_RISK' ? 'AMBER TRIAGE' : 'GREEN FAST'}
+                          {claim.status.replace(/_/g, ' ')}
                         </span>
-                      )}
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-                        claim.status === 'REVIEWED'
-                          ? 'bg-purple-500/10 text-purple-400'
-                          : claim.status === 'FIELD_INSPECTION_RECORDED'
-                          ? 'bg-sky-500/10 text-sky-400'
-                          : claim.status === 'EVIDENCE_GENERATED'
-                          ? 'bg-emerald-500/10 text-emerald-400'
-                          : 'bg-amber-500/10 text-amber-400'
-                      }`}>
-                        {claim.status.replace(/_/g, ' ')}
-                      </span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="text-sm font-medium text-slate-200 mt-1">{claim.farmer_name}</div>
-                  <div className="text-[11px] text-slate-400 mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
-                    <span>{claim.state} ({claim.district || 'Dist'})</span>
-                    <span>•</span>
-                    <span className="text-emerald-300">{claim.crop_type} ({claim.crop_season || 'Kharif'})</span>
-                    <span>•</span>
-                    <span>{claim.claimed_area_ha} ha claimed</span>
-                  </div>
-
-                  {claim.khasra_no && (
-                    <div className="text-[10px] text-slate-400 mt-1 font-mono">
-                      Khasra: {claim.khasra_no} • Khatauni: {claim.khatauni_no || 'N/A'}
+                    <div className="text-sm font-medium text-slate-200 mt-1">{claim.farmer_name}</div>
+                    <div className="text-[11px] text-slate-400 mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
+                      <span>{claim.state} ({claim.district || 'Dist'})</span>
+                      <span>•</span>
+                      <span className="text-emerald-300">{claim.crop_type} ({claim.crop_season || 'Kharif'})</span>
+                      <span>•</span>
+                      <span>{claim.claimed_area_ha} ha claimed</span>
                     </div>
-                  )}
-                </div>
-              );
-            })}
+
+                    {claim.khasra_no && (
+                      <div className="text-[10px] text-slate-400 mt-1 font-mono">
+                        Khasra: {claim.khasra_no} • Khatauni: {claim.khatauni_no || 'N/A'}
+                      </div>
+                    )}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
 
@@ -780,6 +809,40 @@ export const InsurancePage: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Prominent High-Visibility Cadastral Land Area Showcase Header */}
+                <div className="bg-gradient-to-r from-emerald-950/80 via-slate-900 to-slate-950 border border-emerald-500/40 rounded-xl p-3.5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-11 h-11 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex flex-col items-center justify-center text-emerald-300 font-bold text-xs shadow-inner">
+                      <span>{selectedClaim.claimed_area_ha}</span>
+                      <span className="text-[9px] uppercase tracking-wider text-emerald-400 font-semibold">Ha</span>
+                    </div>
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <span className="font-bold text-white text-sm">{selectedClaim.farmer_name}'s Land Parcel</span>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                          Khasra #{selectedClaim.khasra_no || '104/1'}
+                        </span>
+                        {selectedClaim.reference_no === 'CLM-DEMO-001' && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            ⭐ EXPO SHOWCASE
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-300 mt-0.5">
+                        Cadastral Land Area: <b className="text-emerald-300">{selectedClaim.claimed_area_ha} Ha ({(selectedClaim.claimed_area_ha * 2.47105).toFixed(2)} Acres)</b> • Khatauni: <span className="text-slate-200">#{selectedClaim.khatauni_no || '32'}</span> • Tenancy: <span className="text-sky-300 font-medium">{selectedClaim.tenancy_type || 'OWNER'}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 text-xs">
+                    <div className="px-2.5 py-1 rounded-lg bg-slate-900/90 border border-slate-700 text-slate-300 font-mono text-[11px]">
+                      GPS: {selectedClaim.latitude.toFixed(4)}°N, {selectedClaim.longitude.toFixed(4)}°E
+                    </div>
+                    <div className="px-2.5 py-1 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-300 font-semibold text-[11px]">
+                      Submerged: {activeAnalysis?.results?.metrics?.damaged_area_ha || 4.6} Ha ({Math.round(((activeAnalysis?.results?.metrics?.damaged_area_ha || 4.6) / selectedClaim.claimed_area_ha) * 100)}%)
+                    </div>
+                  </div>
+                </div>
+
                 {/* Field-Level Before / Peak Flood Swipe Slider */}
                 <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800 flex items-center space-x-2.5 text-xs text-slate-300">
                   <span className="text-[10px] text-emerald-400 font-semibold whitespace-nowrap">
@@ -803,7 +866,16 @@ export const InsurancePage: React.FC = () => {
                   overlayGeoJson={activeAnalysis?.results?.overlays_geojson}
                   overlayLayerName="Observed Crop Damage"
                   overlayColor="#ef4444"
-                  height="380px"
+                  height="420px"
+                  parcelInfo={{
+                    farmerName: selectedClaim.farmer_name,
+                    khasraNo: selectedClaim.khasra_no || '104/1',
+                    areaHa: selectedClaim.claimed_area_ha,
+                    village: selectedClaim.district || 'Kalyanpur',
+                    crop: selectedClaim.crop_type,
+                    damageType: selectedClaim.damage_type,
+                    verifiedDamageHa: activeAnalysis?.results?.metrics?.damaged_area_ha || 4.6,
+                  }}
                 />
 
                 {/* Phase 7: Official Revenue & Insurance Export Layer */}
