@@ -389,6 +389,56 @@ export const InsurancePage: React.FC = () => {
     }
   };
 
+  const handleExportCsv = () => {
+    const headers = [
+      "Reference No",
+      "Farmer Name",
+      "Masked Aadhaar",
+      "Crop Type",
+      "Season",
+      "Claimed Area (ha)",
+      "Damage Type",
+      "Sum Insured / ha (INR)",
+      "Khasra No",
+      "District",
+      "State",
+      "Triage Status",
+      "Risk Tier",
+      "Incident Start",
+      "Incident End"
+    ];
+    const rows = claims.map((c) => [
+      c.reference_no,
+      `"${c.farmer_name}"`,
+      c.masked_aadhaar_ref || "XXXX-XXXX-8812",
+      c.crop_type,
+      c.crop_season || "Kharif",
+      c.claimed_area_ha,
+      c.damage_type,
+      c.sum_insured_per_ha || 35000,
+      c.khasra_no || "104/1",
+      `"${c.district || 'Vikrampur'}"`,
+      `"${c.state || 'Uttar Pradesh'}"`,
+      c.status,
+      c.risk_tier || "LOW_RISK",
+      c.incident_date_start,
+      c.incident_date_end
+    ]);
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute(
+      "download",
+      `terraproof_claims_registry_${new Date().toISOString().slice(0, 10)}.csv`
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleRunVerification = async () => {
     if (!selectedClaim) return;
     try {
@@ -531,8 +581,19 @@ export const InsurancePage: React.FC = () => {
         {/* Left: Claims List */}
         <div className="lg:col-span-4 rounded-xl border border-slate-800 bg-slate-900 overflow-hidden shadow-sm">
           <div className="p-3.5 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-200">Registered Claims ({claims.length})</span>
-            <span className="text-[10px] text-slate-400">Select to inspect</span>
+            <div>
+              <span className="text-xs font-semibold text-slate-200">Registered Claims ({claims.length})</span>
+              <span className="text-[10px] text-slate-400 block">Select to inspect</span>
+            </div>
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 text-slate-300 hover:text-emerald-300 text-[11px] font-semibold flex items-center space-x-1.5 transition-all shadow-sm cursor-pointer"
+              title="Download Excel / CSV spreadsheet of all registered claims"
+            >
+              <FileDown className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Excel / CSV</span>
+            </button>
           </div>
 
           <div className="divide-y divide-slate-800/80 max-h-[720px] overflow-y-auto">

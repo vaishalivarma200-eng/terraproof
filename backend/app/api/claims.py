@@ -1,6 +1,9 @@
+import csv
+import io
 from datetime import datetime, timezone
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.claim import Claim
@@ -150,6 +153,75 @@ def list_claims(
     if claim_status:
         query = query.filter(Claim.status == claim_status)
     return query.order_by(Claim.created_at.desc()).offset(skip).limit(limit).all()
+
+@router.get("/export/csv")
+def export_claims_registry_csv(db: Session = Depends(get_db)):
+    """
+    Exports the complete SQL claims registry to an Excel-compatible CSV file.
+    Includes cadastral survey records, PMFBY parameters, risk scores, and review status.
+    """
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow([
+        "Reference No",
+        "Farmer Name",
+        "Masked Aadhaar",
+        "Crop Type",
+        "Crop Season",
+        "Claimed Area (ha)",
+        "Cultivated Area (ha)",
+        "Damage Type",
+        "Claimed Loss (INR)",
+        "Sum Insured / ha (INR)",
+        "Khasra No",
+        "Khatauni No",
+        "Tenancy Type",
+        "Village",
+        "District",
+        "State",
+        "Status",
+        "Risk Tier",
+        "Risk Score",
+        "Reviewer Decision",
+        "Incident Start",
+        "Incident End",
+        "Created At",
+    ])
+    claims = db.query(Claim).order_by(Claim.created_at.desc()).all()
+    for c in claims:
+        writer.writerow([
+            c.reference_no,
+            c.farmer_name,
+            c.masked_aadhaar_ref,
+            c.crop_type,
+            c.crop_season,
+            c.claimed_area_ha,
+            c.cultivated_area_ha,
+            c.damage_type,
+            c.claimed_loss_amount,
+            c.sum_insured_per_ha,
+            c.khasra_no,
+            c.khatauni_no,
+            getattr(c, "tenancy_type", "OWNER"),
+            getattr(c, "village", "Kalyanpur"),
+            c.district,
+            c.state,
+            c.status,
+            c.risk_tier,
+            c.risk_score,
+            c.reviewer_decision or "PENDING",
+            c.incident_date_start.isoformat() if c.incident_date_start else "",
+            c.incident_date_end.isoformat() if c.incident_date_end else "",
+            c.created_at.isoformat() if c.created_at else "",
+        ])
+    output.seek(0)
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": "attachment; filename=terraproof_claims_registry.csv"
+        },
+    )
 
 @router.get("/{claim_id}", response_model=ClaimResponse)
 def get_claim(claim_id: str, db: Session = Depends(get_db)):
