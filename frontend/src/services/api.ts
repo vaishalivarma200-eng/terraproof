@@ -34,6 +34,10 @@ async function handleResponse<T>(response: Response): Promise<T> {
     }
     throw new Error(detail);
   }
+  const contentType = response.headers.get('content-type') || '';
+  if (contentType.includes('text/html')) {
+    throw new Error('Backend returned HTML (SPA fallback route reached)');
+  }
   return response.json();
 }
 
