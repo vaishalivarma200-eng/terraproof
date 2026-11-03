@@ -20,6 +20,7 @@ import { RegionEventComparisonModal } from './components/RegionEventComparisonMo
 import { WhatIfScenarioSimulatorModal } from './components/WhatIfScenarioSimulatorModal';
 import { TerraGuideChatPanel } from './components/TerraGuideChatPanel';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Bot, Sparkles } from 'lucide-react';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -164,20 +165,36 @@ export const App: React.FC = () => {
     <LanguageProvider>
       <BrowserRouter>
         <Layout>
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/overview" element={<OverviewPage />} />
-            <Route path="/claims" element={<InsurancePage />} />
-            <Route path="/insurance" element={<InsurancePage />} />
-            <Route path="/verify" element={<PublicVerificationPage />} />
-            <Route path="/verify/:identifier" element={<PublicVerificationPage />} />
-            <Route path="/flood" element={<FloodPage />} />
-            <Route path="/drought" element={<DroughtPage />} />
-            <Route path="/deforestation" element={<DeforestationPage />} />
-            <Route path="/analyses/:id" element={<AnalysisDetailPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+          <ErrorBoundary fallbackMessage="A temporary view issue was intercepted. Click Reload to refresh.">
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/overview" element={<OverviewPage />} />
+              <Route
+                path="/claims"
+                element={
+                  <ErrorBoundary fallbackMessage="Claims dashboard data mismatch intercepted. Click reload to refresh.">
+                    <InsurancePage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route
+                path="/insurance"
+                element={
+                  <ErrorBoundary fallbackMessage="Claims dashboard data mismatch intercepted. Click reload to refresh.">
+                    <InsurancePage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route path="/verify" element={<PublicVerificationPage />} />
+              <Route path="/verify/:identifier" element={<PublicVerificationPage />} />
+              <Route path="/flood" element={<FloodPage />} />
+              <Route path="/drought" element={<DroughtPage />} />
+              <Route path="/deforestation" element={<DeforestationPage />} />
+              <Route path="/analyses/:id" element={<AnalysisDetailPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </ErrorBoundary>
         </Layout>
       </BrowserRouter>
     </LanguageProvider>

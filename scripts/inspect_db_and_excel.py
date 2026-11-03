@@ -30,8 +30,8 @@ if os.path.exists(db_path):
         print(f"  - Job: {r[0][:18]}... | Claim: {r[1][:12]}... | Type: {r[2]:<22} | Status: {r[3]:<10} | Hash: {str(r[4])[:24]}...")
 
     # Check Audit table
-    print("\n=== SQL Records from 'audit_ledger' table ===")
-    cur.execute("SELECT block_index, event_type, record_id, actor, block_hash FROM audit_ledger ORDER BY block_index DESC LIMIT 5")
+    print("\n=== SQL Records from 'audit_blocks' table ===")
+    cur.execute("SELECT block_index, event_type, record_id, actor, block_hash FROM audit_blocks ORDER BY block_index DESC LIMIT 5")
     rows = cur.fetchall()
     for r in rows:
         print(f"  - Block #{r[0]}: {r[1]:<28} | ID: {r[2]:<12} | Actor: {r[3][:20]:<20} | Hash: {r[4][:20]}...")
@@ -39,3 +39,4 @@ if os.path.exists(db_path):
     conn.close()
 else:
     print("terraproof.db not found at", db_path)
+

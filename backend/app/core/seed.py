@@ -83,30 +83,56 @@ def seed_demo_kharif_flood(db: Session) -> int:
 
         # 2. Attach Precomputed Completed AnalysisJob
         fusion_mode = "SENTINEL_1_SAR_MONSOON_FALLBACK" if c_data["reference_no"] == "CLM-DEMO-006" else "SENTINEL_2_OPTICAL_CONFIRMED"
+        verdict = "APPROVE_FAST_TRACK" if c_data.get("claim_archetype") == "GENUINE_CLAIM" else ("FIELD_AUDIT_REQUIRED" if c_data.get("claim_archetype") == "INFLATED_CLAIM" else "REJECT_ANOMALOUS")
         job_results = {
-            "damaged_area_ha": c_data["observed_damaged_ha"],
-            "divergence_percentage": c_data["divergence_pct"],
-            "confidence_score": c_data["confidence_score"],
-            "confidence_breakdown": c_data.get("confidence_breakdown", {}),
-            "overlays_geojson": c_data.get("overlays_geojson"),
-            "compensation_scenario": payout,
-            "peril_classification": {
-                "primary_peril": c_data["damage_type"],
-                "confidence": c_data["confidence_score"]
+            "summary": f"Automated geospatial verification completed for {c_data['farmer_name']}. Observed damaged area: {c_data['observed_damaged_ha']} ha vs claimed {c_data['claimed_area_ha']} ha (Divergence: {c_data['divergence_pct']}%). Confidence score: {c_data['confidence_score']}/100.",
+            "verdict_recommendation": verdict,
+            "integrity_hash": f"SHA256-{c_data['reference_no']}-VERIFIED",
+            "metrics": {
+                "baseline_index_mean": 0.68,
+                "post_event_index_mean": 0.18,
+                "index_delta_mean": -0.50,
+                "total_field_area_ha": float(c_data["claimed_area_ha"]),
+                "estimated_affected_area_ha": float(c_data["observed_damaged_ha"]),
+                "damaged_area_ha": float(c_data["observed_damaged_ha"]),
+                "damage_percentage": round((float(c_data["observed_damaged_ha"]) / float(c_data["claimed_area_ha"])) * 100, 1),
+                "claimed_area_ha": float(c_data["claimed_area_ha"]),
+                "area_discrepancy_percent": float(c_data["divergence_pct"]),
+                "confidence_score": float(c_data["confidence_score"]),
+                "confidence_rationale": f"High multi-spectral coherence ({c_data['confidence_score']}%) across 10m spatial grid.",
+                "confidence_breakdown": c_data.get("confidence_breakdown", {}),
+                "peril_classification": {
+                    "classified_peril": c_data["damage_type"],
+                    "confidence": float(c_data["confidence_score"]),
+                    "consistency_with_claim": "CONSISTENT" if c_data.get("claim_archetype") == "GENUINE_CLAIM" else "INCONSISTENT_DIVERGENT",
+                    "spectral_signature": "MNDWI > 0.45; SAR VH/VV polarization ratio attenuation",
+                    "rationale": f"Spectral transition matches acute {c_data['damage_type'].lower()} inundation timeline.",
+                    "recommended_action": "Approve settlement" if c_data.get("claim_archetype") == "GENUINE_CLAIM" else "Physical audit required"
+                },
+                "sensor_fusion_mode": fusion_mode,
+                "compensation_scenario": payout,
+                "weather_summary": {
+                    "peak_precipitation_mm": 84.8,
+                    "total_period_precipitation_mm": 199.6,
+                    "normal_baseline_mm": 28.0,
+                    "anomaly_percentage": 612.9
+                },
+                "crop_calendar_context": {
+                    "crop_type": c_data["crop_type"],
+                    "season": c_data["crop_season"],
+                    "sowing_window": "June 15 - July 15",
+                    "harvest_window": "October 20 - November 25"
+                }
             },
-            "sensor_fusion_mode": fusion_mode,
-            "weather_summary": {
-                "peak_precipitation_mm": 84.8,
-                "total_period_precipitation_mm": 199.6,
-                "normal_baseline_mm": 28.0,
-                "anomaly_percentage": 612.9
-            },
-            "crop_calendar_context": {
-                "crop_type": c_data["crop_type"],
-                "season": c_data["crop_season"],
-                "sowing_window": "June 15 - July 15",
-                "harvest_window": "October 20 - November 25"
-            }
+            "observations_used": [],
+            "limitations": [
+                "Optical cloud cover during peak monsoon requires Sentinel-1 C-band SAR backscatter fusion.",
+                "10m pixel resolution bounds mixed-pixel uncertainty to +/- 0.04 ha."
+            ],
+            "potential_inconsistencies": [] if c_data.get("claim_archetype") == "GENUINE_CLAIM" else [
+                f"Discrepancy detected: Claimed {c_data['claimed_area_ha']} ha vs Verified {c_data['observed_damaged_ha']} ha ({c_data['divergence_pct']}% divergence)."
+            ],
+            "overlays_geojson": c_data.get("overlays_geojson")
         }
 
         analysis_job = AnalysisJob(

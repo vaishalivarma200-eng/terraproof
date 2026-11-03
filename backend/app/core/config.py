@@ -36,7 +36,7 @@ class Settings(BaseSettings):
         return [str(v)]
     
     # Database
-    DATABASE_URL: str = f"sqlite:///{PROJECT_ROOT}/terraproof.db"
+    DATABASE_URL: str = f"sqlite:///{BACKEND_DIR.as_posix()}/terraproof.db"
     
     # Satellite Data Providers
     STAC_API_URL: str = "https://planetarycomputer.microsoft.com/api/stac/v1"

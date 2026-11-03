@@ -15,7 +15,7 @@ from app.api.risk import router as risk_router
 from app.api.official import router as official_router
 from app.api.public_verify import router as public_verify_router
 from app.api.appeals import router as appeals_router
-from app.api.fairness import router as fairness_router
+from app.api.fairness import router as fairness_router, legacy_router as fairness_legacy_router
 from app.api.demo import router as demo_router
 from app.api.assistant import router as assistant_router
 from app.api.event_comparison import router as event_comparison_router
@@ -66,6 +66,7 @@ app.include_router(official_router, prefix="/api/v1")
 app.include_router(public_verify_router, prefix="/api/v1")
 app.include_router(appeals_router, prefix="/api/v1")
 app.include_router(fairness_router, prefix="/api/v1")
+app.include_router(fairness_legacy_router, prefix="/api/v1")
 app.include_router(demo_router, prefix="/api/v1")
 app.include_router(assistant_router, prefix="/api/v1")
 app.include_router(event_comparison_router, prefix="/api/v1")

@@ -12,8 +12,12 @@ from app.models.claim import Claim
 from app.models.decision import OfficialInspection
 
 router = APIRouter(prefix="/analytics/fairness", tags=["Fairness & Model Parity Monitoring"])
+legacy_router = APIRouter(prefix="/fairness", tags=["Fairness & Model Parity Monitoring"])
 
 @router.get("")
+@router.get("/metrics")
+@legacy_router.get("")
+@legacy_router.get("/metrics")
 def get_fairness_and_parity_metrics(db: Session = Depends(get_db)) -> Dict[str, Any]:
     """
     Computes disaggregated verification statistics by farm size tier and crop type.
