@@ -1,5 +1,9 @@
 # TerraProof | Satellite Evidence & Decision-Support Layer for Agricultural Revenue Administration
 
+<p align="center">
+  <img src="./terraproof_thumbnail.jpg" alt="TerraProof Satellite Verification Banner" width="100%" />
+</p>
+
 [![Python](https://img.shields.io/badge/Python-3.14+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.136+-009688.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18.3+-61DAFB.svg)](https://react.dev/)
